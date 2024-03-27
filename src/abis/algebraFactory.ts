@@ -1,766 +1,812 @@
 export const algebraFactoryABI = [
     {
-        "inputs": [
+        inputs: [
             {
-                "internalType": "address",
-                "name": "_poolDeployer",
-                "type": "address"
-            }
+                internalType: 'address',
+                name: '_poolDeployer',
+                type: 'address',
+            },
         ],
-        "stateMutability": "nonpayable",
-        "type": "constructor"
+        stateMutability: 'nonpayable',
+        type: 'constructor',
     },
     {
-        "anonymous": false,
-        "inputs": [
+        anonymous: false,
+        inputs: [
             {
-                "indexed": false,
-                "internalType": "uint8",
-                "name": "newDefaultCommunityFee",
-                "type": "uint8"
-            }
+                indexed: false,
+                internalType: 'uint16',
+                name: 'newDefaultCommunityFee',
+                type: 'uint16',
+            },
         ],
-        "name": "DefaultCommunityFee",
-        "type": "event"
+        name: 'DefaultCommunityFee',
+        type: 'event',
     },
     {
-        "anonymous": false,
-        "inputs": [
+        anonymous: false,
+        inputs: [
             {
-                "indexed": true,
-                "internalType": "address",
-                "name": "newFarmingAddress",
-                "type": "address"
-            }
+                indexed: false,
+                internalType: 'uint16',
+                name: 'newDefaultFee',
+                type: 'uint16',
+            },
         ],
-        "name": "FarmingAddress",
-        "type": "event"
+        name: 'DefaultFee',
+        type: 'event',
     },
     {
-        "anonymous": false,
-        "inputs": [
+        anonymous: false,
+        inputs: [
             {
-                "indexed": false,
-                "internalType": "uint16",
-                "name": "alpha1",
-                "type": "uint16"
+                indexed: false,
+                internalType: 'address',
+                name: 'defaultPluginFactoryAddress',
+                type: 'address',
+            },
+        ],
+        name: 'DefaultPluginFactory',
+        type: 'event',
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: false,
+                internalType: 'int24',
+                name: 'newDefaultTickspacing',
+                type: 'int24',
+            },
+        ],
+        name: 'DefaultTickspacing',
+        type: 'event',
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: true,
+                internalType: 'address',
+                name: 'previousOwner',
+                type: 'address',
             },
             {
-                "indexed": false,
-                "internalType": "uint16",
-                "name": "alpha2",
-                "type": "uint16"
+                indexed: true,
+                internalType: 'address',
+                name: 'newOwner',
+                type: 'address',
+            },
+        ],
+        name: 'OwnershipTransferStarted',
+        type: 'event',
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: true,
+                internalType: 'address',
+                name: 'previousOwner',
+                type: 'address',
             },
             {
-                "indexed": false,
-                "internalType": "uint32",
-                "name": "beta1",
-                "type": "uint32"
+                indexed: true,
+                internalType: 'address',
+                name: 'newOwner',
+                type: 'address',
+            },
+        ],
+        name: 'OwnershipTransferred',
+        type: 'event',
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: true,
+                internalType: 'address',
+                name: 'token0',
+                type: 'address',
             },
             {
-                "indexed": false,
-                "internalType": "uint32",
-                "name": "beta2",
-                "type": "uint32"
+                indexed: true,
+                internalType: 'address',
+                name: 'token1',
+                type: 'address',
             },
             {
-                "indexed": false,
-                "internalType": "uint16",
-                "name": "gamma1",
-                "type": "uint16"
+                indexed: false,
+                internalType: 'address',
+                name: 'pool',
+                type: 'address',
+            },
+        ],
+        name: 'Pool',
+        type: 'event',
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: false,
+                internalType: 'uint256',
+                name: 'timestamp',
+                type: 'uint256',
+            },
+        ],
+        name: 'RenounceOwnershipFinish',
+        type: 'event',
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: false,
+                internalType: 'uint256',
+                name: 'timestamp',
+                type: 'uint256',
             },
             {
-                "indexed": false,
-                "internalType": "uint16",
-                "name": "gamma2",
-                "type": "uint16"
+                indexed: false,
+                internalType: 'uint256',
+                name: 'finishTimestamp',
+                type: 'uint256',
+            },
+        ],
+        name: 'RenounceOwnershipStart',
+        type: 'event',
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: false,
+                internalType: 'uint256',
+                name: 'timestamp',
+                type: 'uint256',
+            },
+        ],
+        name: 'RenounceOwnershipStop',
+        type: 'event',
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: true,
+                internalType: 'bytes32',
+                name: 'role',
+                type: 'bytes32',
             },
             {
-                "indexed": false,
-                "internalType": "uint16",
-                "name": "baseFee",
-                "type": "uint16"
-            }
-        ],
-        "name": "FeeConfiguration",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "previousOwner",
-                "type": "address"
+                indexed: true,
+                internalType: 'bytes32',
+                name: 'previousAdminRole',
+                type: 'bytes32',
             },
             {
-                "indexed": true,
-                "internalType": "address",
-                "name": "newOwner",
-                "type": "address"
-            }
+                indexed: true,
+                internalType: 'bytes32',
+                name: 'newAdminRole',
+                type: 'bytes32',
+            },
         ],
-        "name": "OwnershipTransferStarted",
-        "type": "event"
+        name: 'RoleAdminChanged',
+        type: 'event',
     },
     {
-        "anonymous": false,
-        "inputs": [
+        anonymous: false,
+        inputs: [
             {
-                "indexed": true,
-                "internalType": "address",
-                "name": "previousOwner",
-                "type": "address"
+                indexed: true,
+                internalType: 'bytes32',
+                name: 'role',
+                type: 'bytes32',
             },
             {
-                "indexed": true,
-                "internalType": "address",
-                "name": "newOwner",
-                "type": "address"
-            }
-        ],
-        "name": "OwnershipTransferred",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "token0",
-                "type": "address"
+                indexed: true,
+                internalType: 'address',
+                name: 'account',
+                type: 'address',
             },
             {
-                "indexed": true,
-                "internalType": "address",
-                "name": "token1",
-                "type": "address"
+                indexed: true,
+                internalType: 'address',
+                name: 'sender',
+                type: 'address',
+            },
+        ],
+        name: 'RoleGranted',
+        type: 'event',
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: true,
+                internalType: 'bytes32',
+                name: 'role',
+                type: 'bytes32',
             },
             {
-                "indexed": false,
-                "internalType": "address",
-                "name": "pool",
-                "type": "address"
-            }
-        ],
-        "name": "Pool",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
-                "internalType": "bytes32",
-                "name": "role",
-                "type": "bytes32"
+                indexed: true,
+                internalType: 'address',
+                name: 'account',
+                type: 'address',
             },
             {
-                "indexed": true,
-                "internalType": "bytes32",
-                "name": "previousAdminRole",
-                "type": "bytes32"
+                indexed: true,
+                internalType: 'address',
+                name: 'sender',
+                type: 'address',
+            },
+        ],
+        name: 'RoleRevoked',
+        type: 'event',
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: false,
+                internalType: 'address',
+                name: 'newVaultFactory',
+                type: 'address',
+            },
+        ],
+        name: 'VaultFactory',
+        type: 'event',
+    },
+    {
+        inputs: [],
+        name: 'DEFAULT_ADMIN_ROLE',
+        outputs: [
+            {
+                internalType: 'bytes32',
+                name: '',
+                type: 'bytes32',
+            },
+        ],
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        inputs: [],
+        name: 'POOLS_ADMINISTRATOR_ROLE',
+        outputs: [
+            {
+                internalType: 'bytes32',
+                name: '',
+                type: 'bytes32',
+            },
+        ],
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        inputs: [],
+        name: 'POOL_INIT_CODE_HASH',
+        outputs: [
+            {
+                internalType: 'bytes32',
+                name: '',
+                type: 'bytes32',
+            },
+        ],
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        inputs: [],
+        name: 'acceptOwnership',
+        outputs: [],
+        stateMutability: 'nonpayable',
+        type: 'function',
+    },
+    {
+        inputs: [
+            {
+                internalType: 'address',
+                name: 'token0',
+                type: 'address',
             },
             {
-                "indexed": true,
-                "internalType": "bytes32",
-                "name": "newAdminRole",
-                "type": "bytes32"
-            }
+                internalType: 'address',
+                name: 'token1',
+                type: 'address',
+            },
         ],
-        "name": "RoleAdminChanged",
-        "type": "event"
+        name: 'computePoolAddress',
+        outputs: [
+            {
+                internalType: 'address',
+                name: 'pool',
+                type: 'address',
+            },
+        ],
+        stateMutability: 'view',
+        type: 'function',
     },
     {
-        "anonymous": false,
-        "inputs": [
+        inputs: [
             {
-                "indexed": true,
-                "internalType": "bytes32",
-                "name": "role",
-                "type": "bytes32"
+                internalType: 'address',
+                name: 'tokenA',
+                type: 'address',
             },
             {
-                "indexed": true,
-                "internalType": "address",
-                "name": "account",
-                "type": "address"
+                internalType: 'address',
+                name: 'tokenB',
+                type: 'address',
+            },
+        ],
+        name: 'createPool',
+        outputs: [
+            {
+                internalType: 'address',
+                name: 'pool',
+                type: 'address',
+            },
+        ],
+        stateMutability: 'nonpayable',
+        type: 'function',
+    },
+    {
+        inputs: [],
+        name: 'defaultCommunityFee',
+        outputs: [
+            {
+                internalType: 'uint16',
+                name: '',
+                type: 'uint16',
+            },
+        ],
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        inputs: [
+            {
+                internalType: 'address',
+                name: 'pool',
+                type: 'address',
+            },
+        ],
+        name: 'defaultConfigurationForPool',
+        outputs: [
+            {
+                internalType: 'uint16',
+                name: 'communityFee',
+                type: 'uint16',
             },
             {
-                "indexed": true,
-                "internalType": "address",
-                "name": "sender",
-                "type": "address"
-            }
-        ],
-        "name": "RoleGranted",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
-                "internalType": "bytes32",
-                "name": "role",
-                "type": "bytes32"
+                internalType: 'int24',
+                name: 'tickSpacing',
+                type: 'int24',
             },
             {
-                "indexed": true,
-                "internalType": "address",
-                "name": "account",
-                "type": "address"
+                internalType: 'uint16',
+                name: 'fee',
+                type: 'uint16',
             },
             {
-                "indexed": true,
-                "internalType": "address",
-                "name": "sender",
-                "type": "address"
-            }
+                internalType: 'address',
+                name: 'communityVault',
+                type: 'address',
+            },
         ],
-        "name": "RoleRevoked",
-        "type": "event"
+        stateMutability: 'view',
+        type: 'function',
     },
     {
-        "anonymous": false,
-        "inputs": [
+        inputs: [],
+        name: 'defaultFee',
+        outputs: [
             {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "timestamp",
-                "type": "uint256"
-            }
+                internalType: 'uint16',
+                name: '',
+                type: 'uint16',
+            },
         ],
-        "name": "renounceOwnershipFinished",
-        "type": "event"
+        stateMutability: 'view',
+        type: 'function',
     },
     {
-        "anonymous": false,
-        "inputs": [
+        inputs: [],
+        name: 'defaultPluginFactory',
+        outputs: [
             {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "timestamp",
-                "type": "uint256"
+                internalType: 'contract IAlgebraPluginFactory',
+                name: '',
+                type: 'address',
+            },
+        ],
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        inputs: [],
+        name: 'defaultTickspacing',
+        outputs: [
+            {
+                internalType: 'int24',
+                name: '',
+                type: 'int24',
+            },
+        ],
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        inputs: [
+            {
+                internalType: 'bytes32',
+                name: 'role',
+                type: 'bytes32',
+            },
+        ],
+        name: 'getRoleAdmin',
+        outputs: [
+            {
+                internalType: 'bytes32',
+                name: '',
+                type: 'bytes32',
+            },
+        ],
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        inputs: [
+            {
+                internalType: 'bytes32',
+                name: 'role',
+                type: 'bytes32',
             },
             {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "finishTimestamp",
-                "type": "uint256"
-            }
+                internalType: 'uint256',
+                name: 'index',
+                type: 'uint256',
+            },
         ],
-        "name": "renounceOwnershipStarted",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
+        name: 'getRoleMember',
+        outputs: [
             {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "timestamp",
-                "type": "uint256"
-            }
+                internalType: 'address',
+                name: '',
+                type: 'address',
+            },
         ],
-        "name": "renounceOwnershipStopped",
-        "type": "event"
+        stateMutability: 'view',
+        type: 'function',
     },
     {
-        "inputs": [],
-        "name": "DEFAULT_ADMIN_ROLE",
-        "outputs": [
+        inputs: [
             {
-                "internalType": "bytes32",
-                "name": "",
-                "type": "bytes32"
-            }
+                internalType: 'bytes32',
+                name: 'role',
+                type: 'bytes32',
+            },
         ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "acceptOwnership",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "baseFeeConfiguration",
-        "outputs": [
+        name: 'getRoleMemberCount',
+        outputs: [
             {
-                "internalType": "uint16",
-                "name": "alpha1",
-                "type": "uint16"
+                internalType: 'uint256',
+                name: '',
+                type: 'uint256',
+            },
+        ],
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        inputs: [
+            {
+                internalType: 'bytes32',
+                name: 'role',
+                type: 'bytes32',
             },
             {
-                "internalType": "uint16",
-                "name": "alpha2",
-                "type": "uint16"
+                internalType: 'address',
+                name: 'account',
+                type: 'address',
+            },
+        ],
+        name: 'grantRole',
+        outputs: [],
+        stateMutability: 'nonpayable',
+        type: 'function',
+    },
+    {
+        inputs: [
+            {
+                internalType: 'bytes32',
+                name: 'role',
+                type: 'bytes32',
             },
             {
-                "internalType": "uint32",
-                "name": "beta1",
-                "type": "uint32"
+                internalType: 'address',
+                name: 'account',
+                type: 'address',
+            },
+        ],
+        name: 'hasRole',
+        outputs: [
+            {
+                internalType: 'bool',
+                name: '',
+                type: 'bool',
+            },
+        ],
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        inputs: [
+            {
+                internalType: 'bytes32',
+                name: 'role',
+                type: 'bytes32',
             },
             {
-                "internalType": "uint32",
-                "name": "beta2",
-                "type": "uint32"
+                internalType: 'address',
+                name: 'account',
+                type: 'address',
+            },
+        ],
+        name: 'hasRoleOrOwner',
+        outputs: [
+            {
+                internalType: 'bool',
+                name: '',
+                type: 'bool',
+            },
+        ],
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        inputs: [],
+        name: 'owner',
+        outputs: [
+            {
+                internalType: 'address',
+                name: '',
+                type: 'address',
+            },
+        ],
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        inputs: [],
+        name: 'pendingOwner',
+        outputs: [
+            {
+                internalType: 'address',
+                name: '',
+                type: 'address',
+            },
+        ],
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        inputs: [
+            {
+                internalType: 'address',
+                name: '',
+                type: 'address',
             },
             {
-                "internalType": "uint16",
-                "name": "gamma1",
-                "type": "uint16"
+                internalType: 'address',
+                name: '',
+                type: 'address',
+            },
+        ],
+        name: 'poolByPair',
+        outputs: [
+            {
+                internalType: 'address',
+                name: '',
+                type: 'address',
+            },
+        ],
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        inputs: [],
+        name: 'poolDeployer',
+        outputs: [
+            {
+                internalType: 'address',
+                name: '',
+                type: 'address',
+            },
+        ],
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        inputs: [],
+        name: 'renounceOwnership',
+        outputs: [],
+        stateMutability: 'nonpayable',
+        type: 'function',
+    },
+    {
+        inputs: [],
+        name: 'renounceOwnershipStartTimestamp',
+        outputs: [
+            {
+                internalType: 'uint256',
+                name: '',
+                type: 'uint256',
+            },
+        ],
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        inputs: [
+            {
+                internalType: 'bytes32',
+                name: 'role',
+                type: 'bytes32',
             },
             {
-                "internalType": "uint16",
-                "name": "gamma2",
-                "type": "uint16"
+                internalType: 'address',
+                name: 'account',
+                type: 'address',
+            },
+        ],
+        name: 'renounceRole',
+        outputs: [],
+        stateMutability: 'nonpayable',
+        type: 'function',
+    },
+    {
+        inputs: [
+            {
+                internalType: 'bytes32',
+                name: 'role',
+                type: 'bytes32',
             },
             {
-                "internalType": "uint16",
-                "name": "baseFee",
-                "type": "uint16"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "communityVault",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "tokenA",
-                "type": "address"
+                internalType: 'address',
+                name: 'account',
+                type: 'address',
             },
-            {
-                "internalType": "address",
-                "name": "tokenB",
-                "type": "address"
-            }
         ],
-        "name": "createPool",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "pool",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "nonpayable",
-        "type": "function"
+        name: 'revokeRole',
+        outputs: [],
+        stateMutability: 'nonpayable',
+        type: 'function',
     },
     {
-        "inputs": [],
-        "name": "defaultCommunityFee",
-        "outputs": [
+        inputs: [
             {
-                "internalType": "uint8",
-                "name": "",
-                "type": "uint8"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "farmingAddress",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "bytes32",
-                "name": "role",
-                "type": "bytes32"
-            }
-        ],
-        "name": "getRoleAdmin",
-        "outputs": [
-            {
-                "internalType": "bytes32",
-                "name": "",
-                "type": "bytes32"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "bytes32",
-                "name": "role",
-                "type": "bytes32"
+                internalType: 'uint16',
+                name: 'newDefaultCommunityFee',
+                type: 'uint16',
             },
-            {
-                "internalType": "uint256",
-                "name": "index",
-                "type": "uint256"
-            }
         ],
-        "name": "getRoleMember",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
+        name: 'setDefaultCommunityFee',
+        outputs: [],
+        stateMutability: 'nonpayable',
+        type: 'function',
     },
     {
-        "inputs": [
+        inputs: [
             {
-                "internalType": "bytes32",
-                "name": "role",
-                "type": "bytes32"
-            }
-        ],
-        "name": "getRoleMemberCount",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "bytes32",
-                "name": "role",
-                "type": "bytes32"
+                internalType: 'uint16',
+                name: 'newDefaultFee',
+                type: 'uint16',
             },
-            {
-                "internalType": "address",
-                "name": "account",
-                "type": "address"
-            }
         ],
-        "name": "grantRole",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
+        name: 'setDefaultFee',
+        outputs: [],
+        stateMutability: 'nonpayable',
+        type: 'function',
     },
     {
-        "inputs": [
+        inputs: [
             {
-                "internalType": "bytes32",
-                "name": "role",
-                "type": "bytes32"
+                internalType: 'address',
+                name: 'newDefaultPluginFactory',
+                type: 'address',
             },
-            {
-                "internalType": "address",
-                "name": "account",
-                "type": "address"
-            }
         ],
-        "name": "hasRole",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
+        name: 'setDefaultPluginFactory',
+        outputs: [],
+        stateMutability: 'nonpayable',
+        type: 'function',
     },
     {
-        "inputs": [
+        inputs: [
             {
-                "internalType": "bytes32",
-                "name": "role",
-                "type": "bytes32"
+                internalType: 'int24',
+                name: 'newDefaultTickspacing',
+                type: 'int24',
             },
-            {
-                "internalType": "address",
-                "name": "account",
-                "type": "address"
-            }
         ],
-        "name": "hasRoleOrOwner",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
+        name: 'setDefaultTickspacing',
+        outputs: [],
+        stateMutability: 'nonpayable',
+        type: 'function',
     },
     {
-        "inputs": [],
-        "name": "owner",
-        "outputs": [
+        inputs: [
             {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "pendingOwner",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
+                internalType: 'address',
+                name: 'newVaultFactory',
+                type: 'address',
             },
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
         ],
-        "name": "poolByPair",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
+        name: 'setVaultFactory',
+        outputs: [],
+        stateMutability: 'nonpayable',
+        type: 'function',
     },
     {
-        "inputs": [],
-        "name": "poolDeployer",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
+        inputs: [],
+        name: 'startRenounceOwnership',
+        outputs: [],
+        stateMutability: 'nonpayable',
+        type: 'function',
     },
     {
-        "inputs": [],
-        "name": "renounceOwnership",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
+        inputs: [],
+        name: 'stopRenounceOwnership',
+        outputs: [],
+        stateMutability: 'nonpayable',
+        type: 'function',
     },
     {
-        "inputs": [],
-        "name": "renounceOwnershipStartTimestamp",
-        "outputs": [
+        inputs: [
             {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "bytes32",
-                "name": "role",
-                "type": "bytes32"
+                internalType: 'bytes4',
+                name: 'interfaceId',
+                type: 'bytes4',
             },
-            {
-                "internalType": "address",
-                "name": "account",
-                "type": "address"
-            }
         ],
-        "name": "renounceRole",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
+        name: 'supportsInterface',
+        outputs: [
             {
-                "internalType": "bytes32",
-                "name": "role",
-                "type": "bytes32"
+                internalType: 'bool',
+                name: '',
+                type: 'bool',
             },
-            {
-                "internalType": "address",
-                "name": "account",
-                "type": "address"
-            }
         ],
-        "name": "revokeRole",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
+        stateMutability: 'view',
+        type: 'function',
     },
     {
-        "inputs": [
+        inputs: [
             {
-                "components": [
-                    {
-                        "internalType": "uint16",
-                        "name": "alpha1",
-                        "type": "uint16"
-                    },
-                    {
-                        "internalType": "uint16",
-                        "name": "alpha2",
-                        "type": "uint16"
-                    },
-                    {
-                        "internalType": "uint32",
-                        "name": "beta1",
-                        "type": "uint32"
-                    },
-                    {
-                        "internalType": "uint32",
-                        "name": "beta2",
-                        "type": "uint32"
-                    },
-                    {
-                        "internalType": "uint16",
-                        "name": "gamma1",
-                        "type": "uint16"
-                    },
-                    {
-                        "internalType": "uint16",
-                        "name": "gamma2",
-                        "type": "uint16"
-                    },
-                    {
-                        "internalType": "uint16",
-                        "name": "baseFee",
-                        "type": "uint16"
-                    }
-                ],
-                "internalType": "struct IAlgebraFeeConfiguration.Configuration",
-                "name": "_config",
-                "type": "tuple"
-            }
+                internalType: 'address',
+                name: 'newOwner',
+                type: 'address',
+            },
         ],
-        "name": "setBaseFeeConfiguration",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
+        name: 'transferOwnership',
+        outputs: [],
+        stateMutability: 'nonpayable',
+        type: 'function',
     },
     {
-        "inputs": [
+        inputs: [],
+        name: 'vaultFactory',
+        outputs: [
             {
-                "internalType": "uint8",
-                "name": "newDefaultCommunityFee",
-                "type": "uint8"
-            }
+                internalType: 'contract IAlgebraVaultFactory',
+                name: '',
+                type: 'address',
+            },
         ],
-        "name": "setDefaultCommunityFee",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
+        stateMutability: 'view',
+        type: 'function',
     },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "newFarmingAddress",
-                "type": "address"
-            }
-        ],
-        "name": "setFarmingAddress",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "startRenounceOwnership",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "stopRenounceOwnership",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "bytes4",
-                "name": "interfaceId",
-                "type": "bytes4"
-            }
-        ],
-        "name": "supportsInterface",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "newOwner",
-                "type": "address"
-            }
-        ],
-        "name": "transferOwnership",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    }
-] as const
+] as const;
