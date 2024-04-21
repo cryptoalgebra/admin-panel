@@ -47,6 +47,11 @@ export const eternalFarmingABI = [
     },
     {
       "inputs": [],
+      "name": "incorrectWeight",
+      "type": "error"
+    },
+    {
+      "inputs": [],
       "name": "invalidPool",
       "type": "error"
     },
@@ -158,6 +163,18 @@ export const eternalFarmingABI = [
           "internalType": "uint24",
           "name": "minimalAllowedPositionWidth",
           "type": "uint24"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint16",
+          "name": "weight0",
+          "type": "uint16"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint16",
+          "name": "weight1",
+          "type": "uint16"
         }
       ],
       "name": "EternalFarmingCreated",
@@ -248,6 +265,31 @@ export const eternalFarmingABI = [
         }
       ],
       "name": "FarmingCenter",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint16",
+          "name": "weight0",
+          "type": "uint16"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint16",
+          "name": "weight1",
+          "type": "uint16"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "incentiveId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "FeesWeightsChanged",
       "type": "event"
     },
     {
@@ -408,6 +450,19 @@ export const eternalFarmingABI = [
           "internalType": "bytes32",
           "name": "",
           "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "FEE_WEIGHT_DENOMINATOR",
+      "outputs": [
+        {
+          "internalType": "uint16",
+          "name": "",
+          "type": "uint16"
         }
       ],
       "stateMutability": "view",
@@ -645,6 +700,16 @@ export const eternalFarmingABI = [
               "internalType": "uint24",
               "name": "minimalPositionWidth",
               "type": "uint24"
+            },
+            {
+              "internalType": "uint16",
+              "name": "weight0",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "weight1",
+              "type": "uint16"
             }
           ],
           "internalType": "struct IAlgebraEternalFarming.IncentiveParams",
@@ -1137,5 +1202,90 @@ export const eternalFarmingABI = [
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "contract IERC20Minimal",
+              "name": "rewardToken",
+              "type": "address"
+            },
+            {
+              "internalType": "contract IERC20Minimal",
+              "name": "bonusRewardToken",
+              "type": "address"
+            },
+            {
+              "internalType": "contract IAlgebraPool",
+              "name": "pool",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "nonce",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct IncentiveKey",
+          "name": "key",
+          "type": "tuple"
+        },
+        {
+          "internalType": "uint16",
+          "name": "weight0",
+          "type": "uint16"
+        },
+        {
+          "internalType": "uint16",
+          "name": "weight1",
+          "type": "uint16"
+        }
+      ],
+      "name": "setWeights",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "contract IERC20Minimal",
+              "name": "rewardToken",
+              "type": "address"
+            },
+            {
+              "internalType": "contract IERC20Minimal",
+              "name": "bonusRewardToken",
+              "type": "address"
+            },
+            {
+              "internalType": "contract IAlgebraPool",
+              "name": "pool",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "nonce",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct IncentiveKey",
+          "name": "key",
+          "type": "tuple"
+        },
+        {
+          "internalType": "bool",
+          "name": "isActive",
+          "type": "bool"
+        }
+      ],
+      "name": "switchDynamicRate",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
     }
-  ] as const
+] as const;

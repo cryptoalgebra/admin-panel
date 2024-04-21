@@ -20,20 +20,21 @@ const Toolbar = ({ changeShowDeactivated }: { changeShowDeactivated: (state: boo
     </div>
 }
 
-const FarmHeader = () => <div className="hidden md:grid grid-cols-4 uppercase text-xs font-semibold text-gray-600 mb-4 pb-4 border-b border-gray-300">
+const FarmHeader = () => <div className="hidden md:grid grid-cols-5 uppercase text-xs font-semibold text-gray-600 mb-4 pb-4 border-b border-gray-300">
     <div>Pool</div>
     <div>Rewards</div>
     <div>Bonus Rewards</div>
+    <div>Dynamic Rates</div>
     <div></div>
 </div>
 
 const FarmRow = (farm: FarmingFieldsFragment) => {
 
-    const { token0, token1, reward, bonusReward, rewardToken, bonusRewardToken, isDeactivated } = useFarmData(farm)
+    const { token0, token1, reward, bonusReward, rewardToken, bonusRewardToken, isDeactivated, isDynamicRateActivated } = useFarmData(farm)
 
     const isEmpty = isDeactivated && ( Number(reward) === 0 && ( Number(bonusReward) === 0 || !bonusReward ) )
 
-    return <div className="grid grid-cols-1 gap-4 md:gap-0 md:grid-cols-4 w-full text-left p-4 bg-gray-50 border border-gray-300 rounded-xl">
+    return <div className="grid grid-cols-1 gap-4 md:gap-0 md:grid-cols-5 w-full text-left p-4 bg-gray-50 border border-gray-300 rounded-xl">
         {token0 && token1 ? <div className="flex w-full justify-between">
             <div className="md:hidden font-bold">Pool</div>
             <div>{`${token0.symbol} / ${token1.symbol}`}</div>
@@ -45,6 +46,10 @@ const FarmRow = (farm: FarmingFieldsFragment) => {
         { bonusRewardToken && bonusReward ? <div className="flex w-full justify-between">
             <div className="md:hidden font-bold">Bonus Rewards</div>
             <div>{`${bonusReward} ${bonusRewardToken.symbol}`}</div>
+        </div> : <div></div> }
+        { token0 && token1 ? <div className="flex w-full justify-between">
+            <div className="md:hidden font-bold">Dynamic Rates</div>
+            <div>{isDynamicRateActivated ? 'Yes' : 'No'}</div>
         </div> : <div></div> }
         { !isEmpty && <div className="text-right">
             <Link to={`/farms/${farm.id}`} state={farm} className="px-4 py-2 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-400">Manage →</Link>

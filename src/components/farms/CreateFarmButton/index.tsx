@@ -65,7 +65,9 @@ const CreateFarmButton = ({
                 rewardRate: rewardRateBn,
                 bonusReward: bonusRewardBn || 0n,
                 bonusRewardRate: bonusRewardRateBn || 0n,
-                minimalPositionWidth: 0
+                minimalPositionWidth: 0,
+                weight0: 500,
+                weight1: 500
             },
             plugin
         ] : undefined

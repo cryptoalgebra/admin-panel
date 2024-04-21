@@ -1,7 +1,16 @@
-import { Address } from "viem";
+import { Address } from 'viem';
 
-export const ALGEBRA_FARMING_CENTER: Address = '0x37A4950b4ea0C46596404895c5027B088B0e70e7'
+export const ALGEBRA_FARMING_CENTER: Address =
+    '0x754Fd5fB70efBcDe132F76c5F5A5cb1716b9FFa2';
 
-export const ALGEBRA_ETERNAL_FARMING: Address = '0x49a390a3dFd2d01389f799965F3af5961f87d228'
+export const ALGEBRA_ETERNAL_FARMING: Address =
+    '0x748DddDfb4780168346ac628593dB1b17cF62dA8';
 
-export const ALGEBRA_FACTORY: Address = '0x6AD6A4f233F1E33613e996CCc17409B93fF8bf5f'
+export const ALGEBRA_FACTORY: Address =
+    '0x32f22b73d887dC91334077BC9C4F9C0879319D44';
+
+export const PLUGIN_FACTORY: Address =
+    '0x037B9F174218Ef3BfA86F8EdBb8c15D0Efaa746E';
+
+export const ALGEBRA_STUB_PLUGIN: Address =
+    '0xeD5B07Dd0F19c7412BF318ADaaFe52089f39B224';
