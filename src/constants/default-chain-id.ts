@@ -1,4 +1,4 @@
-export const DEFAULT_CHAIN_ID = 0xd036
-export const DEFAULT_CHAIN_NAME = 'Superseed Sepolia'
-export const DEFAULT_NATIVE_SYMBOL = 'ETH'
-export const DEFAULT_NATIVE_NAME = 'Ether'
+export const DEFAULT_CHAIN_ID = 0x530
+export const DEFAULT_CHAIN_NAME = 'SEI Testnet'
+export const DEFAULT_NATIVE_SYMBOL = 'SEI'
+export const DEFAULT_NATIVE_NAME = 'SEI'

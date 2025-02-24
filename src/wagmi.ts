@@ -6,11 +6,11 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 
 import { publicProvider } from 'wagmi/providers/public'
 
-const superseed = defineChain({
-  id: 53302,
-  name: 'Superseed',
-  network: 'superseed-sepolia',
-  nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+const seiTestnet = defineChain({
+  id: 1328,
+  network: 'sei-testnet',
+  name: 'SEI Test',
+  nativeCurrency: { name: 'SEI', symbol: 'SEI', decimals: 18 },
   rpcUrls: {
     default: {
       http: [import.meta.env.VITE_INFURA_RPC],
@@ -20,17 +20,20 @@ const superseed = defineChain({
     },
   },
   blockExplorers: {
+    etherscan: {
+      name: 'SeiScan',
+      url: 'https://seitrace.com',
+    },
     default: {
-      name: 'superseedExplorer',
-      url: 'https://sepolia-explorer.superseed.xyz/',
+      name: 'SeiScan',
+      url: 'https://seitrace.com',
     },
   },
   testnet: true,
 })
 
-
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [superseed],
+  [seiTestnet],
   [
     publicProvider(),
   ],

@@ -569,10 +569,10 @@
     stream-browserify "^3.0.0"
     util "^0.12.4"
 
-"@cryptoalgebra/integral-sdk@npm:@cryptoalgebra/archswap-sdk@1.0.1":
+"@cryptoalgebra/integral-sdk@npm:@cryptoalgebra/yaka-sdk@1.0.1":
   version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@cryptoalgebra/archswap-sdk/-/archswap-sdk-1.0.1.tgz#0e858a2eec3cb705bd55c47656d55fdcb76e884d"
-  integrity sha512-JU6TQJKSZJb4ffNHS1T2hurwv9yx9Gn3UAvqA06nA5SbxB1d1hRwEpnrZ6nST1nku9wzQ3/7E025PfEHBrXPqw==
+  resolved "https://registry.yarnpkg.com/@cryptoalgebra/yaka-sdk/-/yaka-sdk-1.0.1.tgz#21b571ef92f7fd976dcb6c5f1422f7d1ae27ea3b"
+  integrity sha512-bKl+k0P2d3fspBQtARFYGqEw+7sjk9yycgqN2c/WfSe+cZ0QFs3LCJXNpEn0Lehp1C9gc+1T4CV8HAKEEhVFHw==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/address" "^5.7.0"
@@ -7530,7 +7530,14 @@ string_decoder@^1.1.1:
   dependencies:
     safe-buffer "~5.2.0"
 
-"strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
+"strip-ansi-cjs@npm:strip-ansi@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.npmjs.org/strip-ansi/-/strip-ansi-6.0.1.tgz"
+  integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
+  dependencies:
+    ansi-regex "^5.0.1"
+
+strip-ansi@^6.0.0, strip-ansi@^6.0.1:
   version "6.0.1"
   resolved "https://registry.npmjs.org/strip-ansi/-/strip-ansi-6.0.1.tgz"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
