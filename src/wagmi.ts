@@ -1,36 +1,13 @@
-import { defineChain } from 'viem'
 import { configureChains, createConfig } from 'wagmi'
+import { base } from 'viem/chains'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 
 import { publicProvider } from 'wagmi/providers/public'
 
-const superseed = defineChain({
-  id: 53302,
-  name: 'Superseed',
-  network: 'superseed-sepolia',
-  nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
-  rpcUrls: {
-    default: {
-      http: [import.meta.env.VITE_INFURA_RPC],
-    },
-    public: {
-      http: [import.meta.env.VITE_INFURA_RPC],
-    },
-  },
-  blockExplorers: {
-    default: {
-      name: 'superseedExplorer',
-      url: 'https://sepolia-explorer.superseed.xyz/',
-    },
-  },
-  testnet: true,
-})
-
-
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [superseed],
+  [base],
   [
     publicProvider(),
   ],

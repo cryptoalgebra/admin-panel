@@ -617,6 +617,7 @@ export enum Burn_OrderBy {
   PoolCommunityFee = 'pool__communityFee',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
+  PoolDeployer = 'pool__deployer',
   PoolFee = 'pool__fee',
   PoolFeeGrowthGlobal0X128 = 'pool__feeGrowthGlobal0X128',
   PoolFeeGrowthGlobal1X128 = 'pool__feeGrowthGlobal1X128',
@@ -627,6 +628,8 @@ export enum Burn_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolPlugin = 'pool__plugin',
+  PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
   PoolTick = 'pool__tick',
   PoolTickSpacing = 'pool__tickSpacing',
@@ -838,6 +841,7 @@ export enum Collect_OrderBy {
   PoolCommunityFee = 'pool__communityFee',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
+  PoolDeployer = 'pool__deployer',
   PoolFee = 'pool__fee',
   PoolFeeGrowthGlobal0X128 = 'pool__feeGrowthGlobal0X128',
   PoolFeeGrowthGlobal1X128 = 'pool__feeGrowthGlobal1X128',
@@ -848,6 +852,8 @@ export enum Collect_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolPlugin = 'pool__plugin',
+  PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
   PoolTick = 'pool__tick',
   PoolTickSpacing = 'pool__tickSpacing',
@@ -1527,6 +1533,7 @@ export enum Flash_OrderBy {
   PoolCommunityFee = 'pool__communityFee',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
+  PoolDeployer = 'pool__deployer',
   PoolFee = 'pool__fee',
   PoolFeeGrowthGlobal0X128 = 'pool__feeGrowthGlobal0X128',
   PoolFeeGrowthGlobal1X128 = 'pool__feeGrowthGlobal1X128',
@@ -1537,6 +1544,8 @@ export enum Flash_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolPlugin = 'pool__plugin',
+  PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
   PoolTick = 'pool__tick',
   PoolTickSpacing = 'pool__tickSpacing',
@@ -1793,6 +1802,7 @@ export enum Mint_OrderBy {
   PoolCommunityFee = 'pool__communityFee',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
+  PoolDeployer = 'pool__deployer',
   PoolFee = 'pool__fee',
   PoolFeeGrowthGlobal0X128 = 'pool__feeGrowthGlobal0X128',
   PoolFeeGrowthGlobal1X128 = 'pool__feeGrowthGlobal1X128',
@@ -1803,6 +1813,8 @@ export enum Mint_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolPlugin = 'pool__plugin',
+  PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
   PoolTick = 'pool__tick',
   PoolTickSpacing = 'pool__tickSpacing',
@@ -1869,6 +1881,118 @@ export enum OrderDirection {
   Desc = 'desc'
 }
 
+export type Plugin = {
+  __typename?: 'Plugin';
+  collectedFeesToken0: Scalars['BigDecimal']['output'];
+  collectedFeesToken1: Scalars['BigDecimal']['output'];
+  collectedFeesUSD: Scalars['BigDecimal']['output'];
+  id: Scalars['ID']['output'];
+  pool: Pool;
+};
+
+export type Plugin_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<Plugin_Filter>>>;
+  collectedFeesToken0?: InputMaybe<Scalars['BigDecimal']['input']>;
+  collectedFeesToken0_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  collectedFeesToken0_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  collectedFeesToken0_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  collectedFeesToken0_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  collectedFeesToken0_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  collectedFeesToken0_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  collectedFeesToken0_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  collectedFeesToken1?: InputMaybe<Scalars['BigDecimal']['input']>;
+  collectedFeesToken1_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  collectedFeesToken1_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  collectedFeesToken1_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  collectedFeesToken1_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  collectedFeesToken1_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  collectedFeesToken1_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  collectedFeesToken1_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  collectedFeesUSD?: InputMaybe<Scalars['BigDecimal']['input']>;
+  collectedFeesUSD_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  collectedFeesUSD_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  collectedFeesUSD_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  collectedFeesUSD_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  collectedFeesUSD_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  collectedFeesUSD_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  collectedFeesUSD_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_not?: InputMaybe<Scalars['ID']['input']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  or?: InputMaybe<Array<InputMaybe<Plugin_Filter>>>;
+  pool?: InputMaybe<Scalars['String']['input']>;
+  pool_?: InputMaybe<Pool_Filter>;
+  pool_contains?: InputMaybe<Scalars['String']['input']>;
+  pool_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  pool_ends_with?: InputMaybe<Scalars['String']['input']>;
+  pool_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  pool_gt?: InputMaybe<Scalars['String']['input']>;
+  pool_gte?: InputMaybe<Scalars['String']['input']>;
+  pool_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  pool_lt?: InputMaybe<Scalars['String']['input']>;
+  pool_lte?: InputMaybe<Scalars['String']['input']>;
+  pool_not?: InputMaybe<Scalars['String']['input']>;
+  pool_not_contains?: InputMaybe<Scalars['String']['input']>;
+  pool_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  pool_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  pool_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  pool_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  pool_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  pool_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  pool_starts_with?: InputMaybe<Scalars['String']['input']>;
+  pool_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+};
+
+export enum Plugin_OrderBy {
+  CollectedFeesToken0 = 'collectedFeesToken0',
+  CollectedFeesToken1 = 'collectedFeesToken1',
+  CollectedFeesUsd = 'collectedFeesUSD',
+  Id = 'id',
+  Pool = 'pool',
+  PoolCollectedFeesToken0 = 'pool__collectedFeesToken0',
+  PoolCollectedFeesToken1 = 'pool__collectedFeesToken1',
+  PoolCollectedFeesUsd = 'pool__collectedFeesUSD',
+  PoolCommunityFee = 'pool__communityFee',
+  PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
+  PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
+  PoolDeployer = 'pool__deployer',
+  PoolFee = 'pool__fee',
+  PoolFeeGrowthGlobal0X128 = 'pool__feeGrowthGlobal0X128',
+  PoolFeeGrowthGlobal1X128 = 'pool__feeGrowthGlobal1X128',
+  PoolFeesToken0 = 'pool__feesToken0',
+  PoolFeesToken1 = 'pool__feesToken1',
+  PoolFeesUsd = 'pool__feesUSD',
+  PoolId = 'pool__id',
+  PoolLiquidity = 'pool__liquidity',
+  PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
+  PoolObservationIndex = 'pool__observationIndex',
+  PoolPlugin = 'pool__plugin',
+  PoolPluginConfig = 'pool__pluginConfig',
+  PoolSqrtPrice = 'pool__sqrtPrice',
+  PoolTick = 'pool__tick',
+  PoolTickSpacing = 'pool__tickSpacing',
+  PoolToken0Price = 'pool__token0Price',
+  PoolToken1Price = 'pool__token1Price',
+  PoolTotalValueLockedMatic = 'pool__totalValueLockedMatic',
+  PoolTotalValueLockedToken0 = 'pool__totalValueLockedToken0',
+  PoolTotalValueLockedToken1 = 'pool__totalValueLockedToken1',
+  PoolTotalValueLockedUsd = 'pool__totalValueLockedUSD',
+  PoolTotalValueLockedUsdUntracked = 'pool__totalValueLockedUSDUntracked',
+  PoolTxCount = 'pool__txCount',
+  PoolUntrackedFeesUsd = 'pool__untrackedFeesUSD',
+  PoolUntrackedVolumeUsd = 'pool__untrackedVolumeUSD',
+  PoolVolumeToken0 = 'pool__volumeToken0',
+  PoolVolumeToken1 = 'pool__volumeToken1',
+  PoolVolumeUsd = 'pool__volumeUSD'
+}
+
 export type Pool = {
   __typename?: 'Pool';
   burns: Array<Burn>;
@@ -1879,6 +2003,7 @@ export type Pool = {
   communityFee: Scalars['BigInt']['output'];
   createdAtBlockNumber: Scalars['BigInt']['output'];
   createdAtTimestamp: Scalars['BigInt']['output'];
+  deployer: Scalars['Bytes']['output'];
   fee: Scalars['BigInt']['output'];
   feeGrowthGlobal0X128: Scalars['BigInt']['output'];
   feeGrowthGlobal1X128: Scalars['BigInt']['output'];
@@ -1890,6 +2015,8 @@ export type Pool = {
   liquidityProviderCount: Scalars['BigInt']['output'];
   mints: Array<Mint>;
   observationIndex: Scalars['BigInt']['output'];
+  plugin: Scalars['Bytes']['output'];
+  pluginConfig: Scalars['Int']['output'];
   poolDayData: Array<PoolDayData>;
   poolHourData: Array<PoolHourData>;
   sqrtPrice: Scalars['BigInt']['output'];
@@ -2228,6 +2355,7 @@ export enum PoolDayData_OrderBy {
   PoolCommunityFee = 'pool__communityFee',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
+  PoolDeployer = 'pool__deployer',
   PoolFee = 'pool__fee',
   PoolFeeGrowthGlobal0X128 = 'pool__feeGrowthGlobal0X128',
   PoolFeeGrowthGlobal1X128 = 'pool__feeGrowthGlobal1X128',
@@ -2238,6 +2366,8 @@ export enum PoolDayData_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolPlugin = 'pool__plugin',
+  PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
   PoolTick = 'pool__tick',
   PoolTickSpacing = 'pool__tickSpacing',
@@ -2563,6 +2693,7 @@ export enum PoolHourData_OrderBy {
   PoolCommunityFee = 'pool__communityFee',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
+  PoolDeployer = 'pool__deployer',
   PoolFee = 'pool__fee',
   PoolFeeGrowthGlobal0X128 = 'pool__feeGrowthGlobal0X128',
   PoolFeeGrowthGlobal1X128 = 'pool__feeGrowthGlobal1X128',
@@ -2573,6 +2704,8 @@ export enum PoolHourData_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolPlugin = 'pool__plugin',
+  PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
   PoolTick = 'pool__tick',
   PoolTickSpacing = 'pool__tickSpacing',
@@ -2739,6 +2872,7 @@ export enum PoolPosition_OrderBy {
   PoolCommunityFee = 'pool__communityFee',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
+  PoolDeployer = 'pool__deployer',
   PoolFee = 'pool__fee',
   PoolFeeGrowthGlobal0X128 = 'pool__feeGrowthGlobal0X128',
   PoolFeeGrowthGlobal1X128 = 'pool__feeGrowthGlobal1X128',
@@ -2749,6 +2883,8 @@ export enum PoolPosition_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolPlugin = 'pool__plugin',
+  PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
   PoolTick = 'pool__tick',
   PoolTickSpacing = 'pool__tickSpacing',
@@ -2842,6 +2978,16 @@ export type Pool_Filter = {
   createdAtTimestamp_lte?: InputMaybe<Scalars['BigInt']['input']>;
   createdAtTimestamp_not?: InputMaybe<Scalars['BigInt']['input']>;
   createdAtTimestamp_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  deployer?: InputMaybe<Scalars['Bytes']['input']>;
+  deployer_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  deployer_gt?: InputMaybe<Scalars['Bytes']['input']>;
+  deployer_gte?: InputMaybe<Scalars['Bytes']['input']>;
+  deployer_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  deployer_lt?: InputMaybe<Scalars['Bytes']['input']>;
+  deployer_lte?: InputMaybe<Scalars['Bytes']['input']>;
+  deployer_not?: InputMaybe<Scalars['Bytes']['input']>;
+  deployer_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  deployer_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
   fee?: InputMaybe<Scalars['BigInt']['input']>;
   feeGrowthGlobal0X128?: InputMaybe<Scalars['BigInt']['input']>;
   feeGrowthGlobal0X128_gt?: InputMaybe<Scalars['BigInt']['input']>;
@@ -2924,6 +3070,24 @@ export type Pool_Filter = {
   observationIndex_not?: InputMaybe<Scalars['BigInt']['input']>;
   observationIndex_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   or?: InputMaybe<Array<InputMaybe<Pool_Filter>>>;
+  plugin?: InputMaybe<Scalars['Bytes']['input']>;
+  pluginConfig?: InputMaybe<Scalars['Int']['input']>;
+  pluginConfig_gt?: InputMaybe<Scalars['Int']['input']>;
+  pluginConfig_gte?: InputMaybe<Scalars['Int']['input']>;
+  pluginConfig_in?: InputMaybe<Array<Scalars['Int']['input']>>;
+  pluginConfig_lt?: InputMaybe<Scalars['Int']['input']>;
+  pluginConfig_lte?: InputMaybe<Scalars['Int']['input']>;
+  pluginConfig_not?: InputMaybe<Scalars['Int']['input']>;
+  pluginConfig_not_in?: InputMaybe<Array<Scalars['Int']['input']>>;
+  plugin_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  plugin_gt?: InputMaybe<Scalars['Bytes']['input']>;
+  plugin_gte?: InputMaybe<Scalars['Bytes']['input']>;
+  plugin_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  plugin_lt?: InputMaybe<Scalars['Bytes']['input']>;
+  plugin_lte?: InputMaybe<Scalars['Bytes']['input']>;
+  plugin_not?: InputMaybe<Scalars['Bytes']['input']>;
+  plugin_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  plugin_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
   poolDayData_?: InputMaybe<PoolDayData_Filter>;
   poolHourData_?: InputMaybe<PoolHourData_Filter>;
   sqrtPrice?: InputMaybe<Scalars['BigInt']['input']>;
@@ -3109,6 +3273,7 @@ export enum Pool_OrderBy {
   CommunityFee = 'communityFee',
   CreatedAtBlockNumber = 'createdAtBlockNumber',
   CreatedAtTimestamp = 'createdAtTimestamp',
+  Deployer = 'deployer',
   Fee = 'fee',
   FeeGrowthGlobal0X128 = 'feeGrowthGlobal0X128',
   FeeGrowthGlobal1X128 = 'feeGrowthGlobal1X128',
@@ -3120,6 +3285,8 @@ export enum Pool_OrderBy {
   LiquidityProviderCount = 'liquidityProviderCount',
   Mints = 'mints',
   ObservationIndex = 'observationIndex',
+  Plugin = 'plugin',
+  PluginConfig = 'pluginConfig',
   PoolDayData = 'poolDayData',
   PoolHourData = 'poolHourData',
   SqrtPrice = 'sqrtPrice',
@@ -3413,6 +3580,7 @@ export enum PositionSnapshot_OrderBy {
   PoolCommunityFee = 'pool__communityFee',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
+  PoolDeployer = 'pool__deployer',
   PoolFee = 'pool__fee',
   PoolFeeGrowthGlobal0X128 = 'pool__feeGrowthGlobal0X128',
   PoolFeeGrowthGlobal1X128 = 'pool__feeGrowthGlobal1X128',
@@ -3423,6 +3591,8 @@ export enum PositionSnapshot_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolPlugin = 'pool__plugin',
+  PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
   PoolTick = 'pool__tick',
   PoolTickSpacing = 'pool__tickSpacing',
@@ -3740,6 +3910,7 @@ export enum Position_OrderBy {
   PoolCommunityFee = 'pool__communityFee',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
+  PoolDeployer = 'pool__deployer',
   PoolFee = 'pool__fee',
   PoolFeeGrowthGlobal0X128 = 'pool__feeGrowthGlobal0X128',
   PoolFeeGrowthGlobal1X128 = 'pool__feeGrowthGlobal1X128',
@@ -3750,6 +3921,8 @@ export enum Position_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolPlugin = 'pool__plugin',
+  PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
   PoolTick = 'pool__tick',
   PoolTickSpacing = 'pool__tickSpacing',
@@ -3878,6 +4051,8 @@ export type Query = {
   flashes: Array<Flash>;
   mint?: Maybe<Mint>;
   mints: Array<Mint>;
+  plugin?: Maybe<Plugin>;
+  plugins: Array<Plugin>;
   pool?: Maybe<Pool>;
   poolDayData?: Maybe<PoolDayData>;
   poolDayDatas: Array<PoolDayData>;
@@ -4113,6 +4288,24 @@ export type QueryMintsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   subgraphError?: _SubgraphErrorPolicy_;
   where?: InputMaybe<Mint_Filter>;
+};
+
+
+export type QueryPluginArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID']['input'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryPluginsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Plugin_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<Plugin_Filter>;
 };
 
 
@@ -4487,6 +4680,8 @@ export type Subscription = {
   flashes: Array<Flash>;
   mint?: Maybe<Mint>;
   mints: Array<Mint>;
+  plugin?: Maybe<Plugin>;
+  plugins: Array<Plugin>;
   pool?: Maybe<Pool>;
   poolDayData?: Maybe<PoolDayData>;
   poolDayDatas: Array<PoolDayData>;
@@ -4722,6 +4917,24 @@ export type SubscriptionMintsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   subgraphError?: _SubgraphErrorPolicy_;
   where?: InputMaybe<Mint_Filter>;
+};
+
+
+export type SubscriptionPluginArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID']['input'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionPluginsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Plugin_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<Plugin_Filter>;
 };
 
 
@@ -5240,6 +5453,7 @@ export enum Swap_OrderBy {
   PoolCommunityFee = 'pool__communityFee',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
+  PoolDeployer = 'pool__deployer',
   PoolFee = 'pool__fee',
   PoolFeeGrowthGlobal0X128 = 'pool__feeGrowthGlobal0X128',
   PoolFeeGrowthGlobal1X128 = 'pool__feeGrowthGlobal1X128',
@@ -5250,6 +5464,8 @@ export enum Swap_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolPlugin = 'pool__plugin',
+  PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
   PoolTick = 'pool__tick',
   PoolTickSpacing = 'pool__tickSpacing',
@@ -5496,6 +5712,7 @@ export enum TickDayData_OrderBy {
   PoolCommunityFee = 'pool__communityFee',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
+  PoolDeployer = 'pool__deployer',
   PoolFee = 'pool__fee',
   PoolFeeGrowthGlobal0X128 = 'pool__feeGrowthGlobal0X128',
   PoolFeeGrowthGlobal1X128 = 'pool__feeGrowthGlobal1X128',
@@ -5506,6 +5723,8 @@ export enum TickDayData_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolPlugin = 'pool__plugin',
+  PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
   PoolTick = 'pool__tick',
   PoolTickSpacing = 'pool__tickSpacing',
@@ -5688,6 +5907,7 @@ export enum TickHourData_OrderBy {
   PoolCommunityFee = 'pool__communityFee',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
+  PoolDeployer = 'pool__deployer',
   PoolFee = 'pool__fee',
   PoolFeeGrowthGlobal0X128 = 'pool__feeGrowthGlobal0X128',
   PoolFeeGrowthGlobal1X128 = 'pool__feeGrowthGlobal1X128',
@@ -5698,6 +5918,8 @@ export enum TickHourData_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolPlugin = 'pool__plugin',
+  PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
   PoolTick = 'pool__tick',
   PoolTickSpacing = 'pool__tickSpacing',
@@ -5961,6 +6183,7 @@ export enum Tick_OrderBy {
   PoolCommunityFee = 'pool__communityFee',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
+  PoolDeployer = 'pool__deployer',
   PoolFee = 'pool__fee',
   PoolFeeGrowthGlobal0X128 = 'pool__feeGrowthGlobal0X128',
   PoolFeeGrowthGlobal1X128 = 'pool__feeGrowthGlobal1X128',
@@ -5971,6 +6194,8 @@ export enum Tick_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolPlugin = 'pool__plugin',
+  PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
   PoolTick = 'pool__tick',
   PoolTickSpacing = 'pool__tickSpacing',

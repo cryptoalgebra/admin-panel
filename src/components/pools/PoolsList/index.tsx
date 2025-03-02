@@ -9,7 +9,7 @@ const PoolHeader = () => (
         <div>Pool</div>
         <div>TVL</div>
         <div>Volume 24H</div>
-        <div>APR</div>
+        {/* <div>APR</div> */}
         <div></div>
     </div>
 );
@@ -50,7 +50,7 @@ const PoolRow = (pool: FormattedPool) => {
                     <div>{pool.apr}</div>
                 </div>
             ) : (
-                <div>0</div>
+                <div></div>
             )}
 
             <div className="text-right">
