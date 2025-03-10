@@ -4,9 +4,9 @@ import type { CodegenConfig } from '@graphql-codegen/cli';
 const config: CodegenConfig = {
   overwrite: true,
   schema: [
-    'https://api.studio.thegraph.com/query/50593/clamm-analytics/version/latest',
-    'https://api.studio.thegraph.com/query/50593/clamm-blocks/version/latest',
-    'https://api.studio.thegraph.com/query/50593/clamm-farms/version/latest',
+    'https://api.studio.thegraph.com/query/43776/atlas-analytics/v0.0.1',
+    'https://api.studio.thegraph.com/query/43776/hemi-blocks/v0.0.1',
+    'https://api.studio.thegraph.com/query/43776/atlas-farming/v0.0.1',
   ],
   documents: "src/graphql/queries/!(*.d).{ts,tsx}",
   generates: {

@@ -1,13 +1,39 @@
 import { configureChains, createConfig } from 'wagmi'
-import { base } from 'viem/chains'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 
 import { publicProvider } from 'wagmi/providers/public'
+import { defineChain } from 'viem'
+
+const hemi = defineChain({
+  id: 43111,
+  network: 'hemi-mainnet',
+  name: 'Hemi',
+  nativeCurrency: { name: 'ETH', symbol: 'ETH', decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: [import.meta.env.VITE_INFURA_RPC],
+    },
+    public: {
+      http: [import.meta.env.VITE_INFURA_RPC],
+    },
+  },
+  blockExplorers: {
+    etherscan: {
+      name: 'HemiScan',
+      url: 'https://explorer.hemi.xyz',
+    },
+    default: {
+      name: 'HemiScan',
+      url: 'https://explorer.hemi.xyz',
+    },
+  },
+  testnet: true,
+})
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [base],
+  [hemi],
   [
     publicProvider(),
   ],
