@@ -6,34 +6,38 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { publicProvider } from 'wagmi/providers/public'
 import { defineChain } from 'viem'
 
-const hemi = defineChain({
-  id: 43111,
-  network: 'hemi-mainnet',
-  name: 'Hemi',
-  nativeCurrency: { name: 'ETH', symbol: 'ETH', decimals: 18 },
+export const baseSepolia = defineChain({
+  id: 84532,
+  network: 'base-sepolia',
+  name: 'Base Sepolia',
+  nativeCurrency: { name: 'Sepolia Ether', symbol: 'ETH', decimals: 18 },
   rpcUrls: {
-    default: {
-      http: [import.meta.env.VITE_INFURA_RPC],
-    },
     public: {
-      http: [import.meta.env.VITE_INFURA_RPC],
+      http: ['https://sepolia.base.org'],
+    },
+    default: {
+      http: ['https://sepolia.base.org'],
     },
   },
   blockExplorers: {
-    etherscan: {
-      name: 'HemiScan',
-      url: 'https://explorer.hemi.xyz',
-    },
     default: {
-      name: 'HemiScan',
-      url: 'https://explorer.hemi.xyz',
+      name: 'Basescan',
+      url: 'https://sepolia.basescan.org',
+      apiUrl: 'https://api-sepolia.basescan.org/api',
+    },
+  },
+  contracts: {
+    multicall3: {
+      address: '0xca11bde05977b3631167028862be2a173976ca11',
+      blockCreated: 1059647,
     },
   },
   testnet: true,
 })
 
+
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [hemi],
+  [baseSepolia],
   [
     publicProvider(),
   ],
