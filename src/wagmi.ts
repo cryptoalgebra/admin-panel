@@ -6,41 +6,41 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { publicProvider } from 'wagmi/providers/public'
 import { defineChain } from 'viem'
 
-export const megaethTestnet = defineChain({
-  id: 6342,
-  name: 'MegaETH Testnet',
-  network: 'megaeth-testnet',
+export const monadTestnet = defineChain({
+  id: 10143,
+  network: 'monad-testnet',
+  name: 'Monad Testnet',
   nativeCurrency: {
-    name: 'MegaETH Testnet Ether',
-    symbol: 'ETH',
+    name: 'Testnet MON Token',
+    symbol: 'MON',
     decimals: 18,
   },
   rpcUrls: {
     default: {
-      http: ['https://carrot.megaeth.com/rpc'],
+      http: ['https://testnet-rpc.monad.xyz'],
     },
     public: {
-      http: ['https://carrot.megaeth.com/rpc'],
-    },
+      http: ['https://testnet-rpc.monad.xyz']
+    }
   },
   blockExplorers: {
     default: {
-      name: 'MegaETH Testnet Explorer',
-      url: 'https://www.megaexplorer.xyz/',
+      name: 'Monad Testnet explorer',
+      url: 'https://testnet.monadexplorer.com',
     },
   },
   contracts: {
     multicall3: {
       address: '0xcA11bde05977b3631167028862bE2a173976CA11',
+      blockCreated: 251449,
     },
   },
   testnet: true,
 })
 
 
-
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [megaethTestnet],
+  [monadTestnet],
   [
     publicProvider(),
   ],
