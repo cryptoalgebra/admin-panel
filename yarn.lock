@@ -579,10 +579,10 @@
     stream-browserify "^3.0.0"
     util "^0.12.4"
 
-"@cryptoalgebra/integral-sdk@npm:@cryptoalgebra/blackhole-sdk@1.0.0":
+"@cryptoalgebra/integral-sdk@npm:@cryptoalgebra/bolt-sdk@1.0.0":
   version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@cryptoalgebra/blackhole-sdk/-/blackhole-sdk-1.0.0.tgz#793a6582f64b9b9973b4c739f93d4fd5a2ebac64"
-  integrity sha512-TEOLM0kpOOtKb1mTobwjGhk5Sr5OAjZQESJ2D/qClUNAwP5ebVew3TWO+GG6B8lme+UYHnG+UMXCJdwmpnqwyA==
+  resolved "https://registry.yarnpkg.com/@cryptoalgebra/bolt-sdk/-/bolt-sdk-1.0.0.tgz#05eed7c013cf3d9941d6ed9f56ec134ab1cf27f4"
+  integrity sha512-P9UDsF0Sk13xpwP6uOGLyUkd1YHZEUS4Xsp/Gm7aOBAkRnBwTj2ZfOvxlR6lmX5uj1ppGlR2W1BLMVLaxthbaQ==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/address" "^5.7.0"
