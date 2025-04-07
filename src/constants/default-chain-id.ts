@@ -1,4 +1,4 @@
-export const DEFAULT_CHAIN_ID = 0x279f
-export const DEFAULT_CHAIN_NAME = 'Monad Testnet'
-export const DEFAULT_NATIVE_SYMBOL = 'MON'
-export const DEFAULT_NATIVE_NAME = 'Monad'
+export const DEFAULT_CHAIN_ID = 0xdede
+export const DEFAULT_CHAIN_NAME = 'Sonic'
+export const DEFAULT_NATIVE_SYMBOL = 'S'
+export const DEFAULT_NATIVE_NAME = 'Sonic'
