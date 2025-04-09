@@ -6,34 +6,36 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 
 import { publicProvider } from 'wagmi/providers/public'
 
-const seiTestnet = defineChain({
-  id: 1328,
-  network: 'sei-testnet',
-  name: 'SEI Test',
-  nativeCurrency: { name: 'SEI', symbol: 'SEI', decimals: 18 },
+export const sei = defineChain({
+  id: 1329,
+  name: 'Sei Network',
+  network: 'sei',
+  nativeCurrency: { name: 'Sei', symbol: 'SEI', decimals: 18 },
   rpcUrls: {
     default: {
-      http: [import.meta.env.VITE_INFURA_RPC],
+      http: ['https://evm-rpc.sei-apis.com/'],
+      webSocket: ['wss://evm-ws.sei-apis.com/'],
     },
     public: {
-      http: [import.meta.env.VITE_INFURA_RPC],
-    },
+      http: ['https://evm-rpc.sei-apis.com/'],
+      webSocket: ['wss://evm-ws.sei-apis.com/'],
+    }
   },
   blockExplorers: {
-    etherscan: {
-      name: 'SeiScan',
-      url: 'https://seitrace.com',
-    },
     default: {
-      name: 'SeiScan',
+      name: 'Seitrace',
       url: 'https://seitrace.com',
     },
   },
-  testnet: true,
+  contracts: {
+    multicall3: {
+      address: '0xcA11bde05977b3631167028862bE2a173976CA11',
+    },
+  },
 })
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [seiTestnet],
+  [sei],
   [
     publicProvider(),
   ],
