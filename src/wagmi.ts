@@ -6,37 +6,37 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { publicProvider } from 'wagmi/providers/public'
 import { defineChain } from 'viem'
 
-export const sonicBlazeTestnet = defineChain({
-  id: 57054,
-  name: 'Sonic Blaze Testnet',
-  network: 'sonic-blaze-testnet',
+export const sonicMainnet = defineChain({
+  id: 146,
+  name: 'Sonic',
+  network: 'sonic',
   nativeCurrency: {
     decimals: 18,
     name: 'Sonic',
     symbol: 'S',
   },
   rpcUrls: {
-    default: { http: ['https://rpc.blaze.soniclabs.com'] },
-    public: { http: ['https://rpc.blaze.soniclabs.com'] }
+    default: { http: ['https://rpc.soniclabs.com'] },
+    public: { http: ['https://rpc.soniclabs.com'] },
   },
   blockExplorers: {
     default: {
-      name: 'Sonic Blaze Testnet Explorer',
-      url: 'https://testnet.sonicscan.org',
+      name: 'Sonic Explorer',
+      url: 'https://sonicscan.org',
     },
   },
   contracts: {
     multicall3: {
-      address: '0xcA11bde05977b3631167028862bE2a173976CA11',
-      blockCreated: 1100,
+      address: '0xca11bde05977b3631167028862be2a173976ca11',
+      blockCreated: 60,
     },
   },
-  testnet: true,
+  testnet: false,
 })
 
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [sonicBlazeTestnet],
+  [sonicMainnet],
   [
     publicProvider(),
   ],
