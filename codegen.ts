@@ -4,9 +4,9 @@ import type { CodegenConfig } from '@graphql-codegen/cli';
 const config: CodegenConfig = {
   overwrite: true,
   schema: [
-    'https://subgraph.satsuma-prod.com/blues-team--829709/analytics-mainnet/version/v0.0.1/api',
-    'https://subgraph.satsuma-prod.com/blues-team--829709/blocks-mainnet/version/v0.0.1/api',
-    'https://subgraph.satsuma-prod.com/blues-team--829709/farms-mainnet/version/v0.0.1/api',
+    'https://api.goldsky.com/api/public/project_cm8gyxv0x02qv01uphvy69ey6/subgraphs/avax-fuji-analytics/v0.0.1/gn',
+    'https://api.goldsky.com/api/public/project_cm8gyxv0x02qv01uphvy69ey6/subgraphs/avax-fuji-blocks/v0.0.1/gn',
+    'https://api.goldsky.com/api/public/project_cm8gyxv0x02qv01uphvy69ey6/subgraphs/avax-fuji-farms/v0.0.1/gn',
   ],
   documents: "src/graphql/queries/!(*.d).{ts,tsx}",
   generates: {

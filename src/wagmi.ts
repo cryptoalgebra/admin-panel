@@ -6,37 +6,37 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { publicProvider } from 'wagmi/providers/public'
 import { defineChain } from 'viem'
 
-export const sonicMainnet = defineChain({
-  id: 146,
-  name: 'Sonic',
-  network: 'sonic',
+export const avaxFuji = defineChain({
+  id: 43_113,
+  name: 'Avalanche Fuji',
+  network: 'avax-fuji',
   nativeCurrency: {
     decimals: 18,
-    name: 'Sonic',
-    symbol: 'S',
+    name: 'Avalanche Fuji',
+    symbol: 'AVAX',
   },
   rpcUrls: {
-    default: { http: ['https://rpc.soniclabs.com'] },
-    public: { http: ['https://rpc.soniclabs.com'] },
+    default: { http: ['https://api.avax-test.network/ext/bc/C/rpc'] },
+    public: { http: ['https://api.avax-test.network/ext/bc/C/rpc'] },
   },
   blockExplorers: {
     default: {
-      name: 'Sonic Explorer',
-      url: 'https://sonicscan.org',
+      name: 'SnowTrace',
+      url: 'https://testnet.snowtrace.io',
     },
   },
   contracts: {
     multicall3: {
       address: '0xca11bde05977b3631167028862be2a173976ca11',
-      blockCreated: 60,
+      blockCreated: 7096959,
     },
   },
-  testnet: false,
+  testnet: true,
 })
 
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [sonicMainnet],
+  [avaxFuji],
   [
     publicProvider(),
   ],
