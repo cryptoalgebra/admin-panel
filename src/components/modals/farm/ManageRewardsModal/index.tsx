@@ -17,7 +17,7 @@ import { IncentiveKey } from "@/types/incentive-key";
 import {
   Token,
   tryParseAmount,
-} from "@cryptoalgebra/custom-pools-and-sliding-fee-sdk";
+} from "@cryptoalgebra/integral-sdk";
 import { useState } from "react";
 import { parseUnits } from "viem";
 import { useContractWrite, usePrepareContractWrite } from "wagmi";

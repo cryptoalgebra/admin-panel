@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import {
   Currency,
   Token,
-} from "@cryptoalgebra/custom-pools-and-sliding-fee-sdk";
+} from "@cryptoalgebra/integral-sdk";
 import { Control, Controller, SubmitHandler, useForm } from "react-hook-form";
 import { ChevronRight, X } from "lucide-react";
 import { useAccount, useBalance } from "wagmi";

@@ -8,7 +8,7 @@ import { useTransitionAwait } from "@/hooks/common/useTransactionAwait";
 import { ApprovalState } from "@/types/approve-state";
 import { PartialIncentiveKey } from "@/types/incentive-key";
 import { IRewards } from "@/types/rewards";
-import { tryParseAmount } from "@cryptoalgebra/custom-pools-and-sliding-fee-sdk";
+import { tryParseAmount } from "@cryptoalgebra/integral-sdk";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useContractWrite, usePrepareContractWrite } from "wagmi";

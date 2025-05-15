@@ -1,7 +1,7 @@
 import {
   Currency,
   CurrencyAmount,
-} from "@cryptoalgebra/custom-pools-and-sliding-fee-sdk";
+} from "@cryptoalgebra/integral-sdk";
 import { Address, erc20ABI, useAccount, useContractRead } from "wagmi";
 
 export function useNeedAllowance(

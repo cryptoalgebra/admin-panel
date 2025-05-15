@@ -3,7 +3,7 @@ import { FormattedPool } from '@/types/pool';
 import { Link } from 'react-router-dom';
 import { useMemo } from 'react';
 import { Address } from 'wagmi';
-import { ADDRESS_ZERO } from '@cryptoalgebra/custom-pools-and-sliding-fee-sdk';
+import { ADDRESS_ZERO } from '@cryptoalgebra/integral-sdk';
 
 const deployers: { [key: string]: string } = {
     '0x7e3387e0595552e992ede4476417704703866e5a': 'HAVE PLUGIN',

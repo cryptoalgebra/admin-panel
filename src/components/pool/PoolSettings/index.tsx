@@ -5,7 +5,7 @@ import { pluginFactoryABI, useAlgebraPoolPlugin } from '@/generated';
 import { usePool } from '@/hooks/pools/usePool';
 import { Address, useContractRead } from 'wagmi';
 import PoolActivationModal from '@/components/modals/pool/PoolActivationModal';
-import { ADDRESS_ZERO } from '@cryptoalgebra/custom-pools-and-sliding-fee-sdk';
+import { ADDRESS_ZERO } from '@cryptoalgebra/integral-sdk';
 
 interface IPoolSettings {
     poolId: Address;

@@ -1,7 +1,7 @@
 import {
   Currency,
   CurrencyAmount,
-} from "@cryptoalgebra/custom-pools-and-sliding-fee-sdk";
+} from "@cryptoalgebra/integral-sdk";
 import { useNeedAllowance } from "./useNeedAllowance";
 import { ApprovalState, ApprovalStateType } from "@/types/approve-state";
 import { useMemo } from "react";

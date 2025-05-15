@@ -6,7 +6,7 @@ import { farmsClient } from "@/graphql/clients";
 import { useSingleFarmingQuery } from "@/graphql/generated/graphql";
 import { useFarmData } from "@/hooks/farms/useFarmData";
 import { IncentiveKey, PartialIncentiveKey } from "@/types/incentive-key";
-import { ADDRESS_ZERO } from "@cryptoalgebra/custom-pools-and-sliding-fee-sdk";
+import { ADDRESS_ZERO } from "@cryptoalgebra/integral-sdk";
 import { ArrowLeft } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { Address } from "wagmi";

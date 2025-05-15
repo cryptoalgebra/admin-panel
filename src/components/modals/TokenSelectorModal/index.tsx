@@ -8,7 +8,7 @@ import {
   CredenzaTitle,
   CredenzaTrigger,
 } from "@/components/ui/credenza";
-import { Currency } from "@cryptoalgebra/custom-pools-and-sliding-fee-sdk";
+import { Currency } from "@cryptoalgebra/integral-sdk";
 
 interface ITokenSelectorModal {
   isOpen: boolean;

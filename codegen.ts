@@ -1,26 +1,22 @@
-import type { CodegenConfig } from "@graphql-codegen/cli";
+import type { CodegenConfig } from '@graphql-codegen/cli';
 
 const config: CodegenConfig = {
   overwrite: true,
   schema: [
-    "https://api.studio.thegraph.com/query/50593/integral-v12/version/latest",
-    "https://api.studio.thegraph.com/query/50593/goerli-blocks/version/latest",
-    "https://api.studio.thegraph.com/query/50593/integral-v12-farming/version/latest",
+    'https://node.graph.prom.io/subgraphs/name/analytics',
+    'https://node.graph.prom.io/subgraphs/name/blocks',
+    'https://node.graph.prom.io/subgraphs/name/farms',
   ],
   documents: "src/graphql/queries/!(*.d).{ts,tsx}",
   generates: {
     "src/graphql/generated/graphql.tsx": {
-      plugins: [
-        "typescript",
-        "typescript-operations",
-        "typescript-react-apollo",
-      ],
+      plugins: ['typescript', 'typescript-operations', 'typescript-react-apollo'],
       config: {
         withHooks: true,
-        withResultType: true,
-      },
-    },
-  },
+        withResultType: true
+      }
+    }
+  }
 };
 
 export default config;

@@ -5,7 +5,7 @@ import {
   useAlgebraPoolToken0,
   useAlgebraPoolToken1,
 } from "@/generated";
-import { Pool, ADDRESS_ZERO } from "@cryptoalgebra/custom-pools-and-sliding-fee-sdk";
+import { Pool, ADDRESS_ZERO } from "@cryptoalgebra/integral-sdk";
 import { Address } from "wagmi";
 import { useCurrency } from "@/hooks/common/useCurrency";
 import { useMemo } from "react";
