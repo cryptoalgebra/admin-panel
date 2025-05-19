@@ -6,29 +6,30 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 
 import { publicProvider } from 'wagmi/providers/public'
 
-const prom = defineChain({
-  id: 227,
-  name: 'Prom',
-  network: 'prom',
-  nativeCurrency: { name: 'Prom', symbol: 'PROM', decimals: 18 },
+export const citreaTestnet = defineChain({
+  id: 5115,
+  name: 'Citrea Testnet',
+  network: 'citrea-testnet',
+  nativeCurrency: { name: 'cBTC', symbol: 'cBTC', decimals: 18 },
   rpcUrls: {
     default: {
-      http: ['https://rpc.prom.io/'],
+      http: ['https://rpc.testnet.citrea.xyz'],
     },
     public: {
-      http: ['https://rpc.prom.io/'],
+      http: ['https://rpc.testnet.citrea.xyz'],
     },
   },
   blockExplorers: {
     default: {
-      name: 'Promscan',
-      url: 'https://promscan.io',
+      name: 'Citrea Explorer',
+      url: 'https://explorer.testnet.citrea.xyz',
     },
   },
+  testnet: true,
 })
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [prom],
+  [citreaTestnet],
   [
     publicProvider(),
   ],
