@@ -6,30 +6,30 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 
 import { publicProvider } from 'wagmi/providers/public'
 
-export const citreaTestnet = defineChain({
-  id: 5115,
-  name: 'Citrea Testnet',
-  network: 'citrea-testnet',
-  nativeCurrency: { name: 'cBTC', symbol: 'cBTC', decimals: 18 },
+export const neuraTestnet = defineChain({
+  id: 267,
+  name: 'Neura Testnet',
+  network: 'neura-testnet',
+  nativeCurrency: { name: 'ANKR', symbol: 'ANKR', decimals: 18 },
   rpcUrls: {
     default: {
-      http: ['https://rpc.testnet.citrea.xyz'],
+      http: ['https://testnet.rpc.neuraprotocol.io'],
     },
     public: {
-      http: ['https://rpc.testnet.citrea.xyz'],
+      http: ['https://testnet.rpc.neuraprotocol.io'],
     },
   },
   blockExplorers: {
     default: {
-      name: 'Citrea Explorer',
-      url: 'https://explorer.testnet.citrea.xyz',
+      name: 'Neura Explorer',
+      url: 'https://testnet-blockscout.infra.neuraprotocol.io',
     },
   },
   testnet: true,
 })
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [citreaTestnet],
+  [neuraTestnet],
   [
     publicProvider(),
   ],
