@@ -6,30 +6,29 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 
 import { publicProvider } from 'wagmi/providers/public'
 
-export const neuraTestnet = defineChain({
-  id: 267,
-  name: 'Neura Testnet',
-  network: 'neura-testnet',
-  nativeCurrency: { name: 'ANKR', symbol: 'ANKR', decimals: 18 },
+export const hyperEvmMainnet = defineChain({
+  id: 999,
+  name: 'HyperEVM',
+  network: 'hyper-evm-mainnet',
+  nativeCurrency: { name: 'HYPE', symbol: 'HYPE', decimals: 18 },
   rpcUrls: {
     default: {
-      http: ['https://testnet.rpc.neuraprotocol.io'],
+      http: ['https://rpc.hyperlend.finance'],
     },
     public: {
-      http: ['https://testnet.rpc.neuraprotocol.io'],
+      http: ['https://rpc.hyperlend.finance'],
     },
   },
   blockExplorers: {
     default: {
-      name: 'Neura Explorer',
-      url: 'https://testnet-blockscout.infra.neuraprotocol.io',
+      name: 'Hyper Scan',
+      url: 'https://www.hyperscan.com/',
     },
   },
-  testnet: true,
 })
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [neuraTestnet],
+  [hyperEvmMainnet],
   [
     publicProvider(),
   ],
