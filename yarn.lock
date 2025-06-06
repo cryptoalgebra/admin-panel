@@ -569,10 +569,10 @@
     stream-browserify "^3.0.0"
     util "^0.12.4"
 
-"@cryptoalgebra/integral-sdk@npm:@cryptoalgebra/gliquid-sdk@1.0.0":
+"@cryptoalgebra/integral-sdk@npm:@cryptoalgebra/katana-sdk@1.0.0":
   version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@cryptoalgebra/gliquid-sdk/-/gliquid-sdk-1.0.0.tgz#dbc0958f949dc2756279b9b1bb275f5db99a54c4"
-  integrity sha512-io4aVgfC2wc+YUS2KyuT0lRnKzZFymhWgcGcnEbNjI/Zv5E78aOGPIm/5+N51U/gBNEl4gQ2ZFPnd9Orz+JBFg==
+  resolved "https://registry.yarnpkg.com/@cryptoalgebra/katana-sdk/-/katana-sdk-1.0.0.tgz#d9754fadc7eaed48f88e7fb1ffa1d7b387f7ddc2"
+  integrity sha512-zBZMJPH71LutJg1EJI25hlCXKypq9knE5BoonZg1cjak9JVXC6oNG3VuOpw/WvT5CExd5tsw/I7TT/H6UdTueA==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/address" "^5.7.0"

@@ -1,22 +1,26 @@
-import type { CodegenConfig } from '@graphql-codegen/cli';
+import type { CodegenConfig } from "@graphql-codegen/cli";
 
 const config: CodegenConfig = {
   overwrite: true,
   schema: [
-    'https://api.goldsky.com/api/public/project_cmb20ryy424yb01wy7zwd7xd1/subgraphs/analytics/v1.0.0/gn',
-    'https://api.goldsky.com/api/public/project_cmb20ryy424yb01wy7zwd7xd1/subgraphs/blocks/v1.0.0/gn',
-    'https://api.goldsky.com/api/public/project_cmb20ryy424yb01wy7zwd7xd1/subgraphs/farms/v1.0.0/gn',
+    "https://api.studio.thegraph.com/query/78728/katana-v-4-analytics/v0.0.1",
+    "https://api.studio.thegraph.com/query/78728/katana-v-4-blocks/v0.0.1",
+    "https://api.studio.thegraph.com/query/78728/katana-v-4-farming/v0.0.1",
   ],
   documents: "src/graphql/queries/!(*.d).{ts,tsx}",
   generates: {
     "src/graphql/generated/graphql.tsx": {
-      plugins: ['typescript', 'typescript-operations', 'typescript-react-apollo'],
+      plugins: [
+        "typescript",
+        "typescript-operations",
+        "typescript-react-apollo",
+      ],
       config: {
         withHooks: true,
-        withResultType: true
-      }
-    }
-  }
+        withResultType: true,
+      },
+    },
+  },
 };
 
 export default config;
