@@ -569,10 +569,10 @@
     stream-browserify "^3.0.0"
     util "^0.12.4"
 
-"@cryptoalgebra/custom-pools-and-sliding-fee-sdk@^1.0.0":
+"@cryptoalgebra/custom-pools-and-sliding-fee-sdk@npm:@cryptoalgebra/integral-sdk@1.0.0":
   version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@cryptoalgebra/custom-pools-and-sliding-fee-sdk/-/custom-pools-and-sliding-fee-sdk-1.0.0.tgz#8ee764a4d29404db567c102875559cb81176a282"
-  integrity sha512-Flj30wDgx85/luzTeXs3c8O7BuPKKpaEWBB0W6cC/VZycT5rK6GBkVWMiwCmCRSPcn4CvAh5dUep0N4wEW4XVg==
+  resolved "https://registry.yarnpkg.com/@cryptoalgebra/integral-sdk/-/integral-sdk-1.0.0.tgz#250047480c92df6f76e71e8f5acdafb811600742"
+  integrity sha512-HzRa0kHt8SPVZmVAgQUpQQxN13ZnQeG/4ZQ6FKmACucD6YTaYqRps6Ah9jqOZXDqb2MhJiThASMgf8mGUNPNdQ==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/address" "^5.7.0"
@@ -7530,7 +7530,14 @@ string_decoder@^1.1.1:
   dependencies:
     safe-buffer "~5.2.0"
 
-"strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
+"strip-ansi-cjs@npm:strip-ansi@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.npmjs.org/strip-ansi/-/strip-ansi-6.0.1.tgz"
+  integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
+  dependencies:
+    ansi-regex "^5.0.1"
+
+strip-ansi@^6.0.0, strip-ansi@^6.0.1:
   version "6.0.1"
   resolved "https://registry.npmjs.org/strip-ansi/-/strip-ansi-6.0.1.tgz"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
