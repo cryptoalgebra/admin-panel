@@ -2,7 +2,6 @@ import { Currency } from "@cryptoalgebra/integral-sdk";
 import React from "react";
 import { Address } from "wagmi";
 import EthLogo from "@/assets/tokens/ether.svg";
-import USDTLogo from "@/assets/tokens/usdt.png";
 import USDCLogo from "@/assets/tokens/usdc.svg";
 import { cn } from "@/lib/utils";
 
@@ -16,15 +15,11 @@ interface CurrencyLogoProps {
 export const specialTokens: {
   [key: Address]: { symbol: string; logo: string };
 } = {
-  ["0xe514d9deb7966c8be0ca922de8a064264ea6bcd4"]: {
-    symbol: "ETH",
+  ["0x5555555555555555555555555555555555555555"]: {
+    symbol: "WHYPE",
     logo: EthLogo,
   },
-  ["0x7d98346b3b000c55904918e3d9e2fc3f94683b01"]: {
-    symbol: "USDT",
-    logo: USDTLogo,
-  },
-  ["0x0b7007c13325c48911f73a2dad5fa5dcbf808adc"]: {
+  ["0x7fb2491d015f6c0271fdfcbb7712feeb43ebe50e"]: {
     symbol: "USDC",
     logo: USDCLogo,
   },
@@ -69,7 +64,7 @@ const CurrencyLogo = ({
     return (
       <img
         src={EthLogo}
-        alt={"ETH"}
+        alt={"WHYPE"}
         className={classString}
         style={{
           ...style,

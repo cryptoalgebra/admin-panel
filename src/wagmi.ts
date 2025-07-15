@@ -6,35 +6,30 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 
 import { publicProvider } from 'wagmi/providers/public'
 
-export const ronin = defineChain({
-  id: 2020,
-  name: 'Ronin',
-  network: 'ronin',
-  nativeCurrency: { name: 'RON', symbol: 'RON', decimals: 18 },
+const hyperEvmTestnet = defineChain({
+  id: 998,
+  network: "hyperEVM-testnet",
+  name: "Hyperliquid EVM Testnet",
+  nativeCurrency: { name: "HYPE", symbol: "HYPE", decimals: 18 },
   rpcUrls: {
-    default: {
-      http: ['https://api.roninchain.com/rpc'],
-    },
-    public: {
-      http: ['https://api.roninchain.com/rpc'],
+      default: {
+          http: ["https://998.rpc.thirdweb.com/c12d40e08559e44221f53ce0a23b7e67"],
+      },
+      public: {
+        http: ["https://998.rpc.thirdweb.com/c12d40e08559e44221f53ce0a23b7e67"],
     },
   },
   blockExplorers: {
-    default: {
-      name: 'Ronin Explorer',
-      url: 'https://app.roninchain.com',
-    },
+      default: {
+          name: "Purrsec",
+          url: "https://testnet.purrsec.com",
+      },
   },
-  contracts: {
-    multicall3: {
-      address: '0xca11bde05977b3631167028862be2a173976ca11',
-      blockCreated: 26023535,
-    },
-  },
-})
+  testnet: true,
+});
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [ronin],
+  [hyperEvmTestnet],
   [
     publicProvider(),
   ],
