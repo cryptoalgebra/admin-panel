@@ -6,8 +6,8 @@ import { Address } from 'wagmi';
 import { ADDRESS_ZERO } from '@cryptoalgebra/custom-pools-and-sliding-fee-sdk';
 
 const deployers: { [key: string]: string } = {
-    '0x7e3387e0595552e992ede4476417704703866e5a': 'HAVE PLUGIN',
-    '0xbb75acad36f08201a49a6dd077229d95f4e7bd50': 'NO PLUGIN',
+    '0x9089f3440c8e7534afcfec2b731c4d6b78876308': 'Limit Orders',
+    // '0xbb75acad36f08201a49a6dd077229d95f4e7bd50': 'NO PLUGIN',
     [ADDRESS_ZERO]: 'BASE'
 }
 

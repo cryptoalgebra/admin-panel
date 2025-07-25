@@ -569,10 +569,10 @@
     stream-browserify "^3.0.0"
     util "^0.12.4"
 
-"@cryptoalgebra/custom-pools-and-sliding-fee-sdk@npm:@cryptoalgebra/integral-sdk@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@cryptoalgebra/integral-sdk/-/integral-sdk-1.0.0.tgz#250047480c92df6f76e71e8f5acdafb811600742"
-  integrity sha512-HzRa0kHt8SPVZmVAgQUpQQxN13ZnQeG/4ZQ6FKmACucD6YTaYqRps6Ah9jqOZXDqb2MhJiThASMgf8mGUNPNdQ==
+"@cryptoalgebra/custom-pools-and-sliding-fee-sdk@npm:@cryptoalgebra/clamm-base-sdk@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@cryptoalgebra/clamm-base-sdk/-/clamm-base-sdk-1.2.0.tgz#4db64888ec2a1cc58c1a5b1c64912ff75ace4754"
+  integrity sha512-Nh0Rm/tHiziRkL9xbwHdOOvz5Mc2GV6TNL0nV8qD7vkfb+Zf+/OCRYdjP++t3QIeDcEJvinIufR8xLXjhc4tWQ==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/address" "^5.7.0"
