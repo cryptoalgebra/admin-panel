@@ -6,30 +6,29 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 
 import { publicProvider } from 'wagmi/providers/public'
 
-const hyperEvmTestnet = defineChain({
-  id: 998,
-  network: "hyperEVM-testnet",
-  name: "Hyperliquid EVM Testnet",
-  nativeCurrency: { name: "HYPE", symbol: "HYPE", decimals: 18 },
+export const taraxaMainnet = defineChain({
+  id: 841,
+  name: 'Taraxa Mainnet',
+  network: 'taraxa-mainnet',
+  nativeCurrency: { name: 'Tara', symbol: 'TARA', decimals: 18 },
   rpcUrls: {
-      default: {
-          http: ["https://998.rpc.thirdweb.com/c12d40e08559e44221f53ce0a23b7e67"],
-      },
-      public: {
-        http: ["https://998.rpc.thirdweb.com/c12d40e08559e44221f53ce0a23b7e67"],
+    default: {
+      http: ['https://rpc.mainnet.taraxa.io'],
+    },
+    public: {
+      http: ['https://rpc.mainnet.taraxa.io'],
     },
   },
   blockExplorers: {
-      default: {
-          name: "Purrsec",
-          url: "https://testnet.purrsec.com",
-      },
+    default: {
+      name: 'Taraxa Explorer',
+      url: 'https://explorer.mainnet.taraxa.io',
+    },
   },
-  testnet: true,
-});
+})
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [hyperEvmTestnet],
+  [taraxaMainnet],
   [
     publicProvider(),
   ],
