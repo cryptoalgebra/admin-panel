@@ -36,6 +36,7 @@ const FarmPage = () => {
     nonce,
     rewardRates,
     isDeactivated,
+    minimalPositionWidth,
   } = useFarmData(singleFarming?.eternalFarming);
 
   const isPoolReady = token0 && token1 && pool;
@@ -111,6 +112,7 @@ const FarmPage = () => {
             id={farm}
             incentiveKey={incentiveKey as IncentiveKey}
             isDeactivated={isDeactivated}
+            minimalPositionWidth={minimalPositionWidth}
           />
         ) : null}
       </div>

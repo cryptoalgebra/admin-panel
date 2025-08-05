@@ -11,9 +11,10 @@ interface IFarmDetails {
     id: string;
     incentiveKey: IncentiveKey;
     isDeactivated: boolean;
+    minimalPositionWidth: number;
 }
 
-const FarmDetails = ({ id, incentiveKey, isDeactivated }: IFarmDetails) => {
+const FarmDetails = ({ id, incentiveKey, isDeactivated, minimalPositionWidth }: IFarmDetails) => {
 
     const { data: deposits } = useAllDepositsOnFarmingQuery({
         skip: !id || isDeactivated,
@@ -42,6 +43,10 @@ const FarmDetails = ({ id, incentiveKey, isDeactivated }: IFarmDetails) => {
             <div>
                 <div className="font-semibold text-sm">Farm ID</div>
                 <div>{id}</div>
+            </div>
+            <div>
+                <div className="font-semibold text-sm">Minimal position width</div>
+                <div>{minimalPositionWidth}</div>
             </div>
             <div>
                 <div className="font-semibold text-sm">Deposits</div>

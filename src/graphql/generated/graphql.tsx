@@ -6843,21 +6843,21 @@ export enum _SubgraphErrorPolicy_ {
   Deny = 'deny'
 }
 
-export type FarmingFieldsFragment = { __typename?: 'EternalFarming', id: string, rewardToken: any, bonusRewardToken: any, reward: any, bonusReward: any, rewardRate: any, bonusRewardRate: any, pool: any, virtualPool: any, isDeactivated?: boolean | null, nonce: any };
+export type FarmingFieldsFragment = { __typename?: 'EternalFarming', id: string, rewardToken: any, bonusRewardToken: any, reward: any, bonusReward: any, rewardRate: any, bonusRewardRate: any, pool: any, virtualPool: any, isDeactivated?: boolean | null, nonce: any, minRangeLength: any };
 
 export type DepositFieldsFragment = { __typename?: 'Deposit', id: string, eternalFarming?: any | null };
 
 export type AllFarmsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllFarmsQuery = { __typename?: 'Query', eternalFarmings: Array<{ __typename?: 'EternalFarming', id: string, rewardToken: any, bonusRewardToken: any, reward: any, bonusReward: any, rewardRate: any, bonusRewardRate: any, pool: any, virtualPool: any, isDeactivated?: boolean | null, nonce: any }> };
+export type AllFarmsQuery = { __typename?: 'Query', eternalFarmings: Array<{ __typename?: 'EternalFarming', id: string, rewardToken: any, bonusRewardToken: any, reward: any, bonusReward: any, rewardRate: any, bonusRewardRate: any, pool: any, virtualPool: any, isDeactivated?: boolean | null, nonce: any, minRangeLength: any }> };
 
 export type SingleFarmingQueryVariables = Exact<{
   farmId: Scalars['ID']['input'];
 }>;
 
 
-export type SingleFarmingQuery = { __typename?: 'Query', eternalFarming?: { __typename?: 'EternalFarming', id: string, rewardToken: any, bonusRewardToken: any, reward: any, bonusReward: any, rewardRate: any, bonusRewardRate: any, pool: any, virtualPool: any, isDeactivated?: boolean | null, nonce: any } | null };
+export type SingleFarmingQuery = { __typename?: 'Query', eternalFarming?: { __typename?: 'EternalFarming', id: string, rewardToken: any, bonusRewardToken: any, reward: any, bonusReward: any, rewardRate: any, bonusRewardRate: any, pool: any, virtualPool: any, isDeactivated?: boolean | null, nonce: any, minRangeLength: any } | null };
 
 export type AllDepositsOnFarmingQueryVariables = Exact<{
   farmId: Scalars['Bytes']['input'];
@@ -6871,7 +6871,7 @@ export type ActiveFarmingForPoolQueryVariables = Exact<{
 }>;
 
 
-export type ActiveFarmingForPoolQuery = { __typename?: 'Query', eternalFarmings: Array<{ __typename?: 'EternalFarming', id: string, rewardToken: any, bonusRewardToken: any, reward: any, bonusReward: any, rewardRate: any, bonusRewardRate: any, pool: any, virtualPool: any, isDeactivated?: boolean | null, nonce: any }> };
+export type ActiveFarmingForPoolQuery = { __typename?: 'Query', eternalFarmings: Array<{ __typename?: 'EternalFarming', id: string, rewardToken: any, bonusRewardToken: any, reward: any, bonusReward: any, rewardRate: any, bonusRewardRate: any, pool: any, virtualPool: any, isDeactivated?: boolean | null, nonce: any, minRangeLength: any }> };
 
 export type PoolFieldsFragment = { __typename?: 'Pool', id: string, fee: any, sqrtPrice: any, liquidity: any, tick: any, tickSpacing: any, deployer: any, totalValueLockedUSD: any, volumeUSD: any, feesUSD: any, untrackedFeesUSD: any, token0Price: any, token1Price: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any, derivedMatic: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any, derivedMatic: any } };
 
@@ -6914,6 +6914,7 @@ export const FarmingFieldsFragmentDoc = gql`
   virtualPool
   isDeactivated
   nonce
+  minRangeLength
 }
     `;
 export const DepositFieldsFragmentDoc = gql`
