@@ -13,6 +13,7 @@ export const FARMING_FRAGMENT = gql`
         virtualPool
         isDeactivated
         nonce
+        minRangeLength
     }
 `
 

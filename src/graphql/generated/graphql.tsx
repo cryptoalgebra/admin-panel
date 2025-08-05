@@ -3639,6 +3639,42 @@ export enum PositionSnapshot_OrderBy {
   WithdrawnToken1 = 'withdrawnToken1'
 }
 
+export type PositionTransferCache = {
+  __typename?: 'PositionTransferCache';
+  id: Scalars['ID']['output'];
+  owner: Scalars['Bytes']['output'];
+};
+
+export type PositionTransferCache_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<PositionTransferCache_Filter>>>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_not?: InputMaybe<Scalars['ID']['input']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  or?: InputMaybe<Array<InputMaybe<PositionTransferCache_Filter>>>;
+  owner?: InputMaybe<Scalars['Bytes']['input']>;
+  owner_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  owner_gt?: InputMaybe<Scalars['Bytes']['input']>;
+  owner_gte?: InputMaybe<Scalars['Bytes']['input']>;
+  owner_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  owner_lt?: InputMaybe<Scalars['Bytes']['input']>;
+  owner_lte?: InputMaybe<Scalars['Bytes']['input']>;
+  owner_not?: InputMaybe<Scalars['Bytes']['input']>;
+  owner_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  owner_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+};
+
+export enum PositionTransferCache_OrderBy {
+  Id = 'id',
+  Owner = 'owner'
+}
+
 export type Position_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
@@ -4030,6 +4066,8 @@ export type Query = {
   position?: Maybe<Position>;
   positionSnapshot?: Maybe<PositionSnapshot>;
   positionSnapshots: Array<PositionSnapshot>;
+  positionTransferCache?: Maybe<PositionTransferCache>;
+  positionTransferCaches: Array<PositionTransferCache>;
   positions: Array<Position>;
   reward?: Maybe<Reward>;
   rewards: Array<Reward>;
@@ -4401,6 +4439,24 @@ export type QueryPositionSnapshotsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   subgraphError?: _SubgraphErrorPolicy_;
   where?: InputMaybe<PositionSnapshot_Filter>;
+};
+
+
+export type QueryPositionTransferCacheArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID']['input'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryPositionTransferCachesArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<PositionTransferCache_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<PositionTransferCache_Filter>;
 };
 
 
@@ -6114,21 +6170,21 @@ export enum _SubgraphErrorPolicy_ {
   Deny = 'deny'
 }
 
-export type FarmingFieldsFragment = { __typename?: 'EternalFarming', id: string, rewardToken: any, bonusRewardToken: any, reward: any, bonusReward: any, rewardRate: any, bonusRewardRate: any, pool: any, virtualPool: any, isDeactivated?: boolean | null, nonce: any };
+export type FarmingFieldsFragment = { __typename?: 'EternalFarming', id: string, rewardToken: any, bonusRewardToken: any, reward: any, bonusReward: any, rewardRate: any, bonusRewardRate: any, pool: any, virtualPool: any, isDeactivated?: boolean | null, nonce: any, minRangeLength: any };
 
 export type DepositFieldsFragment = { __typename?: 'Deposit', id: string, eternalFarming?: any | null };
 
 export type AllFarmsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllFarmsQuery = { __typename?: 'Query', eternalFarmings: Array<{ __typename?: 'EternalFarming', id: string, rewardToken: any, bonusRewardToken: any, reward: any, bonusReward: any, rewardRate: any, bonusRewardRate: any, pool: any, virtualPool: any, isDeactivated?: boolean | null, nonce: any }> };
+export type AllFarmsQuery = { __typename?: 'Query', eternalFarmings: Array<{ __typename?: 'EternalFarming', id: string, rewardToken: any, bonusRewardToken: any, reward: any, bonusReward: any, rewardRate: any, bonusRewardRate: any, pool: any, virtualPool: any, isDeactivated?: boolean | null, nonce: any, minRangeLength: any }> };
 
 export type SingleFarmingQueryVariables = Exact<{
   farmId: Scalars['ID']['input'];
 }>;
 
 
-export type SingleFarmingQuery = { __typename?: 'Query', eternalFarming?: { __typename?: 'EternalFarming', id: string, rewardToken: any, bonusRewardToken: any, reward: any, bonusReward: any, rewardRate: any, bonusRewardRate: any, pool: any, virtualPool: any, isDeactivated?: boolean | null, nonce: any } | null };
+export type SingleFarmingQuery = { __typename?: 'Query', eternalFarming?: { __typename?: 'EternalFarming', id: string, rewardToken: any, bonusRewardToken: any, reward: any, bonusReward: any, rewardRate: any, bonusRewardRate: any, pool: any, virtualPool: any, isDeactivated?: boolean | null, nonce: any, minRangeLength: any } | null };
 
 export type AllDepositsOnFarmingQueryVariables = Exact<{
   farmId: Scalars['Bytes']['input'];
@@ -6142,7 +6198,7 @@ export type ActiveFarmingForPoolQueryVariables = Exact<{
 }>;
 
 
-export type ActiveFarmingForPoolQuery = { __typename?: 'Query', eternalFarmings: Array<{ __typename?: 'EternalFarming', id: string, rewardToken: any, bonusRewardToken: any, reward: any, bonusReward: any, rewardRate: any, bonusRewardRate: any, pool: any, virtualPool: any, isDeactivated?: boolean | null, nonce: any }> };
+export type ActiveFarmingForPoolQuery = { __typename?: 'Query', eternalFarmings: Array<{ __typename?: 'EternalFarming', id: string, rewardToken: any, bonusRewardToken: any, reward: any, bonusReward: any, rewardRate: any, bonusRewardRate: any, pool: any, virtualPool: any, isDeactivated?: boolean | null, nonce: any, minRangeLength: any }> };
 
 export type PoolFieldsFragment = { __typename?: 'Pool', id: string, fee: any, sqrtPrice: any, liquidity: any, tick: any, tickSpacing: any, deployer: any, totalValueLockedUSD: any, volumeUSD: any, feesUSD: any, untrackedFeesUSD: any, token0Price: any, token1Price: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any, derivedMatic: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any, derivedMatic: any } };
 
@@ -6185,6 +6241,7 @@ export const FarmingFieldsFragmentDoc = gql`
   virtualPool
   isDeactivated
   nonce
+  minRangeLength
 }
     `;
 export const DepositFieldsFragmentDoc = gql`

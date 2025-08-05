@@ -18,6 +18,7 @@ export function useFarmData(farm: FarmingFieldsFragment | null | undefined) {
     nonce,
     isDeactivated,
     virtualPool,
+    minRangeLength
   } = farm || {};
 
   const { data: rates } = useAlgebraVirtualPoolRewardRates({
@@ -102,5 +103,6 @@ export function useFarmData(farm: FarmingFieldsFragment | null | undefined) {
     rewardRates,
     isDeactivated: Boolean(isDeactivated),
     isDynamicRateActivated,
+    minimalPositionWidth: minRangeLength
   };
 }
