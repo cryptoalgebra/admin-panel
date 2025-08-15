@@ -6,29 +6,38 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 
 import { publicProvider } from 'wagmi/providers/public'
 
-export const taraxaMainnet = defineChain({
-  id: 841,
-  name: 'Taraxa Mainnet',
-  network: 'taraxa-mainnet',
-  nativeCurrency: { name: 'Tara', symbol: 'TARA', decimals: 18 },
+export const tac = defineChain({
+  id: 239,
+  name: 'TAC',
+  network: 'tac-mainnet',
+  nativeCurrency: { name: 'TAC', symbol: 'TAC', decimals: 18 },
   rpcUrls: {
     default: {
-      http: ['https://rpc.mainnet.taraxa.io'],
+      http: ['https://rpc.ankr.com/tac'],
     },
     public: {
-      http: ['https://rpc.mainnet.taraxa.io'],
+      http: ['https://rpc.ankr.com/tac'],
     },
   },
   blockExplorers: {
     default: {
-      name: 'Taraxa Explorer',
-      url: 'https://explorer.mainnet.taraxa.io',
+      name: 'Blockscout',
+      url: 'https://tac.blockscout.com',
+    },
+    native: {
+      name: 'TAC Explorer',
+      url: 'https://explorer.tac.build',
+    },
+  },
+  contracts: {
+    multicall3: {
+      address: '0xca11bde05977b3631167028862be2a173976ca11',
+      blockCreated: 0,
     },
   },
 })
-
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [taraxaMainnet],
+  [tac],
   [
     publicProvider(),
   ],

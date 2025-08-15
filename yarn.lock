@@ -569,10 +569,10 @@
     stream-browserify "^3.0.0"
     util "^0.12.4"
 
-"@cryptoalgebra/integral-sdk@npm:@cryptoalgebra/fomo-sdk@1.0.0":
+"@cryptoalgebra/integral-sdk@npm:@cryptoalgebra/lynex-tac-sdk@1.0.0":
   version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@cryptoalgebra/fomo-sdk/-/fomo-sdk-1.0.0.tgz#d61d05947a93c2d8f4b0470784ad7655606b49a9"
-  integrity sha512-qyB/cSuy9bpoSDMepHqkygur6GifM437ZADaQzkryypWwuGwT8A31y/QfH453iZWP1v1gp0dMxyfWJWMP+OiQg==
+  resolved "https://registry.yarnpkg.com/@cryptoalgebra/lynex-tac-sdk/-/lynex-tac-sdk-1.0.0.tgz#1b3041ef21bba76922329b953322ad2e61ee2859"
+  integrity sha512-g+TxfZdMpzJKj3866sq3sWhTK3eFc9ZhW1dDMQ1Ne8Cc7ge0pL5pZllZXjAWgsMkZGoufIF9I5q2IED82Ib+xw==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/address" "^5.7.0"
