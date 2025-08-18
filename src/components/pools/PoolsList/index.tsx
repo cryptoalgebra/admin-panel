@@ -1,15 +1,9 @@
-import { useAllPoolsQuery } from '@/graphql/generated/graphql';
-import { FormattedPool } from '@/types/pool';
-import { Link } from 'react-router-dom';
-import { useMemo } from 'react';
-import { Address } from 'wagmi';
-import { ADDRESS_ZERO } from '@cryptoalgebra/custom-pools-and-sliding-fee-sdk';
-
-const deployers: { [key: string]: string } = {
-    '0x7e3387e0595552e992ede4476417704703866e5a': 'HAVE PLUGIN',
-    '0xbb75acad36f08201a49a6dd077229d95f4e7bd50': 'NO PLUGIN',
-    [ADDRESS_ZERO]: 'BASE'
-}
+import { useAllPoolsQuery } from "@/graphql/generated/graphql";
+import { FormattedPool } from "@/types/pool";
+import { Link } from "react-router-dom";
+import { useMemo } from "react";
+import { Address } from "wagmi";
+import { CUSTOM_POOL_DEPLOYER_TITLES } from "@/constants/custom-pool-deployer";
 
 const PoolHeader = () => (
     <div className="hidden md:grid grid-cols-6 uppercase text-xs font-semibold text-gray-600 mb-4 pb-4 border-b border-gray-300">
@@ -29,19 +23,17 @@ const PoolRow = (pool: FormattedPool) => {
                 <div className="flex w-full justify-between">
                     <div className="md:hidden font-bold">Pool</div>
                     <div className="flex items-center gap-4">
-                        <p>
-                            {`${pool.pair.token0.symbol} / ${pool.pair.token1.symbol}`}
-                        </p>
+                        <p>{`${pool.pair.token0.symbol} / ${pool.pair.token1.symbol}`}</p>
                         <div className="bg-blue-200 text-sm rounded-xl px-2 py-1">{`${pool.fee}%`}</div>
                     </div>
                 </div>
             )}
-            {
-                pool.deployer && <div className='flex w-full justify-between'>
+            {pool.deployer && (
+                <div className="flex w-full justify-between">
                     <div className="md:hidden font-bold">Deployer</div>
-                    <div>{deployers[pool.deployer]}</div>
+                    <div>{CUSTOM_POOL_DEPLOYER_TITLES[pool.deployer]}</div>
                 </div>
-            }
+            )}
             {pool.tvlUSD ? (
                 <div className="flex w-full justify-between">
                     <div className="md:hidden font-bold">Pool</div>
@@ -68,10 +60,7 @@ const PoolRow = (pool: FormattedPool) => {
             )}
 
             <div className="text-right">
-                <Link
-                    to={`/pools/${pool.id}`}
-                    className="px-4 py-2 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-400"
-                >
+                <Link to={`/pools/${pool.id}`} className="px-4 py-2 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-400">
                     Manage →
                 </Link>
             </div>
@@ -85,26 +74,24 @@ const PoolsList = () => {
     const formattedPools: FormattedPool[] = useMemo(() => {
         if (!pools?.pools) return [];
 
-        return pools.pools.map(
-            ({ id, token0, token1, fee, totalValueLockedUSD, volumeUSD, deployer }) => ({
-                id: id as Address,
-                pair: {
-                    token0,
-                    token1,
-                },
-                deployer,
-                fee: Number(fee) / 10_000,
-                tvlUSD: Number(totalValueLockedUSD),
-                volume24USD: Number(volumeUSD),
-                apr: 0,
-            })
-        );
+        return pools.pools.map(({ id, token0, token1, fee, totalValueLockedUSD, volumeUSD, deployer }) => ({
+            id: id as Address,
+            pair: {
+                token0,
+                token1,
+            },
+            deployer,
+            fee: Number(fee) / 10_000,
+            tvlUSD: Number(totalValueLockedUSD),
+            volume24USD: Number(volumeUSD),
+            apr: 0,
+        }));
     }, [pools]);
 
     return (
         <div className="w-full text-left">
             {loading ? (
-                'Loading...'
+                "Loading..."
             ) : (
                 <div>
                     <PoolHeader />

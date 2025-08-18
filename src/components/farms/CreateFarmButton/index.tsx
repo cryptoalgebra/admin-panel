@@ -11,13 +11,14 @@ import { IRewards } from "@/types/rewards";
 import { tryParseAmount } from "@cryptoalgebra/custom-pools-and-sliding-fee-sdk";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useContractWrite, usePrepareContractWrite } from "wagmi";
+import { Address, useContractWrite, usePrepareContractWrite } from "wagmi";
 
 interface ICreateFarmButton {
     hasSecondReward: boolean;
     incentiveKey: PartialIncentiveKey;
     rewards: IRewards;
     minimalPositionWidth: number;
+    poolDeployer: Address;
 }
 
 const CreateFarmButton = ({
@@ -25,6 +26,7 @@ const CreateFarmButton = ({
     incentiveKey: { rewardToken, bonusRewardToken, pool, nonce },
     rewards: { reward, rewardBn, rewardRateBn, bonusReward, bonusRewardBn, bonusRewardRateBn },
     minimalPositionWidth,
+    poolDeployer,
 }: ICreateFarmButton) => {
     const navigate = useNavigate();
 
@@ -78,6 +80,7 @@ const CreateFarmButton = ({
                           minimalPositionWidth,
                       },
                       plugin,
+                      poolDeployer,
                   ]
                 : undefined,
     });
@@ -90,7 +93,7 @@ const CreateFarmButton = ({
         if (isSuccess) {
             navigate("/farms");
         }
-    }, [isSuccess, navigate]);
+    }, [hasSecondReward, isSuccess, navigate]);
 
     const isDisabled = !isKeyReady || !areRewardsReady || !onCreate || isLoading;
 
