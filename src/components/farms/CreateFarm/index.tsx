@@ -8,7 +8,7 @@ import { Address, parseUnits } from "viem";
 import { formatCurrency } from "@/utils/common/formatCurrency";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useActiveFarmingForPoolQuery, useAllPoolsQuery } from "@/graphql/generated/graphql";
+import { useActiveFarmingForPoolQuery, useAllPoolsQuery, useCustomPoolDeployerQuery } from "@/graphql/generated/graphql";
 import CurrencyLogo from "@/components/common/CurrencyLogo";
 import { DEFAULT_CHAIN_ID } from "@/constants/default-chain-id";
 import { farmsClient } from "@/graphql/clients";
@@ -18,6 +18,7 @@ import { PartialIncentiveKey } from "@/types/incentive-key";
 import { useEternalFarmingNumOfIncentives } from "@/generated";
 import { IRewards } from "@/types/rewards";
 import { cn } from "@/lib/utils";
+import { CUSTOM_POOL_DEPLOYER_TITLES } from "@/constants/custom-pool-deployer";
 
 interface IFormState {
     pool: string | undefined;
@@ -113,6 +114,45 @@ const InputNumber = ({
         )}
     />
 );
+
+export const InputToggle = ({
+    title,
+    name,
+    control,
+    disabled,
+    isRequired,
+}: {
+    title: string;
+    name: keyof IFormState;
+    control: Control<IFormState>;
+    disabled?: boolean;
+    isRequired?: boolean;
+}) => {
+    return (
+        <Controller
+            name={name}
+            control={control}
+            rules={{
+                required: isRequired ? `Select ${title}` : false,
+            }}
+            render={({ field: { value, onChange }, fieldState: { error } }) => (
+                <div
+                    className={cn(
+                        "flex items-center gap-2 p-5 bg-white rounded-2xl border border-[#eaeaea]",
+                        disabled ? "opacity-30 pointer-events-none" : ""
+                    )}
+                >
+                    <label htmlFor={name} className="flex-1 cursor-pointer">
+                        {title}
+                        {isRequired && <span className="text-red-500 ml-1">*</span>}
+                    </label>
+                    <Switch id={name} checked={!!value} onCheckedChange={onChange} disabled={disabled} />
+                    {error && <span className="text-red-500 text-xs absolute -bottom-4 right-0">{error.message}</span>}
+                </div>
+            )}
+        />
+    );
+};
 
 const RewardRate = ({
     title,
@@ -217,7 +257,7 @@ const CreateFarm = () => {
 
     const rewardToken = watch("rewardToken");
     const bonusRewardToken = watch("bonusRewardToken");
-    const pool = watch("pool");
+    const poolAddress = watch("pool");
 
     const rewardAmount = watch("rewardAmount");
     const rewardRate = watch("rewardRate");
@@ -226,22 +266,29 @@ const CreateFarm = () => {
 
     const minimalPositionWidth = watch("minimalPositionWidth");
 
-    const { data: activeFarming, loading: isFarmingLoading } = useActiveFarmingForPoolQuery({
-        skip: Boolean(!pool),
-        client: farmsClient,
+    const { data: poolDeployer } = useCustomPoolDeployerQuery({
         variables: {
-            poolId: pool,
+            poolId: poolAddress?.toLowerCase() || "",
         },
     });
 
-    const isPoolAvailable = !isFarmingLoading && activeFarming && activeFarming.eternalFarmings.length === 0;
+    const { data: activeFarming, loading: isFarmingLoading } = useActiveFarmingForPoolQuery({
+        skip: Boolean(!poolAddress),
+        client: farmsClient,
+        variables: {
+            poolId: poolAddress,
+        },
+    });
+
+    const isPoolAvailable =
+        !isFarmingLoading && activeFarming && activeFarming.eternalFarmings.length === 0 && poolDeployer?.pool?.deployer;
 
     const { data: nonce } = useEternalFarmingNumOfIncentives();
 
     const incentveKey: PartialIncentiveKey = {
         rewardToken: rewardToken ? (rewardToken.wrapped.address as Address) : undefined,
         bonusRewardToken: bonusRewardToken ? (bonusRewardToken.wrapped.address as Address) : undefined,
-        pool: pool ? (pool as Address) : undefined,
+        pool: poolAddress ? (poolAddress as Address) : undefined,
         nonce,
     };
 
@@ -263,7 +310,7 @@ const CreateFarm = () => {
             <div className="flex flex-col gap-4 p-8 -mx-8 md:mx-0 h-fit md:border md:rounded-xl">
                 <label className="text-lg font-semibold">1. Select a pool</label>
                 <PoolSelector control={control} reset={reset} />
-                {pool ? (
+                {poolAddress ? (
                     isFarmingLoading ? (
                         <Loader size={18} color="currentColor" />
                     ) : isPoolAvailable ? (
@@ -342,13 +389,16 @@ const CreateFarm = () => {
                                 isRequired={false}
                                 maxDecimals={0}
                             />
+
+                            {/* <InputToggle title="Enable farming for ALM" name={"enableAlmFarming"} control={control} isRequired={false} /> */}
                         </div>
 
                         <CreateFarmButton
                             hasSecondReward={hasSecondReward}
                             incentiveKey={incentveKey}
                             rewards={rewards}
-                            minimalPositionWidth={Number(minimalPositionWidth)}
+                            minimalPositionWidth={Number(minimalPositionWidth || 0)}
+                            poolDeployer={poolDeployer.pool?.deployer}
                         />
                     </form>
                 </div>
@@ -367,6 +417,7 @@ const PoolSelector = ({ control, reset }: { control: Control<IFormState>; reset:
             id: pool.id,
             token0: pool.token0,
             token1: pool.token1,
+            deployer: pool.deployer,
             name: `${pool.token0.symbol} / ${pool.token1.symbol}`,
         }));
     }, [pools]);
@@ -398,6 +449,7 @@ const PoolSelector = ({ control, reset }: { control: Control<IFormState>; reset:
                                     <CurrencyLogo currency={new Token(DEFAULT_CHAIN_ID, pool.token0.id, +pool.token0.decimals)} size={20} />
                                     <CurrencyLogo currency={new Token(DEFAULT_CHAIN_ID, pool.token1.id, +pool.token1.decimals)} size={20} />
                                     <span className="ml-2">{pool.name}</span>
+                                    <span className="ml-2">{CUSTOM_POOL_DEPLOYER_TITLES[pool.deployer]}</span>
                                 </div>
                             </SelectItem>
                         ))}

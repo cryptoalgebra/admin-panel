@@ -980,7 +980,6 @@ export type Deposit = {
   liquidity: Scalars['BigInt']['output'];
   owner: Scalars['Bytes']['output'];
   pool: Scalars['Bytes']['output'];
-  rangeLength: Scalars['BigInt']['output'];
 };
 
 export type Deposit_Filter = {
@@ -1034,14 +1033,6 @@ export type Deposit_Filter = {
   pool_not?: InputMaybe<Scalars['Bytes']['input']>;
   pool_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
   pool_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
-  rangeLength?: InputMaybe<Scalars['BigInt']['input']>;
-  rangeLength_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  rangeLength_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  rangeLength_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  rangeLength_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  rangeLength_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  rangeLength_not?: InputMaybe<Scalars['BigInt']['input']>;
-  rangeLength_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
 };
 
 export enum Deposit_OrderBy {
@@ -1049,8 +1040,7 @@ export enum Deposit_OrderBy {
   Id = 'id',
   Liquidity = 'liquidity',
   Owner = 'owner',
-  Pool = 'pool',
-  RangeLength = 'rangeLength'
+  Pool = 'pool'
 }
 
 export type EternalFarming = {
@@ -6214,6 +6204,13 @@ export type AllPoolsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type AllPoolsQuery = { __typename?: 'Query', pools: Array<{ __typename?: 'Pool', id: string, fee: any, sqrtPrice: any, liquidity: any, tick: any, tickSpacing: any, deployer: any, totalValueLockedUSD: any, volumeUSD: any, feesUSD: any, untrackedFeesUSD: any, token0Price: any, token1Price: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any, derivedMatic: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any, derivedMatic: any } }> };
 
+export type CustomPoolDeployerQueryVariables = Exact<{
+  poolId: Scalars['ID']['input'];
+}>;
+
+
+export type CustomPoolDeployerQuery = { __typename?: 'Query', pool?: { __typename?: 'Pool', deployer: any } | null };
+
 export type TokenFieldsFragment = { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any, derivedMatic: any };
 
 export type SingleTokenQueryVariables = Exact<{
@@ -6520,6 +6517,46 @@ export type AllPoolsQueryHookResult = ReturnType<typeof useAllPoolsQuery>;
 export type AllPoolsLazyQueryHookResult = ReturnType<typeof useAllPoolsLazyQuery>;
 export type AllPoolsSuspenseQueryHookResult = ReturnType<typeof useAllPoolsSuspenseQuery>;
 export type AllPoolsQueryResult = Apollo.QueryResult<AllPoolsQuery, AllPoolsQueryVariables>;
+export const CustomPoolDeployerDocument = gql`
+    query CustomPoolDeployer($poolId: ID!) {
+  pool(id: $poolId) {
+    deployer
+  }
+}
+    `;
+
+/**
+ * __useCustomPoolDeployerQuery__
+ *
+ * To run a query within a React component, call `useCustomPoolDeployerQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCustomPoolDeployerQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCustomPoolDeployerQuery({
+ *   variables: {
+ *      poolId: // value for 'poolId'
+ *   },
+ * });
+ */
+export function useCustomPoolDeployerQuery(baseOptions: Apollo.QueryHookOptions<CustomPoolDeployerQuery, CustomPoolDeployerQueryVariables> & ({ variables: CustomPoolDeployerQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CustomPoolDeployerQuery, CustomPoolDeployerQueryVariables>(CustomPoolDeployerDocument, options);
+      }
+export function useCustomPoolDeployerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CustomPoolDeployerQuery, CustomPoolDeployerQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CustomPoolDeployerQuery, CustomPoolDeployerQueryVariables>(CustomPoolDeployerDocument, options);
+        }
+export function useCustomPoolDeployerSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<CustomPoolDeployerQuery, CustomPoolDeployerQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<CustomPoolDeployerQuery, CustomPoolDeployerQueryVariables>(CustomPoolDeployerDocument, options);
+        }
+export type CustomPoolDeployerQueryHookResult = ReturnType<typeof useCustomPoolDeployerQuery>;
+export type CustomPoolDeployerLazyQueryHookResult = ReturnType<typeof useCustomPoolDeployerLazyQuery>;
+export type CustomPoolDeployerSuspenseQueryHookResult = ReturnType<typeof useCustomPoolDeployerSuspenseQuery>;
+export type CustomPoolDeployerQueryResult = Apollo.QueryResult<CustomPoolDeployerQuery, CustomPoolDeployerQueryVariables>;
 export const SingleTokenDocument = gql`
     query SingleToken($tokenId: ID!) {
   token(id: $tokenId) {

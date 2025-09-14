@@ -25,3 +25,6 @@ dist-ssr
 
 src/graphql/generated
 src/generated.ts
+
+.yalc
+yalc.lock
