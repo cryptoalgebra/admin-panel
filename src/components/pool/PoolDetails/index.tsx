@@ -1,6 +1,6 @@
-import DataWithCopyButton from '@/components/common/DataWithCopyButton';
-import { PoolFieldsFragment } from '@/graphql/generated/graphql';
-import { Address } from 'wagmi';
+import DataWithCopyButton from "@/components/common/DataWithCopyButton";
+import { PoolFieldsFragment } from "@/graphql/generated/graphql";
+import { Address } from "wagmi";
 
 interface IPoolDetails {
     poolId: Address;
@@ -8,7 +8,6 @@ interface IPoolDetails {
 }
 
 const PoolDetails = ({ pool, poolId }: IPoolDetails) => {
-    console.log(pool);
     return (
         <div className="flex flex-col text-left p-4 border rounded-xl">
             <div className="font-bold mb-4">Pool Details</div>
@@ -42,9 +41,7 @@ const PoolDetails = ({ pool, poolId }: IPoolDetails) => {
                     <p>{pool.untrackedFeesUSD} $</p>
                 </div>
                 <div>
-                    <p className="font-semibold text-sm">
-                        Current Tick Spacing
-                    </p>
+                    <p className="font-semibold text-sm">Current Tick Spacing</p>
                     <p>{pool.tickSpacing}</p>
                 </div>
                 <div>

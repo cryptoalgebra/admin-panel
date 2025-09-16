@@ -26,7 +26,7 @@ const TokenSelectorModal = ({
   children,
 }: ITokenSelectorModal) => {
   return (
-    <Credenza open={isOpen}>
+    <Credenza open={isOpen} onOpenChange={setIsOpen}>
       <CredenzaTrigger asChild>{children}</CredenzaTrigger>
       <CredenzaContent
         className="bg-white !rounded-3xl"

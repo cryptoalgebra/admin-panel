@@ -407,7 +407,7 @@ const CreateFarm = () => {
     );
 };
 
-const PoolSelector = ({ control, reset }: { control: Control<IFormState>; reset: () => void }) => {
+export const PoolSelector = ({ control, reset }: { control: Control<IFormState>; reset: () => void }) => {
     const { data: pools } = useAllPoolsQuery();
 
     const formattedPools = useMemo(() => {
