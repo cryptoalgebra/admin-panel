@@ -1473,10 +1473,10 @@
     tsdx "^0.14.1"
     typechain "^8.0.0"
 
-"@cryptoalgebra/custom-pools-and-sliding-fee-sdk@npm:@cryptoalgebra/integral-sdk@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@cryptoalgebra/integral-sdk/-/integral-sdk-1.0.0.tgz#250047480c92df6f76e71e8f5acdafb811600742"
-  integrity sha512-HzRa0kHt8SPVZmVAgQUpQQxN13ZnQeG/4ZQ6FKmACucD6YTaYqRps6Ah9jqOZXDqb2MhJiThASMgf8mGUNPNdQ==
+"@cryptoalgebra/custom-pools-and-sliding-fee-sdk@npm:@cryptoalgebra/integral-sdk@1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@cryptoalgebra/integral-sdk/-/integral-sdk-1.0.1.tgz#d0e6bf83fd02dd0b2f72c0fe081f14141c2249c7"
+  integrity sha512-r4r5cBv7k8y+IkwarJFuC1G9883nIiz4H1ddVCJ7sLCl9xzLVj4jp2xuzWuwnh9nMN3W4s4tfbKL3QrAml83xA==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/address" "^5.7.0"

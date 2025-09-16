@@ -1,61 +1,85 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import {
-    Navigate,
-    RouterProvider,
-    createBrowserRouter,
-} from 'react-router-dom';
-import FarmsPage from './pages/Farms/index.tsx';
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
-import LayoutApp from './App.tsx';
-import FarmPage from './pages/Farm/index.tsx';
-import NewFarmPage from './pages/NewFarm/index.tsx';
-import PoolsPage from './pages/Pools/index.tsx';
-import PoolPage from './pages/Pool/index.tsx';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import { Navigate, RouterProvider, createBrowserRouter } from "react-router-dom";
+import FarmsPage from "./pages/Farms/index.tsx";
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import LayoutApp from "./App.tsx";
+import FarmPage from "./pages/Farm/index.tsx";
+import NewFarmPage from "./pages/NewFarm/index.tsx";
+import PoolsPage from "./pages/Pools/index.tsx";
+import PoolPage from "./pages/Pool/index.tsx";
+import GaugesPage from "./pages/Gauges/index.tsx";
+import NewGaugePage from "./pages/NewGauge/index.tsx";
+import GaugePage from "./pages/Gauge/index.tsx";
 
 const router = createBrowserRouter([
     {
-        path: '/',
-        element: <Navigate replace to={'/farms'} />,
+        path: "/",
+        element: <Navigate replace to={"/farms"} />,
     },
     {
-        path: '/farms',
+        path: "/farms",
         element: (
             <LayoutApp>
-                <FarmsPage />{' '}
+                <FarmsPage />
             </LayoutApp>
         ),
     },
     {
-        path: '/farms/:farm',
+        path: "/farms/:farm",
         element: (
             <LayoutApp>
-                <FarmPage />{' '}
+                <FarmPage />
             </LayoutApp>
         ),
     },
     {
-        path: '/new-farm',
+        path: "/new-farm",
         element: (
             <LayoutApp>
-                <NewFarmPage />{' '}
+                <NewFarmPage />
             </LayoutApp>
         ),
     },
     {
-        path: '/pools',
+        path: "/pools",
         element: (
             <LayoutApp>
-                <PoolsPage />{' '}
+                <PoolsPage />
             </LayoutApp>
         ),
     },
     {
-        path: '/pools/:pool',
+        path: "/pools/:pool",
         element: (
             <LayoutApp>
-                <PoolPage />{' '}
+                <PoolPage />
+            </LayoutApp>
+        ),
+    },
+
+    {
+        path: "/gauges",
+        element: (
+            <LayoutApp>
+                <GaugesPage />
+            </LayoutApp>
+        ),
+    },
+    {
+        path: "/gauges/:gauge",
+        element: (
+            <LayoutApp>
+                <GaugePage />
+            </LayoutApp>
+        ),
+    },
+    {
+        path: "/new-gauge",
+        element: (
+            <LayoutApp>
+                <NewGaugePage />
             </LayoutApp>
         ),
     },
@@ -66,7 +90,7 @@ const client = new ApolloClient({
     cache: new InMemoryCache(),
 });
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
         <ApolloProvider client={client}>
             <RouterProvider router={router} />

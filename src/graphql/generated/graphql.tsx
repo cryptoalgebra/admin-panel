@@ -512,6 +512,40 @@ export type Burn = {
   transaction: Transaction;
 };
 
+export type BurnFeeCache = {
+  __typename?: 'BurnFeeCache';
+  id: Scalars['ID']['output'];
+  pluginFee: Scalars['BigInt']['output'];
+};
+
+export type BurnFeeCache_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<BurnFeeCache_Filter>>>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_not?: InputMaybe<Scalars['ID']['input']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  or?: InputMaybe<Array<InputMaybe<BurnFeeCache_Filter>>>;
+  pluginFee?: InputMaybe<Scalars['BigInt']['input']>;
+  pluginFee_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  pluginFee_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  pluginFee_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  pluginFee_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  pluginFee_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  pluginFee_not?: InputMaybe<Scalars['BigInt']['input']>;
+  pluginFee_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+};
+
+export enum BurnFeeCache_OrderBy {
+  Id = 'id',
+  PluginFee = 'pluginFee'
+}
+
 export type Burn_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
@@ -980,6 +1014,7 @@ export type Deposit = {
   liquidity: Scalars['BigInt']['output'];
   owner: Scalars['Bytes']['output'];
   pool: Scalars['Bytes']['output'];
+  rangeLength: Scalars['BigInt']['output'];
 };
 
 export type Deposit_Filter = {
@@ -1033,6 +1068,14 @@ export type Deposit_Filter = {
   pool_not?: InputMaybe<Scalars['Bytes']['input']>;
   pool_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
   pool_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  rangeLength?: InputMaybe<Scalars['BigInt']['input']>;
+  rangeLength_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  rangeLength_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  rangeLength_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  rangeLength_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  rangeLength_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  rangeLength_not?: InputMaybe<Scalars['BigInt']['input']>;
+  rangeLength_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
 };
 
 export enum Deposit_OrderBy {
@@ -1040,7 +1083,8 @@ export enum Deposit_OrderBy {
   Id = 'id',
   Liquidity = 'liquidity',
   Owner = 'owner',
-  Pool = 'pool'
+  Pool = 'pool',
+  RangeLength = 'rangeLength'
 }
 
 export type EternalFarming = {
@@ -4026,6 +4070,8 @@ export type Query = {
   bundle?: Maybe<Bundle>;
   bundles: Array<Bundle>;
   burn?: Maybe<Burn>;
+  burnFeeCache?: Maybe<BurnFeeCache>;
+  burnFeeCaches: Array<BurnFeeCache>;
   burns: Array<Burn>;
   collect?: Maybe<Collect>;
   collects: Array<Collect>;
@@ -4062,6 +4108,8 @@ export type Query = {
   reward?: Maybe<Reward>;
   rewards: Array<Reward>;
   swap?: Maybe<Swap>;
+  swapFeeCache?: Maybe<SwapFeeCache>;
+  swapFeeCaches: Array<SwapFeeCache>;
   swaps: Array<Swap>;
   tick?: Maybe<Tick>;
   tickHourData?: Maybe<TickHourData>;
@@ -4159,6 +4207,24 @@ export type QueryBurnArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID']['input'];
   subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryBurnFeeCacheArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID']['input'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryBurnFeeCachesArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<BurnFeeCache_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<BurnFeeCache_Filter>;
 };
 
 
@@ -4486,6 +4552,24 @@ export type QuerySwapArgs = {
 };
 
 
+export type QuerySwapFeeCacheArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID']['input'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerySwapFeeCachesArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<SwapFeeCache_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<SwapFeeCache_Filter>;
+};
+
+
 export type QuerySwapsArgs = {
   block?: InputMaybe<Block_Height>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -4681,6 +4765,50 @@ export type Swap = {
   token1: Token;
   transaction: Transaction;
 };
+
+export type SwapFeeCache = {
+  __typename?: 'SwapFeeCache';
+  id: Scalars['ID']['output'];
+  overrideFee: Scalars['BigInt']['output'];
+  pluginFee: Scalars['BigInt']['output'];
+};
+
+export type SwapFeeCache_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<SwapFeeCache_Filter>>>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_not?: InputMaybe<Scalars['ID']['input']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  or?: InputMaybe<Array<InputMaybe<SwapFeeCache_Filter>>>;
+  overrideFee?: InputMaybe<Scalars['BigInt']['input']>;
+  overrideFee_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  overrideFee_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  overrideFee_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  overrideFee_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  overrideFee_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  overrideFee_not?: InputMaybe<Scalars['BigInt']['input']>;
+  overrideFee_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  pluginFee?: InputMaybe<Scalars['BigInt']['input']>;
+  pluginFee_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  pluginFee_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  pluginFee_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  pluginFee_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  pluginFee_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  pluginFee_not?: InputMaybe<Scalars['BigInt']['input']>;
+  pluginFee_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+};
+
+export enum SwapFeeCache_OrderBy {
+  Id = 'id',
+  OverrideFee = 'overrideFee',
+  PluginFee = 'pluginFee'
+}
 
 export type Swap_Filter = {
   /** Filter for the block changed event. */
@@ -6190,6 +6318,13 @@ export type ActiveFarmingForPoolQueryVariables = Exact<{
 
 export type ActiveFarmingForPoolQuery = { __typename?: 'Query', eternalFarmings: Array<{ __typename?: 'EternalFarming', id: string, rewardToken: any, bonusRewardToken: any, reward: any, bonusReward: any, rewardRate: any, bonusRewardRate: any, pool: any, virtualPool: any, isDeactivated?: boolean | null, nonce: any, minRangeLength: any }> };
 
+export type BundleFieldsFragment = { __typename?: 'Bundle', id: string, maticPriceUSD: any };
+
+export type NativePriceQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type NativePriceQuery = { __typename?: 'Query', bundles: Array<{ __typename?: 'Bundle', id: string, maticPriceUSD: any }> };
+
 export type PoolFieldsFragment = { __typename?: 'Pool', id: string, fee: any, sqrtPrice: any, liquidity: any, tick: any, tickSpacing: any, deployer: any, totalValueLockedUSD: any, volumeUSD: any, feesUSD: any, untrackedFeesUSD: any, token0Price: any, token1Price: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any, derivedMatic: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any, derivedMatic: any } };
 
 export type SinglePoolQueryVariables = Exact<{
@@ -6245,6 +6380,12 @@ export const DepositFieldsFragmentDoc = gql`
     fragment DepositFields on Deposit {
   id
   eternalFarming
+}
+    `;
+export const BundleFieldsFragmentDoc = gql`
+    fragment BundleFields on Bundle {
+  id
+  maticPriceUSD
 }
     `;
 export const TokenFieldsFragmentDoc = gql`
@@ -6438,6 +6579,45 @@ export type ActiveFarmingForPoolQueryHookResult = ReturnType<typeof useActiveFar
 export type ActiveFarmingForPoolLazyQueryHookResult = ReturnType<typeof useActiveFarmingForPoolLazyQuery>;
 export type ActiveFarmingForPoolSuspenseQueryHookResult = ReturnType<typeof useActiveFarmingForPoolSuspenseQuery>;
 export type ActiveFarmingForPoolQueryResult = Apollo.QueryResult<ActiveFarmingForPoolQuery, ActiveFarmingForPoolQueryVariables>;
+export const NativePriceDocument = gql`
+    query NativePrice {
+  bundles {
+    ...BundleFields
+  }
+}
+    ${BundleFieldsFragmentDoc}`;
+
+/**
+ * __useNativePriceQuery__
+ *
+ * To run a query within a React component, call `useNativePriceQuery` and pass it any options that fit your needs.
+ * When your component renders, `useNativePriceQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNativePriceQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useNativePriceQuery(baseOptions?: Apollo.QueryHookOptions<NativePriceQuery, NativePriceQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<NativePriceQuery, NativePriceQueryVariables>(NativePriceDocument, options);
+      }
+export function useNativePriceLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<NativePriceQuery, NativePriceQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<NativePriceQuery, NativePriceQueryVariables>(NativePriceDocument, options);
+        }
+export function useNativePriceSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<NativePriceQuery, NativePriceQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<NativePriceQuery, NativePriceQueryVariables>(NativePriceDocument, options);
+        }
+export type NativePriceQueryHookResult = ReturnType<typeof useNativePriceQuery>;
+export type NativePriceLazyQueryHookResult = ReturnType<typeof useNativePriceLazyQuery>;
+export type NativePriceSuspenseQueryHookResult = ReturnType<typeof useNativePriceSuspenseQuery>;
+export type NativePriceQueryResult = Apollo.QueryResult<NativePriceQuery, NativePriceQueryVariables>;
 export const SinglePoolDocument = gql`
     query SinglePool($poolId: ID!) {
   pool(id: $poolId) {
