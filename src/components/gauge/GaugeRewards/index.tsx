@@ -15,17 +15,20 @@ import { Address, formatUnits, parseUnits } from "viem";
 import { useContractWrite } from "wagmi";
 
 export function GaugeRewards({ votingPool, refetch }: { votingPool: VotingPool; refetch: () => void }) {
+    const filteredRewards = votingPool.rewardTokenList.filter((rewardToken) => rewardToken.amount > 0n);
     return (
         <div className="flex flex-col gap-4 p-4 border rounded-xl">
-            <div className="font-bold">Current Incentives</div>
-            {votingPool.rewardTokenList.length > 0 ? (
-                votingPool.rewardTokenList.map((rewardToken) => (
+            <div>
+                <span className="font-bold">Current Incentives </span>
+            </div>
+            {filteredRewards.length > 0 ? (
+                filteredRewards.map((rewardToken) => (
                     <div key={rewardToken.address}>
                         <GaugeRewardToken rewardToken={rewardToken} />
                     </div>
                 ))
             ) : (
-                <div className="flex items-center justify-center w-full border rounded-xl">Gauge doesn't have rewards</div>
+                <div className="flex items-center justify-center w-full min-h-48 border rounded-lg">Gauge doesn't have rewards</div>
             )}
             <NewIncentive votingReward={votingPool.votingReward} refetch={refetch} />
         </div>

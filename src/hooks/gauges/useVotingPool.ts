@@ -29,7 +29,7 @@ export function useVotingPool(poolAddress: Address | undefined) {
 
     const { data: totalVotesInPeriod, isLoading: totalVotesInPeriodLoading } = useVotingRewardTotalVotesInPeriod({
         address: gauge?.votingReward,
-        args: [nextPeriod],
+        args: [nextPeriod ?? 0n],
     });
 
     const { data: rewardList, isLoading: rewardListLoading } = useVotingRewardGetRewardList({
@@ -41,7 +41,7 @@ export function useVotingPool(poolAddress: Address | undefined) {
             address: gauge?.votingReward,
             abi: votingRewardABI,
             functionName: "rewardForPeriod",
-            args: [currentPeriod ?? 0n, reward],
+            args: [nextPeriod ?? 0n, reward],
         })),
         enabled: rewardList && rewardList.length > 0,
     });
