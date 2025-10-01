@@ -74,7 +74,7 @@ const FarmRewardDetails = ({ token, rate, reward, incentiveKey, isBonus, rewardR
     const chainId = useChainId();
     const ethersProvider = useEthersSigner();
 
-    const { data: isRewardEnabledForALM, isLoading: isRewardEnabledForALMLoading } = useSWR(
+    const { data: isRewardEnabledForALM, isLoading: isRewardEnabledForALMLoading, error: almError } = useSWR(
         [`isReward${reward}Enabled`, incentiveKey, chainId, token, ethersProvider],
         async () => {
             if (!incentiveKey.pool || !token || !ethersProvider) throw new Error("No incentive key or provider");
@@ -217,19 +217,21 @@ const FarmRewardDetails = ({ token, rate, reward, incentiveKey, isBonus, rewardR
                     </ManageRewardsModal>
                 )}
             </div>
-            <button
-                onClick={onEnableAlmFarming}
-                disabled={isRewardEnabledForALM || isLoadingAlm || isRewardEnabledForALMLoading}
-                className="w-full p-2 mt-4 border flex items-center justify-center border-blue-500 font-bold rounded-xl hover:bg-blue-500 hover:text-white disabled:opacity-60 disabled:hover:bg-white disabled:hover:text-black"
-            >
-                {isLoadingAlm || isRewardEnabledForALMLoading ? (
-                    <Loader color="black" />
-                ) : isRewardEnabledForALM ? (
-                    "Enabled for alm"
-                ) : (
-                    "Enable for ALM"
-                )}
-            </button>
+            {!almError && (
+                <button
+                    onClick={onEnableAlmFarming}
+                    disabled={isRewardEnabledForALM || isLoadingAlm || isRewardEnabledForALMLoading}
+                    className="w-full p-2 mt-4 border flex items-center justify-center border-blue-500 font-bold rounded-xl hover:bg-blue-500 hover:text-white disabled:opacity-60 disabled:hover:bg-white disabled:hover:text-black"
+                >
+                    {isLoadingAlm || isRewardEnabledForALMLoading ? (
+                        <Loader color="black" />
+                    ) : isRewardEnabledForALM ? (
+                        "Enabled for alm"
+                    ) : (
+                        "Enable for ALM"
+                    )}
+                </button>
+            )}
         </div>
     );
 };

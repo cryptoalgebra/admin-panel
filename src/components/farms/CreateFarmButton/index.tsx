@@ -26,8 +26,8 @@ const CreateFarmButton = ({
     incentiveKey: { rewardToken, bonusRewardToken, pool, nonce },
     rewards: { reward, rewardBn, rewardRateBn, bonusReward, bonusRewardBn, bonusRewardRateBn },
     minimalPositionWidth,
-    poolDeployer,
-}: ICreateFarmButton) => {
+}: // poolDeployer,
+ICreateFarmButton) => {
     const navigate = useNavigate();
 
     const { data: plugin } = useAlgebraPoolPlugin({
@@ -80,7 +80,7 @@ const CreateFarmButton = ({
                           minimalPositionWidth,
                       },
                       plugin,
-                      poolDeployer,
+                      //   poolDeployer,
                   ]
                 : undefined,
     });

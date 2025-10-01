@@ -656,11 +656,6 @@ export const eternalFarmingABI = [
                 name: "plugin",
                 type: "address",
             },
-            {
-                internalType: "address",
-                name: "pluginDeployer",
-                type: "address",
-            },
         ],
         name: "createEternalFarming",
         outputs: [
