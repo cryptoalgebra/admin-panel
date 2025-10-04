@@ -1,6 +1,6 @@
 import { ChainId } from "@cryptoalgebra/integral-sdk";
 
-export const DEFAULT_CHAIN_NAME = "TAC";
-export const DEFAULT_NATIVE_SYMBOL = "TAC";
-export const DEFAULT_NATIVE_NAME = "TAC";
-export const DEFAULT_CHAIN_ID = ChainId.TACMainnet;
+export const DEFAULT_CHAIN_NAME = "Plasma";
+export const DEFAULT_NATIVE_SYMBOL = "Plsma";
+export const DEFAULT_NATIVE_NAME = "XPL";
+export const DEFAULT_CHAIN_ID = ChainId.PlasmaMainnet;

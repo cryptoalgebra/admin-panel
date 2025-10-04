@@ -6,38 +6,39 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 
 import { publicProvider } from 'wagmi/providers/public'
 
-export const tac = defineChain({
-  id: 239,
-  name: 'TAC',
-  network: 'tac-mainnet',
-  nativeCurrency: { name: 'TAC', symbol: 'TAC', decimals: 18 },
+export const plasma = defineChain({
+  id: 9745,
+  name: 'Plasma',
+  network: 'plasma',
+  nativeCurrency: {
+    name: 'Plasma',
+    symbol: 'XPL',
+    decimals: 18,
+  },
   rpcUrls: {
     default: {
-      http: ['https://rpc.ankr.com/tac'],
+      http: ['https://rpc.plasma.to'],
     },
     public: {
-      http: ['https://rpc.ankr.com/tac'],
-    },
+      http: ['https://rpc.plasma.to']
+    }
   },
   blockExplorers: {
     default: {
-      name: 'Blockscout',
-      url: 'https://tac.blockscout.com',
-    },
-    native: {
-      name: 'TAC Explorer',
-      url: 'https://explorer.tac.build',
+      name: 'PlasmaScan',
+      url: 'https://plasmascan.to',
     },
   },
   contracts: {
     multicall3: {
-      address: '0xca11bde05977b3631167028862be2a173976ca11',
+      address: '0xcA11bde05977b3631167028862bE2a173976CA11',
       blockCreated: 0,
     },
   },
 })
+
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [tac],
+  [plasma],
   [
     publicProvider(),
   ],
