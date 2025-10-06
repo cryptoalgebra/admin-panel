@@ -498,6 +498,8 @@ export type Burn = {
   origin: Scalars['Bytes']['output'];
   owner?: Maybe<Scalars['Bytes']['output']>;
   pool: Pool;
+  reserves0: Scalars['BigDecimal']['output'];
+  reserves1: Scalars['BigDecimal']['output'];
   tickLower: Scalars['BigInt']['output'];
   tickUpper: Scalars['BigInt']['output'];
   timestamp: Scalars['BigInt']['output'];
@@ -634,6 +636,22 @@ export type Burn_Filter = {
   pool_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
   pool_starts_with?: InputMaybe<Scalars['String']['input']>;
   pool_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  reserves0?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves0_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves0_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves0_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  reserves0_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves0_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves0_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves0_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  reserves1?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves1_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves1_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves1_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  reserves1_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves1_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves1_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves1_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
   tickLower?: InputMaybe<Scalars['BigInt']['input']>;
   tickLower_gt?: InputMaybe<Scalars['BigInt']['input']>;
   tickLower_gte?: InputMaybe<Scalars['BigInt']['input']>;
@@ -767,6 +785,8 @@ export enum Burn_OrderBy {
   PoolVolumeToken0 = 'pool__volumeToken0',
   PoolVolumeToken1 = 'pool__volumeToken1',
   PoolVolumeUsd = 'pool__volumeUSD',
+  Reserves0 = 'reserves0',
+  Reserves1 = 'reserves1',
   TickLower = 'tickLower',
   TickUpper = 'tickUpper',
   Timestamp = 'timestamp',
@@ -807,6 +827,7 @@ export enum Burn_OrderBy {
   TransactionGasLimit = 'transaction__gasLimit',
   TransactionGasPrice = 'transaction__gasPrice',
   TransactionId = 'transaction__id',
+  TransactionIndex = 'transaction__index',
   TransactionTimestamp = 'transaction__timestamp'
 }
 
@@ -998,6 +1019,7 @@ export enum Collect_OrderBy {
   TransactionGasLimit = 'transaction__gasLimit',
   TransactionGasPrice = 'transaction__gasPrice',
   TransactionId = 'transaction__id',
+  TransactionIndex = 'transaction__index',
   TransactionTimestamp = 'transaction__timestamp'
 }
 
@@ -1008,7 +1030,6 @@ export type Deposit = {
   liquidity: Scalars['BigInt']['output'];
   owner: Scalars['Bytes']['output'];
   pool: Scalars['Bytes']['output'];
-  rangeLength: Scalars['BigInt']['output'];
 };
 
 export type Deposit_Filter = {
@@ -1062,14 +1083,6 @@ export type Deposit_Filter = {
   pool_not?: InputMaybe<Scalars['Bytes']['input']>;
   pool_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
   pool_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
-  rangeLength?: InputMaybe<Scalars['BigInt']['input']>;
-  rangeLength_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  rangeLength_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  rangeLength_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  rangeLength_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  rangeLength_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  rangeLength_not?: InputMaybe<Scalars['BigInt']['input']>;
-  rangeLength_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
 };
 
 export enum Deposit_OrderBy {
@@ -1077,8 +1090,7 @@ export enum Deposit_OrderBy {
   Id = 'id',
   Liquidity = 'liquidity',
   Owner = 'owner',
-  Pool = 'pool',
-  RangeLength = 'rangeLength'
+  Pool = 'pool'
 }
 
 export type EternalFarming = {
@@ -1689,6 +1701,7 @@ export enum Flash_OrderBy {
   TransactionGasLimit = 'transaction__gasLimit',
   TransactionGasPrice = 'transaction__gasPrice',
   TransactionId = 'transaction__id',
+  TransactionIndex = 'transaction__index',
   TransactionTimestamp = 'transaction__timestamp'
 }
 
@@ -1703,6 +1716,8 @@ export type Mint = {
   origin: Scalars['Bytes']['output'];
   owner: Scalars['Bytes']['output'];
   pool: Pool;
+  reserves0: Scalars['BigDecimal']['output'];
+  reserves1: Scalars['BigDecimal']['output'];
   sender?: Maybe<Scalars['Bytes']['output']>;
   tickLower: Scalars['BigInt']['output'];
   tickUpper: Scalars['BigInt']['output'];
@@ -1806,6 +1821,22 @@ export type Mint_Filter = {
   pool_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
   pool_starts_with?: InputMaybe<Scalars['String']['input']>;
   pool_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  reserves0?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves0_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves0_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves0_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  reserves0_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves0_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves0_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves0_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  reserves1?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves1_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves1_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves1_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  reserves1_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves1_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves1_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves1_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
   sender?: InputMaybe<Scalars['Bytes']['input']>;
   sender_contains?: InputMaybe<Scalars['Bytes']['input']>;
   sender_gt?: InputMaybe<Scalars['Bytes']['input']>;
@@ -1949,6 +1980,8 @@ export enum Mint_OrderBy {
   PoolVolumeToken0 = 'pool__volumeToken0',
   PoolVolumeToken1 = 'pool__volumeToken1',
   PoolVolumeUsd = 'pool__volumeUSD',
+  Reserves0 = 'reserves0',
+  Reserves1 = 'reserves1',
   Sender = 'sender',
   TickLower = 'tickLower',
   TickUpper = 'tickUpper',
@@ -1990,6 +2023,7 @@ export enum Mint_OrderBy {
   TransactionGasLimit = 'transaction__gasLimit',
   TransactionGasPrice = 'transaction__gasPrice',
   TransactionId = 'transaction__id',
+  TransactionIndex = 'transaction__index',
   TransactionTimestamp = 'transaction__timestamp'
 }
 
@@ -2001,6 +2035,7 @@ export enum OrderDirection {
 
 export type Plugin = {
   __typename?: 'Plugin';
+  activeModules: Array<Scalars['String']['output']>;
   collectedFeesToken0: Scalars['BigDecimal']['output'];
   collectedFeesToken1: Scalars['BigDecimal']['output'];
   collectedFeesUSD: Scalars['BigDecimal']['output'];
@@ -2011,6 +2046,12 @@ export type Plugin = {
 export type Plugin_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  activeModules?: InputMaybe<Array<Scalars['String']['input']>>;
+  activeModules_contains?: InputMaybe<Array<Scalars['String']['input']>>;
+  activeModules_contains_nocase?: InputMaybe<Array<Scalars['String']['input']>>;
+  activeModules_not?: InputMaybe<Array<Scalars['String']['input']>>;
+  activeModules_not_contains?: InputMaybe<Array<Scalars['String']['input']>>;
+  activeModules_not_contains_nocase?: InputMaybe<Array<Scalars['String']['input']>>;
   and?: InputMaybe<Array<InputMaybe<Plugin_Filter>>>;
   collectedFeesToken0?: InputMaybe<Scalars['BigDecimal']['input']>;
   collectedFeesToken0_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
@@ -2069,6 +2110,7 @@ export type Plugin_Filter = {
 };
 
 export enum Plugin_OrderBy {
+  ActiveModules = 'activeModules',
   CollectedFeesToken0 = 'collectedFeesToken0',
   CollectedFeesToken1 = 'collectedFeesToken1',
   CollectedFeesUsd = 'collectedFeesUSD',
@@ -3662,6 +3704,7 @@ export enum PositionSnapshot_OrderBy {
   TransactionGasLimit = 'transaction__gasLimit',
   TransactionGasPrice = 'transaction__gasPrice',
   TransactionId = 'transaction__id',
+  TransactionIndex = 'transaction__index',
   TransactionTimestamp = 'transaction__timestamp',
   WithdrawnToken0 = 'withdrawnToken0',
   WithdrawnToken1 = 'withdrawnToken1'
@@ -4046,6 +4089,7 @@ export enum Position_OrderBy {
   TransactionGasLimit = 'transaction__gasLimit',
   TransactionGasPrice = 'transaction__gasPrice',
   TransactionId = 'transaction__id',
+  TransactionIndex = 'transaction__index',
   TransactionTimestamp = 'transaction__timestamp',
   WithdrawnToken0 = 'withdrawnToken0',
   WithdrawnToken1 = 'withdrawnToken1'
@@ -4752,6 +4796,8 @@ export type Swap = {
   pool: Pool;
   price: Scalars['BigInt']['output'];
   recipient: Scalars['Bytes']['output'];
+  reserves0: Scalars['BigDecimal']['output'];
+  reserves1: Scalars['BigDecimal']['output'];
   sender: Scalars['Bytes']['output'];
   tick: Scalars['BigInt']['output'];
   timestamp: Scalars['BigInt']['output'];
@@ -4906,6 +4952,22 @@ export type Swap_Filter = {
   recipient_not?: InputMaybe<Scalars['Bytes']['input']>;
   recipient_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
   recipient_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  reserves0?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves0_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves0_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves0_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  reserves0_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves0_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves0_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves0_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  reserves1?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves1_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves1_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves1_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  reserves1_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves1_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves1_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  reserves1_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
   sender?: InputMaybe<Scalars['Bytes']['input']>;
   sender_contains?: InputMaybe<Scalars['Bytes']['input']>;
   sender_gt?: InputMaybe<Scalars['Bytes']['input']>;
@@ -5042,6 +5104,8 @@ export enum Swap_OrderBy {
   PoolVolumeUsd = 'pool__volumeUSD',
   Price = 'price',
   Recipient = 'recipient',
+  Reserves0 = 'reserves0',
+  Reserves1 = 'reserves1',
   Sender = 'sender',
   Tick = 'tick',
   Timestamp = 'timestamp',
@@ -5082,6 +5146,7 @@ export enum Swap_OrderBy {
   TransactionGasLimit = 'transaction__gasLimit',
   TransactionGasPrice = 'transaction__gasPrice',
   TransactionId = 'transaction__id',
+  TransactionIndex = 'transaction__index',
   TransactionTimestamp = 'transaction__timestamp'
 }
 
@@ -6131,6 +6196,7 @@ export type Transaction = {
   gasLimit: Scalars['BigInt']['output'];
   gasPrice: Scalars['BigInt']['output'];
   id: Scalars['ID']['output'];
+  index: Scalars['BigInt']['output'];
   mints: Array<Mint>;
   swaps: Array<Swap>;
   timestamp: Scalars['BigInt']['output'];
@@ -6220,6 +6286,14 @@ export type Transaction_Filter = {
   id_lte?: InputMaybe<Scalars['ID']['input']>;
   id_not?: InputMaybe<Scalars['ID']['input']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  index?: InputMaybe<Scalars['BigInt']['input']>;
+  index_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  index_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  index_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  index_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  index_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  index_not?: InputMaybe<Scalars['BigInt']['input']>;
+  index_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   mints_?: InputMaybe<Mint_Filter>;
   or?: InputMaybe<Array<InputMaybe<Transaction_Filter>>>;
   swaps_?: InputMaybe<Swap_Filter>;
@@ -6241,6 +6315,7 @@ export enum Transaction_OrderBy {
   GasLimit = 'gasLimit',
   GasPrice = 'gasPrice',
   Id = 'id',
+  Index = 'index',
   Mints = 'mints',
   Swaps = 'swaps',
   Timestamp = 'timestamp'
