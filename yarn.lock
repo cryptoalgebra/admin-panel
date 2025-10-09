@@ -1446,10 +1446,10 @@
     stream-browserify "^3.0.0"
     util "^0.12.4"
 
-"@cryptoalgebra/alm-sdk@^1.0.11":
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/@cryptoalgebra/alm-sdk/-/alm-sdk-1.0.11.tgz#2df7d9305143d3a3788aa3ade017ba1f6dca1ba6"
-  integrity sha512-bFQkPIu2vcUUKCHvQOG63ZRW1GHXw2cSg0gB0ilH+cSg0RBMUWzpYqU0Lser8jrHjKrAWci+MFHoTpqPIZYFDQ==
+"@cryptoalgebra/alm-sdk@^1.0.14":
+  version "1.0.14"
+  resolved "https://registry.yarnpkg.com/@cryptoalgebra/alm-sdk/-/alm-sdk-1.0.14.tgz#825999b4ef0364f13f8b512d593b4300bfad81b8"
+  integrity sha512-CSW6q+01ZEEVAh6y2z8UHMd4X3ADXnWORxRPAzLlAkc5mx8XnE4gcFoNwQ7EZbIH0bTxbPmmcCLbjvv3XE+hCQ==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/abstract-signer" "^5.6.2"
@@ -1473,10 +1473,10 @@
     tsdx "^0.14.1"
     typechain "^8.0.0"
 
-"@cryptoalgebra/custom-pools-and-sliding-fee-sdk@npm:@cryptoalgebra/integral-sdk@1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@cryptoalgebra/integral-sdk/-/integral-sdk-1.0.2.tgz#a39a47f59db2041e4d4826f32c46f1819ff35183"
-  integrity sha512-CEwE4HS8ZnXdISXS5NPhf5f9kSAJuL1DUfIn2cdR6Vcbl4/CD1XlIyxoKZva7qAg8ZoUvXS0HvAjlytyIvkikQ==
+"@cryptoalgebra/custom-pools-and-sliding-fee-sdk@npm:@cryptoalgebra/integral-sdk@1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@cryptoalgebra/integral-sdk/-/integral-sdk-1.0.3.tgz#401934a6e222d820815985e2bd303a29ac2ac178"
+  integrity sha512-2/DEb0k4eW0xkH6dObPQT3FkWiDZVn2y8xrpyF2v+HPbAeAzGxv7U9DhE/iyVJ9vqx6gF3e/lMFz3E8ofRWOew==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/address" "^5.7.0"
