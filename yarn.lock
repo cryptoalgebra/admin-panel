@@ -569,10 +569,10 @@
     stream-browserify "^3.0.0"
     util "^0.12.4"
 
-"@cryptoalgebra/integral-sdk@npm:@cryptoalgebra/lithos-sdk@1.0.0":
+"@cryptoalgebra/integral-sdk@npm:@cryptoalgebra/sophon-os-sdk@1.0.0":
   version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@cryptoalgebra/lithos-sdk/-/lithos-sdk-1.0.0.tgz#24e797d3dac7d4bfcf318d662aba198ccee23d99"
-  integrity sha512-/YGMJqFvl8R2Uh0S87o64x9z+xL/7gyCygM8pX/UNrTlFMpjra3Hdz0Dmsgh88K1dqNy7am7/HXi4s+8+2Jphw==
+  resolved "https://registry.yarnpkg.com/@cryptoalgebra/sophon-os-sdk/-/sophon-os-sdk-1.0.0.tgz#5e97463d24923022d8fdf8492019a89f53e81edf"
+  integrity sha512-Y+6c0cvnhVihaCqmcbWPwtz6UP1BwSUKB3jCFNcGFDbx4ZBoDJOx3Y5K+HsEfG2x5IOWmeHrp+uX5feqkwEK6Q==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/address" "^5.7.0"

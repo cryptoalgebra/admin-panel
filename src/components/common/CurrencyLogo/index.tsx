@@ -15,7 +15,7 @@ interface CurrencyLogoProps {
 export const specialTokens: {
   [key: Address]: { symbol: string; logo: string };
 } = {
-  ["0x5555555555555555555555555555555555555555"]: {
+  ["0x577bdff849e65c1effeb8114e9cd243c1180f158"]: {
     symbol: "WHYPE",
     logo: EthLogo,
   },
@@ -64,7 +64,7 @@ const CurrencyLogo = ({
     return (
       <img
         src={EthLogo}
-        alt={"WHYPE"}
+        alt={"WSOPH"}
         className={classString}
         style={{
           ...style,

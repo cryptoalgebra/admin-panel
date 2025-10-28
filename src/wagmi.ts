@@ -7,12 +7,12 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { publicProvider } from 'wagmi/providers/public'
 
 export const plasma = defineChain({
-  id: 9745,
-  name: 'Plasma',
-  network: 'plasma',
+  id: 531050204,
+  name: 'SophonOS',
+  network: 'sophon-os',
   nativeCurrency: {
-    name: 'Plasma',
-    symbol: 'XPL',
+    name: 'SOPH',
+    symbol: 'SOPH',
     decimals: 18,
   },
   rpcUrls: {
@@ -25,14 +25,14 @@ export const plasma = defineChain({
   },
   blockExplorers: {
     default: {
-      name: 'PlasmaScan',
-      url: 'https://plasmascan.to',
+      name: 'SophonScan',
+      url: 'https://zksync-os-testnet-sophon.zksync.dev',
     },
   },
   contracts: {
     multicall3: {
       address: '0xcA11bde05977b3631167028862bE2a173976CA11',
-      blockCreated: 0,
+      blockCreated: 1468,
     },
   },
 })
