@@ -6,33 +6,30 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 
 import { publicProvider } from 'wagmi/providers/public'
 
-export const rayls = defineChain({
-  id: 123123,
-  name: 'Rayls',
-  network: 'rayls',
+export const mantraDuKongEVMTestnet = /*#__PURE__*/ defineChain({
+  id: 5887,
+  name: 'MANTRA DuKong EVM Testnet',
+  network: 'mantra-dukong',
   nativeCurrency: {
-    name: 'ETH',
-    symbol: 'ETH',
     decimals: 18,
+    name: 'OM',
+    symbol: 'OM',
   },
   rpcUrls: {
-    default: {
-      http: ['https://devnet-rpc.rayls.com'],
-    },
-    public: {
-      http: ['https://devnet-rpc.rayls.com']
-    }
+    default: { http: ['https://evm.dukong.mantrachain.io'] },
+    public: { http: ['https://evm.dukong.mantrachain.io'] },
   },
   blockExplorers: {
     default: {
-      name: 'RaylsScan',
-      url: 'https://devnet-rpc.rayls.com',
+      name: 'MANTRAScan',
+      url: 'https://mantrascan.io/dukong',
     },
-  }
+  },
+  testnet: true,
 })
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [rayls],
+  [mantraDuKongEVMTestnet],
   [
     publicProvider(),
   ],
