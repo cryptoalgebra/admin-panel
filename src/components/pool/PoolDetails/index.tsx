@@ -1,6 +1,6 @@
-import DataWithCopyButton from '@/components/common/DataWithCopyButton';
-import { PoolFieldsFragment } from '@/graphql/generated/graphql';
-import { Address } from 'wagmi';
+import DataWithCopyButton from "@/components/common/DataWithCopyButton";
+import { PoolFieldsFragment } from "@/graphql/generated/graphql";
+import { Address } from "wagmi";
 
 interface IPoolDetails {
     poolId: Address;
@@ -10,46 +10,44 @@ interface IPoolDetails {
 const PoolDetails = ({ pool, poolId }: IPoolDetails) => {
     console.log(pool);
     return (
-        <div className="flex flex-col text-left p-4 border rounded-xl">
-            <div className="font-bold mb-4">Pool Details</div>
+        <div className="flex flex-col text-left p-6 bg-white border border-neutral-200 rounded-lg">
+            <div className="font-semibold text-lg mb-6">Pool Details</div>
             <div className="flex flex-col gap-4">
                 <div>
-                    <p className="font-semibold text-sm">Pool address</p>
+                    <p className="text-xs text-neutral-500 mb-1">Pool address</p>
                     <DataWithCopyButton data={poolId} />
                 </div>
                 <div>
-                    <p className="font-semibold text-sm">Deployer</p>
+                    <p className="text-xs text-neutral-500 mb-1">Deployer</p>
                     <DataWithCopyButton data={pool.deployer} />
                 </div>
                 <div>
-                    <p className="font-semibold text-sm">TVL USD</p>
-                    <p>{pool.totalValueLockedUSD} $</p>
+                    <p className="text-xs text-neutral-500 mb-1">TVL USD</p>
+                    <p className="text-sm">{pool.totalValueLockedUSD} $</p>
                 </div>
                 <div>
-                    <p className="font-semibold text-sm">Volume USD</p>
-                    <p>{pool.volumeUSD} $</p>
+                    <p className="text-xs text-neutral-500 mb-1">Volume USD</p>
+                    <p className="text-sm">{pool.volumeUSD} $</p>
                 </div>
                 <div>
-                    <p className="font-semibold text-sm">Fee</p>
-                    <p>{pool.fee}</p>
+                    <p className="text-xs text-neutral-500 mb-1">Fee</p>
+                    <p className="text-sm">{pool.fee}</p>
                 </div>
                 <div>
-                    <p className="font-semibold text-sm">Fees USD</p>
-                    <p>{pool.feesUSD} $</p>
+                    <p className="text-xs text-neutral-500 mb-1">Fees USD</p>
+                    <p className="text-sm">{pool.feesUSD} $</p>
                 </div>
                 <div>
-                    <p className="font-semibold text-sm">Untracked Fees USD</p>
-                    <p>{pool.untrackedFeesUSD} $</p>
+                    <p className="text-xs text-neutral-500 mb-1">Untracked Fees USD</p>
+                    <p className="text-sm">{pool.untrackedFeesUSD} $</p>
                 </div>
                 <div>
-                    <p className="font-semibold text-sm">
-                        Current Tick Spacing
-                    </p>
-                    <p>{pool.tickSpacing}</p>
+                    <p className="text-xs text-neutral-500 mb-1">Current Tick Spacing</p>
+                    <p className="text-sm">{pool.tickSpacing}</p>
                 </div>
                 <div>
-                    <p className="font-semibold text-sm">Current Tick</p>
-                    <p>{pool.tick}</p>
+                    <p className="text-xs text-neutral-500 mb-1">Current Tick</p>
+                    <p className="text-sm">{pool.tick}</p>
                 </div>
             </div>
         </div>

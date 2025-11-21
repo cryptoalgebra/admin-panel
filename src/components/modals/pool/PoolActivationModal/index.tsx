@@ -1,16 +1,9 @@
-import DataWithCopyButton from '@/components/common/DataWithCopyButton';
-import Loader from '@/components/common/Loader';
-import {
-    Credenza,
-    CredenzaBody,
-    CredenzaContent,
-    CredenzaHeader,
-    CredenzaTitle,
-    CredenzaTrigger,
-} from '@/components/ui/credenza';
-import { usePrepareAlgebraPoolSetPlugin } from '@/generated';
-import { useTransitionAwait } from '@/hooks/common/useTransactionAwait';
-import { Address, useContractWrite } from 'wagmi';
+import DataWithCopyButton from "@/components/common/DataWithCopyButton";
+import Loader from "@/components/common/Loader";
+import { Credenza, CredenzaBody, CredenzaContent, CredenzaHeader, CredenzaTitle, CredenzaTrigger } from "@/components/ui/credenza";
+import { usePrepareAlgebraPoolSetPlugin } from "@/generated";
+import { useTransitionAwait } from "@/hooks/common/useTransactionAwait";
+import { Address, useContractWrite } from "wagmi";
 
 interface IPoolActivationModal {
     title: string;
@@ -20,13 +13,7 @@ interface IPoolActivationModal {
     isToActivate: boolean;
 }
 
-const PoolActivationModal = ({
-    title,
-    children,
-    poolId,
-    pluginId,
-    isToActivate,
-}: IPoolActivationModal) => {
+const PoolActivationModal = ({ title, children, poolId, pluginId, isToActivate }: IPoolActivationModal) => {
     const { config } = usePrepareAlgebraPoolSetPlugin({
         address: poolId,
         args: [pluginId],
@@ -42,31 +29,30 @@ const PoolActivationModal = ({
     return (
         <Credenza>
             <CredenzaTrigger asChild>{children}</CredenzaTrigger>
-            <CredenzaContent className="bg-white !rounded-3xl">
+            <CredenzaContent className="bg-white rounded-lg">
                 <CredenzaHeader>
                     <CredenzaTitle>{title}</CredenzaTitle>
                 </CredenzaHeader>
-                <CredenzaBody className={'flex flex-col gap-4'}>
+                <CredenzaBody className={"flex flex-col gap-4"}>
                     <div>
-                        <p className="font-semibold text-sm">Pool address</p>
+                        <p className="text-xs text-neutral-500 mb-1">Pool address</p>
                         <DataWithCopyButton data={poolId} />
                     </div>
-                    <hr />
-                    <div>
-                        This will change Current plugin address to{' '}
-                        {isToActivate ? 'Base' : 'Stub'} plugin address.
+                    <hr className="border-neutral-200" />
+                    <div className="text-sm">
+                        This will change Current plugin address to {isToActivate ? "Base" : "Stub"} plugin address.
                     </div>
                     <button
                         disabled={isLoading}
                         onClick={handleConfirm}
-                        className={`flex items-center justify-center mt-2 py-2 px-4 w-full text-white font-bold rounded-xl '
+                        className={`flex items-center justify-center mt-2 py-2 px-4 w-full text-white text-sm rounded-lg transition-colors '
                             ${
                                 isToActivate
-                                    ? 'bg-green-600 disabled:bg-green-400 hover:bg-green-400'
-                                    : 'bg-red-500 disabled:bg-red-400 hover:bg-red-400'
+                                    ? "bg-green-600 disabled:bg-green-400 hover:bg-green-500"
+                                    : "bg-red-500 disabled:bg-red-400 hover:bg-red-600"
                             }`}
                     >
-                        {isLoading ? <Loader /> : 'Confirm'}
+                        {isLoading ? <Loader /> : "Confirm"}
                     </button>
                 </CredenzaBody>
             </CredenzaContent>

@@ -7,34 +7,30 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { publicProvider } from 'wagmi/providers/public'
 
 export const plasma = defineChain({
-  id: 531050204,
-  name: 'SophonOS',
-  network: 'sophon-os',
-  nativeCurrency: {
-    name: 'SOPH',
-    symbol: 'SOPH',
-    decimals: 18,
-  },
-  rpcUrls: {
-    default: {
-      http: ['https://rpc.plasma.to'],
+    id: 531050204,
+    network: "sophon-os-testnet",
+    name: "SophonOSTestnet",
+    nativeCurrency: { name: "SOPH", symbol: "SOPH", decimals: 18 },
+    rpcUrls: {
+        default: {
+            http: ["https://zksync-os-testnet-sophon.zksync.dev"],
+        },
+        public: {
+            http: ["https://zksync-os-testnet-sophon.zksync.dev"],
+        },
     },
-    public: {
-      http: ['https://rpc.plasma.to']
-    }
-  },
-  blockExplorers: {
-    default: {
-      name: 'SophonScan',
-      url: 'https://zksync-os-testnet-sophon.zksync.dev',
+    blockExplorers: {
+        default: {
+            name: "SophonOSTestnet",
+            url: "https://block-explorer.zksync-os-testnet-sophon.zksync.dev",
+        },
     },
-  },
-  contracts: {
-    multicall3: {
-      address: '0xcA11bde05977b3631167028862bE2a173976CA11',
-      blockCreated: 1468,
+    contracts: {
+        multicall3: {
+            address: "0xca11bde05977b3631167028862be2a173976ca11",
+            blockCreated: 1468,
+        },
     },
-  },
 })
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
