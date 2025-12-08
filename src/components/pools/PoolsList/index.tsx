@@ -2,7 +2,7 @@ import { useAllPoolsQuery } from "@/graphql/generated/graphql";
 import { FormattedPool } from "@/types/pool";
 import { Link } from "react-router-dom";
 import { useMemo } from "react";
-import { Address } from "wagmi";
+import { Address } from "viem";
 import { ADDRESS_ZERO } from "@cryptoalgebra/integral-sdk";
 
 const deployers: { [key: string]: string } = {

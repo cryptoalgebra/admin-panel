@@ -3,15 +3,19 @@ import Loader from "@/components/common/Loader";
 import SetPluginAddressModal from "@/components/modals/pool/ChangePluginAddressModal";
 import ManagePluginConfigModal from "@/components/modals/pool/ManagePluginConfigModal";
 import { Switch } from "@/components/ui/switch";
-import { ALGEBRA_STUB_PLUGIN } from "@/constants/addresses";
-import { useAlgebraBasePluginDefaultPluginConfig, useAlgebraPoolPlugin, usePrepareAlgebraPoolSetPluginConfig } from "@/generated";
-import { useTransitionAwait } from "@/hooks/common/useTransactionAwait";
+import { ALGEBRA_STUB_PLUGIN } from "config/contract-addresses";
+import { DEFAULT_CHAIN_ID } from "config/default-chain";
+import { useReadAlgebraBasePluginDefaultPluginConfig, useReadAlgebraPoolPlugin } from "@/generated";
+import { useTransactionAwait } from "@/hooks/common/useTransactionAwait";
 import { usePluginFlags } from "@/hooks/pools/usePluginFlags";
 import { PluginFlags } from "@/types/pool-plugin-flags";
 import { parsePluginConfig } from "@/utils/pool/parsePluginConfig";
 import { parsePluginFlags } from "@/utils/pool/parsePluginFlags";
 import { useEffect, useMemo, useState } from "react";
-import { Address, useContractWrite } from "wagmi";
+import { Address } from "viem";
+import { useWriteContract } from "wagmi";
+import { algebraPoolABI } from "config/abis";
+
 interface IManagePlugins {
     poolId: Address;
 }
@@ -25,11 +29,11 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
         return parsePluginFlags(flags);
     }, [flags]);
 
-    const { data: pluginId } = useAlgebraPoolPlugin({
+    const { data: pluginId } = useReadAlgebraPoolPlugin({
         address: poolId,
     });
 
-    const isToActivate = pluginId === ALGEBRA_STUB_PLUGIN;
+    const isToActivate = pluginId === ALGEBRA_STUB_PLUGIN[DEFAULT_CHAIN_ID];
 
     const isSwapDisabled = flags?.AFTER_SWAP_FLAG === 1 || flags?.BEFORE_SWAP_FLAG === 1;
 
@@ -37,19 +41,13 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
 
     const isFlashesDisabled = flags?.AFTER_FLASH_FLAG === 1 || flags?.BEFORE_FLASH_FLAG === 1;
 
-    const { data: defaultPluginConfig } = useAlgebraBasePluginDefaultPluginConfig({
+    const { data: defaultPluginConfig } = useReadAlgebraBasePluginDefaultPluginConfig({
         address: pluginId,
     });
 
-    const { config: preparedPluginConfig } = usePrepareAlgebraPoolSetPluginConfig({
-        address: poolId,
-        args: [pluginConfig as number],
-        enabled: pluginConfig !== undefined,
-    });
+    const { data: setPluginConfigHash, writeContract } = useWriteContract();
 
-    const { data: setPluginConfigHash, write } = useContractWrite(preparedPluginConfig);
-
-    const { isLoading } = useTransitionAwait(setPluginConfigHash?.hash, "Set Plugin");
+    const { isLoading } = useTransactionAwait(setPluginConfigHash, "Set Plugin");
 
     useEffect(() => {
         if (!pluginFlags) return;
@@ -74,8 +72,13 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
     };
 
     const handleConfirm = () => {
-        if (isLoading) return;
-        write?.();
+        if (isLoading || pluginConfig === undefined) return;
+        writeContract({
+            address: poolId,
+            abi: algebraPoolABI,
+            functionName: "setPluginConfig",
+            args: [pluginConfig],
+        });
     };
 
     const handleResetPluginConfig = () => {

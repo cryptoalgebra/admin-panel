@@ -1,11 +1,14 @@
 import DataWithCopyButton from "@/components/common/DataWithCopyButton";
 import ManagePoolSettingsModal from "@/components/modals/pool/ManagePoolSettingsModal";
-import { ALGEBRA_STUB_PLUGIN, PLUGIN_FACTORY } from "@/constants/addresses";
-import { pluginFactoryABI, useAlgebraPoolPlugin } from "@/generated";
+import { ALGEBRA_STUB_PLUGIN, PLUGIN_FACTORY } from "config/contract-addresses";
+import { DEFAULT_CHAIN_ID } from "config/default-chain";
+import { useReadAlgebraPoolPlugin } from "@/generated";
 import { usePool } from "@/hooks/pools/usePool";
-import { Address, useContractRead } from "wagmi";
+import { Address } from "viem";
+import { useReadContract } from "wagmi";
 import PoolActivationModal from "@/components/modals/pool/PoolActivationModal";
 import { ADDRESS_ZERO } from "@cryptoalgebra/integral-sdk";
+import { pluginFactoryABI } from "config/abis";
 
 interface IPoolSettings {
     poolId: Address;
@@ -13,18 +16,18 @@ interface IPoolSettings {
 }
 
 const PoolSettings = ({ poolId, deployer }: IPoolSettings) => {
-    const { data: pluginId } = useAlgebraPoolPlugin({
+    const { data: pluginId } = useReadAlgebraPoolPlugin({
         address: poolId,
     });
 
-    const { data: basePluginId } = useContractRead({
-        address: PLUGIN_FACTORY,
+    const { data: basePluginId } = useReadContract({
+        address: PLUGIN_FACTORY[DEFAULT_CHAIN_ID],
         abi: pluginFactoryABI,
         functionName: "pluginByPool",
         args: [poolId],
     });
 
-    const isToActivate = pluginId === ALGEBRA_STUB_PLUGIN;
+    const isToActivate = pluginId === ALGEBRA_STUB_PLUGIN[DEFAULT_CHAIN_ID];
 
     const [, pool] = usePool(poolId);
 
@@ -41,7 +44,7 @@ const PoolSettings = ({ poolId, deployer }: IPoolSettings) => {
             </div>
             <div>
                 <p className="text-xs text-neutral-500 mb-1">Stub plugin address</p>
-                <DataWithCopyButton data={ALGEBRA_STUB_PLUGIN} />
+                <DataWithCopyButton data={ALGEBRA_STUB_PLUGIN[DEFAULT_CHAIN_ID]} />
             </div>
             <div className="flex gap-2 mt-auto">
                 <ManagePoolSettingsModal poolId={poolId} functionName="setCommunityFee" title="Community Fee">
@@ -76,7 +79,7 @@ const PoolSettings = ({ poolId, deployer }: IPoolSettings) => {
             ) : (
                 <PoolActivationModal
                     isToActivate={isToActivate}
-                    pluginId={ALGEBRA_STUB_PLUGIN}
+                    pluginId={ALGEBRA_STUB_PLUGIN[DEFAULT_CHAIN_ID]}
                     poolId={poolId}
                     title={`Deactivate Pool ${pool?.token0.symbol} / ${pool?.token1.symbol}`}
                 >

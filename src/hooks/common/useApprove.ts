@@ -1,62 +1,64 @@
-import {
-  Currency,
-  CurrencyAmount,
-} from "@cryptoalgebra/integral-sdk";
+import { Currency, CurrencyAmount } from "@cryptoalgebra/integral-sdk";
 import { useNeedAllowance } from "./useNeedAllowance";
 import { ApprovalState, ApprovalStateType } from "@/types/approve-state";
-import { useMemo } from "react";
-import {
-  Address,
-  erc20ABI,
-  useContractWrite,
-  usePrepareContractWrite,
-} from "wagmi";
-import { useTransitionAwait } from "./useTransactionAwait";
+import { useEffect, useMemo, useState } from "react";
+import { Address, erc20Abi } from "viem";
+import { useWriteContract } from "wagmi";
+import { useTransactionAwait } from "./useTransactionAwait";
 import { formatCurrency } from "@/utils/common/formatCurrency";
 
 export function useApprove(
-  amountToApprove: CurrencyAmount<Currency> | undefined,
-  spender: Address
+    amountToApprove: CurrencyAmount<Currency> | undefined,
+    spender: Address
 ) {
-  const token = amountToApprove?.currency?.isToken
-    ? amountToApprove.currency
-    : undefined;
-  const needAllowance = useNeedAllowance(token, amountToApprove, spender);
+    const token = amountToApprove?.currency?.isToken ? amountToApprove.currency : undefined;
+    const [shouldPolling, setShouldPolling] = useState(false);
 
-  const approvalState: ApprovalStateType = useMemo(() => {
-    if (!amountToApprove || !spender) return ApprovalState.UNKNOWN;
-    if (amountToApprove.currency.isNative) return ApprovalState.APPROVED;
+    const needAllowance = useNeedAllowance(token, amountToApprove, spender, shouldPolling);
 
-    return needAllowance ? ApprovalState.NOT_APPROVED : ApprovalState.APPROVED;
-  }, [amountToApprove, needAllowance, spender]);
+    const approvalState: ApprovalStateType = useMemo(() => {
+        if (!amountToApprove || !spender) return ApprovalState.UNKNOWN;
+        if (amountToApprove.currency.isNative) return ApprovalState.APPROVED;
 
-  const { config } = usePrepareContractWrite({
-    address: amountToApprove
-      ? (amountToApprove.currency.wrapped.address as Address)
-      : undefined,
-    abi: erc20ABI,
-    functionName: "approve",
-    args: [
-      spender,
-      amountToApprove ? BigInt(amountToApprove.quotient.toString()) : 0,
-    ] as [Address, bigint],
-  });
+        return needAllowance ? ApprovalState.NOT_APPROVED : ApprovalState.APPROVED;
+    }, [amountToApprove, needAllowance, spender]);
 
-  const { data: approvalData, writeAsync: approve } = useContractWrite(config);
+    const config = amountToApprove
+        ? {
+              address: amountToApprove.currency.wrapped.address as Address,
+              abi: erc20Abi,
+              functionName: "approve" as const,
+              args: [spender, BigInt(amountToApprove.quotient.toString())] as [Address, bigint],
+          }
+        : undefined;
 
-  const { isLoading, isSuccess } = useTransitionAwait(
-    approvalData?.hash,
-    `Approve ${formatCurrency.format(
-      Number(amountToApprove?.toSignificant())
-    )} ${amountToApprove?.currency.symbol}`
-  );
+    const { data: approvalData, writeContract: approve, isPending } = useWriteContract();
 
-  return {
-    approvalState: isLoading
-      ? ApprovalState.PENDING
-      : isSuccess && approvalState === ApprovalState.APPROVED
-      ? ApprovalState.APPROVED
-      : approvalState,
-    approvalCallback: approve,
-  };
+    const { isLoading, isSuccess } = useTransactionAwait(
+        approvalData,
+        `Approve ${formatCurrency.format(Number(amountToApprove?.toSignificant()))} ${amountToApprove?.currency.symbol}`
+    );
+
+    useEffect(() => {
+        if (!needAllowance && shouldPolling) {
+            setShouldPolling(false);
+        }
+    }, [needAllowance, shouldPolling]);
+
+    const approvalCallback = () => {
+        if (config) {
+            setShouldPolling(true);
+            approve(config);
+        }
+    };
+
+    return {
+        approvalState:
+            isLoading || isPending
+                ? ApprovalState.PENDING
+                : isSuccess && approvalState === ApprovalState.APPROVED
+                  ? ApprovalState.APPROVED
+                  : approvalState,
+        approvalCallback,
+    };
 }

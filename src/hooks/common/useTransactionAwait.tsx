@@ -1,16 +1,20 @@
-import { ToastAction } from '@/components/ui/toast';
-import { useToast } from '@/components/ui/use-toast';
-import { ExternalLinkIcon } from 'lucide-react';
-import { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Address, useWaitForTransaction } from 'wagmi';
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
+import { useAppKitNetwork } from "@reown/appkit/react";
+import { ExternalLinkIcon } from "lucide-react";
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Address } from "viem";
+import { useWaitForTransactionReceipt } from "wagmi";
 
-export const ViewTxOnExplorer = ({ hash }: { hash: Address | undefined }) =>
-    hash ? (
+export const ViewTxOnExplorer = ({ hash }: { hash: Address | undefined }) => {
+    const { caipNetwork: chain } = useAppKitNetwork();
+
+    return hash ? (
         <ToastAction altText="View on explorer" asChild>
             <Link
-                to={`https://holesky.etherscan.io/tx/${hash}`}
-                target={'_blank'}
+                to={`${chain?.blockExplorers?.default.url}/tx/${hash}`}
+                target={"_blank"}
                 className="border-none gap-2 hover:bg-transparent hover:text-blue-400"
             >
                 View on explorer
@@ -20,8 +24,9 @@ export const ViewTxOnExplorer = ({ hash }: { hash: Address | undefined }) =>
     ) : (
         <></>
     );
+};
 
-export function useTransitionAwait(
+export function useTransactionAwait(
     hash: Address | undefined,
     title: string,
     description?: string,
@@ -31,42 +36,42 @@ export function useTransitionAwait(
 
     const navigate = useNavigate();
 
-    const { data, isError, isLoading, isSuccess } = useWaitForTransaction({
+    const { data, isError, isLoading, isSuccess } = useWaitForTransactionReceipt({
         hash,
     });
 
     useEffect(() => {
-        if (isLoading) {
+        if (isLoading && hash) {
             toast({
                 title: title,
-                description: description || 'Transaction was sent',
+                description: description || "Transaction was sent",
                 action: <ViewTxOnExplorer hash={hash} />,
             });
         }
-    }, [isLoading]);
+    }, [isLoading, hash]);
 
     useEffect(() => {
-        if (isLoading) {
+        if (isError && hash) {
             toast({
                 title: title,
-                description: description || 'Transaction failed',
+                description: description || "Transaction failed",
                 action: <ViewTxOnExplorer hash={hash} />,
             });
         }
-    }, [isError]);
+    }, [isError, hash]);
 
     useEffect(() => {
-        if (isSuccess) {
+        if (isSuccess && hash) {
             toast({
                 title: title,
-                description: description || 'Transaction confirmed',
+                description: description || "Transaction confirmed",
                 action: <ViewTxOnExplorer hash={hash} />,
             });
             if (redirectPath) {
                 navigate(redirectPath);
             }
         }
-    }, [isSuccess]);
+    }, [isSuccess, hash]);
 
     return {
         data,

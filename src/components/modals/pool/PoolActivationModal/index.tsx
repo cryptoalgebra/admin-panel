@@ -1,9 +1,10 @@
 import DataWithCopyButton from "@/components/common/DataWithCopyButton";
 import Loader from "@/components/common/Loader";
 import { Credenza, CredenzaBody, CredenzaContent, CredenzaHeader, CredenzaTitle, CredenzaTrigger } from "@/components/ui/credenza";
-import { usePrepareAlgebraPoolSetPlugin } from "@/generated";
-import { useTransitionAwait } from "@/hooks/common/useTransactionAwait";
-import { Address, useContractWrite } from "wagmi";
+import { algebraPoolABI } from "config";
+import { useTransactionAwait } from "@/hooks/common/useTransactionAwait";
+import { Address } from "viem";
+import { useWriteContract } from "wagmi";
 
 interface IPoolActivationModal {
     title: string;
@@ -14,17 +15,17 @@ interface IPoolActivationModal {
 }
 
 const PoolActivationModal = ({ title, children, poolId, pluginId, isToActivate }: IPoolActivationModal) => {
-    const { config } = usePrepareAlgebraPoolSetPlugin({
-        address: poolId,
-        args: [pluginId],
-    });
+    const { data, writeContract } = useWriteContract();
 
-    const { data, write } = useContractWrite(config);
-
-    const { isLoading } = useTransitionAwait(data?.hash, title);
+    const { isLoading } = useTransactionAwait(data, title);
 
     const handleConfirm = () => {
-        write?.();
+        writeContract({
+            address: poolId,
+            abi: algebraPoolABI,
+            functionName: "setPlugin",
+            args: [pluginId],
+        });
     };
     return (
         <Credenza>

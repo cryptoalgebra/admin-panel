@@ -1,10 +1,10 @@
-import { useAlgebraPoolGlobalState } from '@/generated';
-import { PluginFlags } from '@/types/pool-plugin-flags';
-import { useMemo } from 'react';
-import { Address } from 'wagmi';
+import { useReadAlgebraPoolGlobalState } from "@/generated";
+import { PluginFlags } from "@/types/pool-plugin-flags";
+import { useMemo } from "react";
+import { Address } from "viem";
 
 export function usePluginFlags(poolId: Address): PluginFlags | undefined {
-    const { data: globalState, isLoading } = useAlgebraPoolGlobalState({
+    const { data: globalState, isLoading } = useReadAlgebraPoolGlobalState({
         address: poolId,
     });
 

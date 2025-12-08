@@ -1,7 +1,7 @@
 import { Checkbox } from "@/components/ui/checkbox";
-import { farmsClient } from "@/graphql/clients";
 import { FarmingFieldsFragment, useAllFarmsQuery } from "@/graphql/generated/graphql";
 import { useFarmData } from "@/hooks/farms/useFarmData";
+import { useClients } from "@/hooks/graphql/useClients";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -91,8 +91,10 @@ const FarmRow = (farm: FarmingFieldsFragment) => {
 const FarmList = () => {
     const [showDeactivated, setShowDeactivated] = useState(false);
 
+    const { farmingClient } = useClients();
+
     const { data: farms, loading } = useAllFarmsQuery({
-        client: farmsClient,
+        client: farmingClient,
     });
 
     const { activeFarms, deactivatedFarms } = useMemo(() => {

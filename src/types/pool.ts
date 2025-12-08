@@ -1,5 +1,5 @@
 import { TokenFieldsFragment } from '@/graphql/generated/graphql';
-import { Address } from 'wagmi';
+import { Address } from 'viem';
 
 interface Pair {
     token0: TokenFieldsFragment;

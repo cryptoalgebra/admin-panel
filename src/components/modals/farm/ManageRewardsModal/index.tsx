@@ -1,16 +1,16 @@
 import Loader from "@/components/common/Loader";
 import { Credenza, CredenzaBody, CredenzaContent, CredenzaHeader, CredenzaTitle, CredenzaTrigger } from "@/components/ui/credenza";
-import { ALGEBRA_ETERNAL_FARMING } from "@/constants/addresses";
-import { DEFAULT_CHAIN_ID } from "@/constants/default-chain-id";
-import { eternalFarmingABI } from "@/generated";
+import { ALGEBRA_ETERNAL_FARMING } from "config/contract-addresses";
+import { DEFAULT_CHAIN_ID } from "config/default-chain";
+import { eternalFarmingABI } from "config/abis";
 import { useApprove } from "@/hooks/common/useApprove";
-import { useTransitionAwait } from "@/hooks/common/useTransactionAwait";
+import { useTransactionAwait } from "@/hooks/common/useTransactionAwait";
 import { ApprovalState } from "@/types/approve-state";
 import { IncentiveKey } from "@/types/incentive-key";
 import { Token, tryParseAmount } from "@cryptoalgebra/integral-sdk";
 import { useState } from "react";
 import { parseUnits } from "viem";
-import { useContractWrite, usePrepareContractWrite } from "wagmi";
+import { useWriteContract } from "wagmi";
 
 type ManageFunctions = "addRewards" | "setRates" | "decreaseRewardsAmount";
 
@@ -32,8 +32,8 @@ const ManageRewardsModal = ({ title, functionName, incentiveKey, rewardRates, is
                 ? [rewardRates[0].value, parseUnits(value as `${number}`, rewardRates[1].decimals)]
                 : [parseUnits(value as `${number}`, rewardRates[0].decimals), rewardRates[1].value]
             : isBonus
-            ? [0n, parseUnits(value as `${number}`, rewardRates[1].decimals)]
-            : [parseUnits(value as `${number}`, rewardRates[0].decimals), 0n];
+              ? [0n, parseUnits(value as `${number}`, rewardRates[1].decimals)]
+              : [parseUnits(value as `${number}`, rewardRates[0].decimals), 0n];
 
     const parsedRewardAmount = tryParseAmount(
         value,
@@ -46,23 +46,16 @@ const ManageRewardsModal = ({ title, functionName, incentiveKey, rewardRates, is
 
     const { approvalState: approvalStateReward, approvalCallback: approvalCallbackReward } = useApprove(
         parsedRewardAmount,
-        ALGEBRA_ETERNAL_FARMING
+        ALGEBRA_ETERNAL_FARMING[DEFAULT_CHAIN_ID]
     );
 
     const showApproveReward =
         (functionName === "addRewards" && approvalStateReward === ApprovalState.NOT_APPROVED) ||
         approvalStateReward === ApprovalState.PENDING;
 
-    const { config } = usePrepareContractWrite({
-        address: ALGEBRA_ETERNAL_FARMING,
-        abi: eternalFarmingABI,
-        functionName,
-        args: !showApproveReward ? [incentiveKey, args[0], args[1]] : undefined,
-    });
+    const { data, writeContract } = useWriteContract();
 
-    const { data, write } = useContractWrite(config);
-
-    const { isLoading } = useTransitionAwait(data?.hash, title);
+    const { isLoading } = useTransactionAwait(data, title);
 
     return (
         <Credenza>
@@ -115,7 +108,14 @@ const ManageRewardsModal = ({ title, functionName, incentiveKey, rewardRates, is
                     ) : (
                         <button
                             disabled={!value || isLoading}
-                            onClick={() => write && write()}
+                            onClick={() =>
+                                writeContract({
+                                    address: ALGEBRA_ETERNAL_FARMING[DEFAULT_CHAIN_ID],
+                                    abi: eternalFarmingABI,
+                                    functionName,
+                                    args: [incentiveKey, args[0], args[1]],
+                                })
+                            }
                             className="flex justify-center w-full py-2 px-4 bg-black text-white text-sm rounded-lg hover:bg-neutral-800 disabled:bg-neutral-400 transition-colors"
                         >
                             {isLoading ? <Loader color="currentColor" /> : "Confirm"}

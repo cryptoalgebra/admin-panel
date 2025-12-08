@@ -1,45 +1,43 @@
-import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
 import { Link, NavLink, matchPath, useLocation } from "react-router-dom";
-import { useAccount, useConnect, useDisconnect } from "wagmi";
+import { useAccount, useBalance } from "wagmi";
 import SophonLogo from "@/assets/sophon-logo.png";
 import { truncateHash } from "@/utils/common/truncateHash";
+import { useAppKit, useAppKitNetwork } from "@reown/appkit/react";
+import { Button } from "@/components/ui/button";
+import { ChevronDown, WalletIcon } from "lucide-react";
+import { formatAmount } from "@/utils/common/formatAmount";
+import { formatUnits } from "viem";
 
-const Connect = () => {
-    const { connector, isConnected, address } = useAccount();
-    const { connect, connectors, isLoading, pendingConnector } = useConnect();
-    const { disconnect } = useDisconnect();
+const Account = () => {
+    const { open } = useAppKit();
+
+    const { caipNetwork: currentNetwork } = useAppKitNetwork();
+
+    const { address: account } = useAccount();
+
+    const { data: balance } = useBalance({
+        address: account,
+    });
+
+    const formattedBalance = balance ? formatAmount(formatUnits(balance.value, balance.decimals), 4) : null;
 
     return (
-        <div>
-            <div>
-                {isConnected ? (
-                    <button
-                        className="w-fit h-10 px-3 py-2 text-sm bg-primary rounded-lg border-none text-white"
-                        onClick={() => disconnect()}
-                    >
-                        {address ? truncateHash(address) : "Disconnect"}
-                    </button>
-                ) : (
-                    <Select
-                        onValueChange={(v) =>
-                            connect({
-                                connector: connectors.find((connector) => connector.name === v),
-                            })
-                        }
-                    >
-                        <SelectTrigger className="w-fit bg-primary rounded-lg border-none text-sm text-white">Connect</SelectTrigger>
-                        <SelectContent>
-                            {connectors
-                                .filter((x) => x.ready && x.id !== connector?.id)
-                                .map((x) => (
-                                    <SelectItem key={`connector-${x.name}`} value={x.name}>
-                                        {x.name}
-                                        {isLoading && x.id === pendingConnector?.id && " (connecting)"}
-                                    </SelectItem>
-                                ))}
-                        </SelectContent>
-                    </Select>
-                )}
+        <div className="flex h-full justify-end max-h-[64px] gap-4 whitespace-nowrap items-center">
+            <div className="flex gap-2 h-full items-center">
+                <Button variant={"secondary"} size={"sm"} onClick={() => open({ view: "Networks" })}>
+                    <img src={currentNetwork?.assets?.imageUrl} width={20} height={20} /> <ChevronDown size={20} />
+                </Button>
+                <Button onClick={() => open()} variant={account ? "secondary" : "primary"} size={"sm"}>
+                    <WalletIcon size={16} className="md:hidden" />
+                    {account ? (
+                        <>
+                            <span className="max-md:hidden">{`${formattedBalance} ${balance?.symbol}`}</span>
+                            <span className="max-md:hidden">{truncateHash(account)}</span>
+                        </>
+                    ) : (
+                        <span className="max-md:hidden">Connect Wallet</span>
+                    )}
+                </Button>
             </div>
         </div>
     );
@@ -88,7 +86,7 @@ const Header = () => {
                     ))}
                 </ul>
             </nav>
-            <Connect />
+            <Account />
         </header>
     );
 };

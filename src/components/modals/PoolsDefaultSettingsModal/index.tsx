@@ -2,17 +2,17 @@ import Loader from "@/components/common/Loader";
 import { Credenza, CredenzaBody, CredenzaContent, CredenzaHeader, CredenzaTitle, CredenzaTrigger } from "@/components/ui/credenza";
 import { Input } from "@/components/ui/input";
 import {
-    useAlgebraFactoryDefaultCommunityFee,
-    useAlgebraFactoryDefaultTickspacing,
-    useAlgebraFactoryDefaultFee,
-    usePrepareAlgebraFactorySetDefaultCommunityFee,
-    usePrepareAlgebraFactorySetDefaultTickspacing,
-    usePreparePluginFactorySetDefaultBaseFee,
+    useReadAlgebraFactoryDefaultCommunityFee,
+    useReadAlgebraFactoryDefaultTickspacing,
+    useReadAlgebraFactoryDefaultFee,
 } from "@/generated";
-import { useTransitionAwait } from "@/hooks/common/useTransactionAwait";
+import { ALGEBRA_FACTORY, PLUGIN_FACTORY } from "config/contract-addresses";
+import { DEFAULT_CHAIN_ID } from "config/default-chain";
+import { useTransactionAwait } from "@/hooks/common/useTransactionAwait";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
-import { useContractWrite } from "wagmi";
+import { useWriteContract } from "wagmi";
+import { algebraFactoryABI, pluginFactoryABI } from "config/abis";
 
 interface IPoolsDefaultSettingsModal {
     title: string;
@@ -38,11 +38,11 @@ const PoolsDefaultSettingsModal = ({ title, children }: IPoolsDefaultSettingsMod
         [SettingsKeys.TICK_SPACING]: 0,
     });
 
-    const { data: defaultFee } = useAlgebraFactoryDefaultFee();
+    const { data: defaultFee } = useReadAlgebraFactoryDefaultFee();
 
-    const { data: defaultCommunityFee } = useAlgebraFactoryDefaultCommunityFee();
+    const { data: defaultCommunityFee } = useReadAlgebraFactoryDefaultCommunityFee();
 
-    const { data: defaultTickSpacing } = useAlgebraFactoryDefaultTickspacing();
+    const { data: defaultTickSpacing } = useReadAlgebraFactoryDefaultTickspacing();
 
     useEffect(() => {
         if (defaultCommunityFee === undefined || defaultTickSpacing === undefined || defaultFee === undefined) return;
@@ -54,41 +54,44 @@ const PoolsDefaultSettingsModal = ({ title, children }: IPoolsDefaultSettingsMod
     }, [defaultCommunityFee, defaultTickSpacing, defaultFee]);
 
     /* Set Default Community Fee */
-    const { config: defaultCommunityFeeConfig } = usePrepareAlgebraFactorySetDefaultCommunityFee({
-        args: [settingsData[SettingsKeys.COMMUNITY_FEE]],
-    });
-
-    const { data: communityFeeHash, write: setDefaultCommunityFee } = useContractWrite(defaultCommunityFeeConfig);
+    const { data: communityFeeHash, writeContract: setDefaultCommunityFee } = useWriteContract();
 
     /* Set Default Fee */
-    const { config: defaultFeeConfig } = usePreparePluginFactorySetDefaultBaseFee({
-        args: [settingsData[SettingsKeys.FEE]],
-    });
-
-    const { data: feeHash, write: setDefaultFeeConfiguration } = useContractWrite(defaultFeeConfig);
+    const { data: feeHash, writeContract: setDefaultFeeConfiguration } = useWriteContract();
 
     /* Set Tick Spacing */
-    const { config: tickSpacingConfig } = usePrepareAlgebraFactorySetDefaultTickspacing({
-        args: [settingsData[SettingsKeys.TICK_SPACING]],
-    });
+    const { data: tickSpacingHash, writeContract: setDefaultTickSpacing } = useWriteContract();
 
-    const { data: tickSpacingHash, write: setDefaultTickSpacing } = useContractWrite(tickSpacingConfig);
-
-    const { isLoading: feeLoading } = useTransitionAwait(feeHash?.hash, "Set Default Fee");
-    const { isLoading: communityFeeLoading } = useTransitionAwait(communityFeeHash?.hash, "Set Community Fee");
-    const { isLoading: tickSpacingLoading } = useTransitionAwait(tickSpacingHash?.hash, "Set Tick Spacing");
+    const { isLoading: feeLoading } = useTransactionAwait(feeHash, "Set Default Fee");
+    const { isLoading: communityFeeLoading } = useTransactionAwait(communityFeeHash, "Set Community Fee");
+    const { isLoading: tickSpacingLoading } = useTransactionAwait(tickSpacingHash, "Set Tick Spacing");
 
     const handleSubmit = (e: React.FormEvent, key: SettingsKeys) => {
         e.preventDefault();
         switch (key) {
             case SettingsKeys.COMMUNITY_FEE:
-                setDefaultCommunityFee?.();
+                setDefaultCommunityFee({
+                    address: ALGEBRA_FACTORY[DEFAULT_CHAIN_ID],
+                    abi: algebraFactoryABI,
+                    functionName: "setDefaultCommunityFee",
+                    args: [settingsData[SettingsKeys.COMMUNITY_FEE]],
+                });
                 break;
             case SettingsKeys.FEE:
-                setDefaultFeeConfiguration?.();
+                setDefaultFeeConfiguration({
+                    address: PLUGIN_FACTORY[DEFAULT_CHAIN_ID],
+                    abi: pluginFactoryABI,
+                    functionName: "setDefaultBaseFee",
+                    args: [settingsData[SettingsKeys.FEE]],
+                });
                 break;
             case SettingsKeys.TICK_SPACING:
-                setDefaultTickSpacing?.();
+                setDefaultTickSpacing({
+                    address: ALGEBRA_FACTORY[DEFAULT_CHAIN_ID],
+                    abi: algebraFactoryABI,
+                    functionName: "setDefaultTickspacing",
+                    args: [settingsData[SettingsKeys.TICK_SPACING]],
+                });
                 break;
             default:
                 break;

@@ -1,5 +1,5 @@
 import FarmPoolDetails from '@/components/farm/FarmPoolDetails';
-import { Address } from 'wagmi';
+import { Address } from 'viem';
 
 interface ITokenDetails {
     name: string;

@@ -761,6 +761,7 @@ export enum Burn_OrderBy {
   PoolCollectedFeesToken1 = 'pool__collectedFeesToken1',
   PoolCollectedFeesUsd = 'pool__collectedFeesUSD',
   PoolCommunityFee = 'pool__communityFee',
+  PoolCommunityVault = 'pool__communityVault',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
   PoolDeployer = 'pool__deployer',
@@ -773,6 +774,7 @@ export enum Burn_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolOverrideFee = 'pool__overrideFee',
   PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
@@ -987,6 +989,7 @@ export enum Collect_OrderBy {
   PoolCollectedFeesToken1 = 'pool__collectedFeesToken1',
   PoolCollectedFeesUsd = 'pool__collectedFeesUSD',
   PoolCommunityFee = 'pool__communityFee',
+  PoolCommunityVault = 'pool__communityVault',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
   PoolDeployer = 'pool__deployer',
@@ -999,6 +1002,7 @@ export enum Collect_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolOverrideFee = 'pool__overrideFee',
   PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
@@ -1669,6 +1673,7 @@ export enum Flash_OrderBy {
   PoolCollectedFeesToken1 = 'pool__collectedFeesToken1',
   PoolCollectedFeesUsd = 'pool__collectedFeesUSD',
   PoolCommunityFee = 'pool__communityFee',
+  PoolCommunityVault = 'pool__communityVault',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
   PoolDeployer = 'pool__deployer',
@@ -1681,6 +1686,7 @@ export enum Flash_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolOverrideFee = 'pool__overrideFee',
   PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
@@ -1956,6 +1962,7 @@ export enum Mint_OrderBy {
   PoolCollectedFeesToken1 = 'pool__collectedFeesToken1',
   PoolCollectedFeesUsd = 'pool__collectedFeesUSD',
   PoolCommunityFee = 'pool__communityFee',
+  PoolCommunityVault = 'pool__communityVault',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
   PoolDeployer = 'pool__deployer',
@@ -1968,6 +1975,7 @@ export enum Mint_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolOverrideFee = 'pool__overrideFee',
   PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
@@ -2041,6 +2049,7 @@ export enum OrderDirection {
 
 export type Plugin = {
   __typename?: 'Plugin';
+  activeModules: Array<Scalars['String']['output']>;
   collectedFeesToken0: Scalars['BigDecimal']['output'];
   collectedFeesToken1: Scalars['BigDecimal']['output'];
   collectedFeesUSD: Scalars['BigDecimal']['output'];
@@ -2051,6 +2060,12 @@ export type Plugin = {
 export type Plugin_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  activeModules?: InputMaybe<Array<Scalars['String']['input']>>;
+  activeModules_contains?: InputMaybe<Array<Scalars['String']['input']>>;
+  activeModules_contains_nocase?: InputMaybe<Array<Scalars['String']['input']>>;
+  activeModules_not?: InputMaybe<Array<Scalars['String']['input']>>;
+  activeModules_not_contains?: InputMaybe<Array<Scalars['String']['input']>>;
+  activeModules_not_contains_nocase?: InputMaybe<Array<Scalars['String']['input']>>;
   and?: InputMaybe<Array<InputMaybe<Plugin_Filter>>>;
   collectedFeesToken0?: InputMaybe<Scalars['BigDecimal']['input']>;
   collectedFeesToken0_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
@@ -2109,6 +2124,7 @@ export type Plugin_Filter = {
 };
 
 export enum Plugin_OrderBy {
+  ActiveModules = 'activeModules',
   CollectedFeesToken0 = 'collectedFeesToken0',
   CollectedFeesToken1 = 'collectedFeesToken1',
   CollectedFeesUsd = 'collectedFeesUSD',
@@ -2118,6 +2134,7 @@ export enum Plugin_OrderBy {
   PoolCollectedFeesToken1 = 'pool__collectedFeesToken1',
   PoolCollectedFeesUsd = 'pool__collectedFeesUSD',
   PoolCommunityFee = 'pool__communityFee',
+  PoolCommunityVault = 'pool__communityVault',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
   PoolDeployer = 'pool__deployer',
@@ -2130,6 +2147,7 @@ export enum Plugin_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolOverrideFee = 'pool__overrideFee',
   PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
@@ -2158,6 +2176,7 @@ export type Pool = {
   collectedFeesUSD: Scalars['BigDecimal']['output'];
   collects: Array<Collect>;
   communityFee: Scalars['BigInt']['output'];
+  communityVault: Scalars['Bytes']['output'];
   createdAtBlockNumber: Scalars['BigInt']['output'];
   createdAtTimestamp: Scalars['BigInt']['output'];
   deployer: Scalars['Bytes']['output'];
@@ -2171,6 +2190,7 @@ export type Pool = {
   liquidityProviderCount: Scalars['BigInt']['output'];
   mints: Array<Mint>;
   observationIndex: Scalars['BigInt']['output'];
+  overrideFee: Scalars['BigInt']['output'];
   plugin: Scalars['Bytes']['output'];
   pluginConfig: Scalars['Int']['output'];
   poolDayData: Array<PoolDayData>;
@@ -2489,6 +2509,7 @@ export enum PoolDayData_OrderBy {
   PoolCollectedFeesToken1 = 'pool__collectedFeesToken1',
   PoolCollectedFeesUsd = 'pool__collectedFeesUSD',
   PoolCommunityFee = 'pool__communityFee',
+  PoolCommunityVault = 'pool__communityVault',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
   PoolDeployer = 'pool__deployer',
@@ -2501,6 +2522,7 @@ export enum PoolDayData_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolOverrideFee = 'pool__overrideFee',
   PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
@@ -2806,6 +2828,7 @@ export enum PoolHourData_OrderBy {
   PoolCollectedFeesToken1 = 'pool__collectedFeesToken1',
   PoolCollectedFeesUsd = 'pool__collectedFeesUSD',
   PoolCommunityFee = 'pool__communityFee',
+  PoolCommunityVault = 'pool__communityVault',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
   PoolDeployer = 'pool__deployer',
@@ -2818,6 +2841,7 @@ export enum PoolHourData_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolOverrideFee = 'pool__overrideFee',
   PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
@@ -2982,6 +3006,7 @@ export enum PoolPosition_OrderBy {
   PoolCollectedFeesToken1 = 'pool__collectedFeesToken1',
   PoolCollectedFeesUsd = 'pool__collectedFeesUSD',
   PoolCommunityFee = 'pool__communityFee',
+  PoolCommunityVault = 'pool__communityVault',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
   PoolDeployer = 'pool__deployer',
@@ -2994,6 +3019,7 @@ export enum PoolPosition_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolOverrideFee = 'pool__overrideFee',
   PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
@@ -3071,6 +3097,16 @@ export type Pool_Filter = {
   communityFee_lte?: InputMaybe<Scalars['BigInt']['input']>;
   communityFee_not?: InputMaybe<Scalars['BigInt']['input']>;
   communityFee_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  communityVault?: InputMaybe<Scalars['Bytes']['input']>;
+  communityVault_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  communityVault_gt?: InputMaybe<Scalars['Bytes']['input']>;
+  communityVault_gte?: InputMaybe<Scalars['Bytes']['input']>;
+  communityVault_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  communityVault_lt?: InputMaybe<Scalars['Bytes']['input']>;
+  communityVault_lte?: InputMaybe<Scalars['Bytes']['input']>;
+  communityVault_not?: InputMaybe<Scalars['Bytes']['input']>;
+  communityVault_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  communityVault_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
   createdAtBlockNumber?: InputMaybe<Scalars['BigInt']['input']>;
   createdAtBlockNumber_gt?: InputMaybe<Scalars['BigInt']['input']>;
   createdAtBlockNumber_gte?: InputMaybe<Scalars['BigInt']['input']>;
@@ -3171,6 +3207,14 @@ export type Pool_Filter = {
   observationIndex_not?: InputMaybe<Scalars['BigInt']['input']>;
   observationIndex_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   or?: InputMaybe<Array<InputMaybe<Pool_Filter>>>;
+  overrideFee?: InputMaybe<Scalars['BigInt']['input']>;
+  overrideFee_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  overrideFee_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  overrideFee_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  overrideFee_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  overrideFee_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  overrideFee_not?: InputMaybe<Scalars['BigInt']['input']>;
+  overrideFee_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   plugin?: InputMaybe<Scalars['Bytes']['input']>;
   pluginConfig?: InputMaybe<Scalars['Int']['input']>;
   pluginConfig_gt?: InputMaybe<Scalars['Int']['input']>;
@@ -3372,6 +3416,7 @@ export enum Pool_OrderBy {
   CollectedFeesUsd = 'collectedFeesUSD',
   Collects = 'collects',
   CommunityFee = 'communityFee',
+  CommunityVault = 'communityVault',
   CreatedAtBlockNumber = 'createdAtBlockNumber',
   CreatedAtTimestamp = 'createdAtTimestamp',
   Deployer = 'deployer',
@@ -3385,6 +3430,7 @@ export enum Pool_OrderBy {
   LiquidityProviderCount = 'liquidityProviderCount',
   Mints = 'mints',
   ObservationIndex = 'observationIndex',
+  OverrideFee = 'overrideFee',
   Plugin = 'plugin',
   PluginConfig = 'pluginConfig',
   PoolDayData = 'poolDayData',
@@ -3654,6 +3700,7 @@ export enum PositionSnapshot_OrderBy {
   PoolCollectedFeesToken1 = 'pool__collectedFeesToken1',
   PoolCollectedFeesUsd = 'pool__collectedFeesUSD',
   PoolCommunityFee = 'pool__communityFee',
+  PoolCommunityVault = 'pool__communityVault',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
   PoolDeployer = 'pool__deployer',
@@ -3666,6 +3713,7 @@ export enum PositionSnapshot_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolOverrideFee = 'pool__overrideFee',
   PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
@@ -3982,6 +4030,7 @@ export enum Position_OrderBy {
   PoolCollectedFeesToken1 = 'pool__collectedFeesToken1',
   PoolCollectedFeesUsd = 'pool__collectedFeesUSD',
   PoolCommunityFee = 'pool__communityFee',
+  PoolCommunityVault = 'pool__communityVault',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
   PoolDeployer = 'pool__deployer',
@@ -3994,6 +4043,7 @@ export enum Position_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolOverrideFee = 'pool__overrideFee',
   PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
@@ -5701,6 +5751,7 @@ export enum Swap_OrderBy {
   PoolCollectedFeesToken1 = 'pool__collectedFeesToken1',
   PoolCollectedFeesUsd = 'pool__collectedFeesUSD',
   PoolCommunityFee = 'pool__communityFee',
+  PoolCommunityVault = 'pool__communityVault',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
   PoolDeployer = 'pool__deployer',
@@ -5713,6 +5764,7 @@ export enum Swap_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolOverrideFee = 'pool__overrideFee',
   PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
@@ -5940,6 +5992,7 @@ export enum TickHourData_OrderBy {
   PoolCollectedFeesToken1 = 'pool__collectedFeesToken1',
   PoolCollectedFeesUsd = 'pool__collectedFeesUSD',
   PoolCommunityFee = 'pool__communityFee',
+  PoolCommunityVault = 'pool__communityVault',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
   PoolDeployer = 'pool__deployer',
@@ -5952,6 +6005,7 @@ export enum TickHourData_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolOverrideFee = 'pool__overrideFee',
   PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
@@ -6195,6 +6249,7 @@ export enum Tick_OrderBy {
   PoolCollectedFeesToken1 = 'pool__collectedFeesToken1',
   PoolCollectedFeesUsd = 'pool__collectedFeesUSD',
   PoolCommunityFee = 'pool__communityFee',
+  PoolCommunityVault = 'pool__communityVault',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
   PoolDeployer = 'pool__deployer',
@@ -6207,6 +6262,7 @@ export enum Tick_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolOverrideFee = 'pool__overrideFee',
   PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',

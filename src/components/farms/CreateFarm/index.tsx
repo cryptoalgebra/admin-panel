@@ -10,14 +10,14 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useActiveFarmingForPoolQuery, useAllPoolsQuery } from "@/graphql/generated/graphql";
 import CurrencyLogo from "@/components/common/CurrencyLogo";
-import { DEFAULT_CHAIN_ID } from "@/constants/default-chain-id";
-import { farmsClient } from "@/graphql/clients";
+import { DEFAULT_CHAIN_ID } from "config/default-chain";
 import Loader from "@/components/common/Loader";
 import CreateFarmButton from "../CreateFarmButton";
 import { PartialIncentiveKey } from "@/types/incentive-key";
-import { useEternalFarmingNumOfIncentives } from "@/generated";
+import { useReadAlgebraEternalFarmingNumOfIncentives } from "@/generated";
 import { IRewards } from "@/types/rewards";
 import { cn } from "@/lib/utils";
+import { useClients } from "@/hooks/graphql/useClients";
 
 interface IFormState {
     pool: string | undefined;
@@ -202,6 +202,7 @@ const Reward = ({ control, name }: { control: Control<IFormState>; name: "reward
 };
 
 const CreateFarm = () => {
+    const { farmingClient } = useClients();
     const { handleSubmit, reset, watch, control, setValue } = useForm<IFormState>();
 
     const onSubmit: SubmitHandler<IFormState> = (data) => console.log(data);
@@ -225,7 +226,7 @@ const CreateFarm = () => {
 
     const { data: activeFarming, loading: isFarmingLoading } = useActiveFarmingForPoolQuery({
         skip: Boolean(!pool),
-        client: farmsClient,
+        client: farmingClient,
         variables: {
             poolId: pool,
         },
@@ -233,7 +234,7 @@ const CreateFarm = () => {
 
     const isPoolAvailable = !isFarmingLoading && activeFarming && activeFarming.eternalFarmings.length === 0;
 
-    const { data: nonce } = useEternalFarmingNumOfIncentives();
+    const { data: nonce } = useReadAlgebraEternalFarmingNumOfIncentives();
 
     const incentveKey: PartialIncentiveKey = {
         rewardToken: rewardToken ? (rewardToken.wrapped.address as Address) : undefined,

@@ -1,12 +1,12 @@
-import { WagmiConfig } from "wagmi";
-import "./App.css"
-import { config } from "./wagmi";
 import Layout from "./components/common/Layout";
+import { Outlet } from "react-router-dom";
 
-const LayoutApp = ({ children }: { children: React.ReactNode }) => <WagmiConfig config={config}>
-  <Layout>
-    {children}
-  </Layout>
-</WagmiConfig>
+function App() {
+    return (
+        <Layout>
+            <Outlet />
+        </Layout>
+    );
+}
 
-export default LayoutApp;
+export default App;

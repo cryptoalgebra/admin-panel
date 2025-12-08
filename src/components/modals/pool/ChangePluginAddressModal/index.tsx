@@ -1,11 +1,11 @@
 import Loader from "@/components/common/Loader";
 import { Credenza, CredenzaBody, CredenzaContent, CredenzaHeader, CredenzaTitle, CredenzaTrigger } from "@/components/ui/credenza";
 import { Input } from "@/components/ui/input";
-import { usePrepareAlgebraPoolSetPlugin } from "@/generated";
-import { useTransitionAwait } from "@/hooks/common/useTransactionAwait";
+import { algebraPoolABI } from "config";
+import { useTransactionAwait } from "@/hooks/common/useTransactionAwait";
 import { useState } from "react";
-import { isAddress } from "viem";
-import { Address, useContractWrite } from "wagmi";
+import { Address, isAddress } from "viem";
+import { useWriteContract } from "wagmi";
 
 interface IChangePluginAddressModal {
     title: string;
@@ -17,20 +17,19 @@ const ChangePluginAddressModal = ({ title, children, poolId }: IChangePluginAddr
     const [value, setValue] = useState<string>("");
     const [isAddressValid, setIsAddressValid] = useState<boolean>(false);
 
-    const { config } = usePrepareAlgebraPoolSetPlugin({
-        address: poolId,
-        args: [value as Address],
-        enabled: isAddress(value),
-    });
+    const { data, writeContract } = useWriteContract();
 
-    const { data, write } = useContractWrite(config);
-
-    const { isLoading } = useTransitionAwait(data?.hash, title);
+    const { isLoading } = useTransactionAwait(data, title);
 
     const handleConfirm = () => {
         if (isAddress(value)) {
             setIsAddressValid(false);
-            write?.();
+            writeContract({
+                address: poolId,
+                abi: algebraPoolABI,
+                functionName: "setPlugin",
+                args: [value as Address],
+            });
         } else {
             setIsAddressValid(true);
         }

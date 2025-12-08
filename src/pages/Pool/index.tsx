@@ -6,7 +6,7 @@ import TokenDetails from '@/components/pool/TokensDetails';
 import { useSinglePoolQuery } from '@/graphql/generated/graphql';
 import { ArrowLeft } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
-import { Address } from 'wagmi';
+import { Address } from 'viem';
 
 const PoolPage = () => {
     const { pool: poolId } = useParams() as { pool: Address };

@@ -1,6 +1,6 @@
 import { Currency } from "@cryptoalgebra/integral-sdk";
 import React from "react";
-import { Address } from "wagmi";
+import { Address } from "viem";
 import USDCLogo from "@/assets/tokens/usdc.svg";
 import EthLogo from "@/assets/tokens/ether.svg";
 import SOPHLogo from "@/assets/sophon-logo-dark.png";

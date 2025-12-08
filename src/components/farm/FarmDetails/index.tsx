@@ -1,11 +1,12 @@
 import Loader from "@/components/common/Loader";
-import { ALGEBRA_ETERNAL_FARMING } from "@/constants/addresses";
-import { eternalFarmingABI } from "@/generated";
-import { farmsClient } from "@/graphql/clients";
+import { ALGEBRA_ETERNAL_FARMING } from "config/contract-addresses";
+import { DEFAULT_CHAIN_ID } from "config/default-chain";
+import { eternalFarmingABI } from "config/abis";
 import { useAllDepositsOnFarmingQuery } from "@/graphql/generated/graphql";
-import { useTransitionAwait } from "@/hooks/common/useTransactionAwait";
+import { useTransactionAwait } from "@/hooks/common/useTransactionAwait";
 import { IncentiveKey } from "@/types/incentive-key";
-import { useContractWrite, usePrepareContractWrite } from "wagmi";
+import { useWriteContract } from "wagmi";
+import { useClients } from "@/hooks/graphql/useClients";
 
 interface IFarmDetails {
     id: string;
@@ -14,9 +15,10 @@ interface IFarmDetails {
 }
 
 const FarmDetails = ({ id, incentiveKey, isDeactivated }: IFarmDetails) => {
+    const { farmingClient } = useClients();
     const { data: deposits } = useAllDepositsOnFarmingQuery({
         skip: !id || isDeactivated,
-        client: farmsClient,
+        client: farmingClient,
         variables: {
             farmId: id || "",
         },
@@ -24,16 +26,18 @@ const FarmDetails = ({ id, incentiveKey, isDeactivated }: IFarmDetails) => {
 
     const depositsOnFarm = deposits ? deposits.deposits.length : undefined;
 
-    const { config } = usePrepareContractWrite({
-        address: ALGEBRA_ETERNAL_FARMING,
-        abi: eternalFarmingABI,
-        functionName: "deactivateIncentive",
-        args: [incentiveKey],
-    });
+    const { data, writeContract, isPending } = useWriteContract();
 
-    const { data, write } = useContractWrite(config);
+    const { isLoading } = useTransactionAwait(data, "Deactivate Farm");
 
-    const { isLoading } = useTransitionAwait(data?.hash, "Deactivate Farm");
+    const handleDeactivate = () => {
+        writeContract({
+            address: ALGEBRA_ETERNAL_FARMING[DEFAULT_CHAIN_ID],
+            abi: eternalFarmingABI,
+            functionName: "deactivateIncentive",
+            args: [incentiveKey],
+        });
+    };
 
     return (
         <div className="flex flex-col text-left p-6 bg-white border border-neutral-200 rounded-lg">
@@ -51,11 +55,11 @@ const FarmDetails = ({ id, incentiveKey, isDeactivated }: IFarmDetails) => {
             <div className="w-full mt-auto">
                 {!isDeactivated && (
                     <button
-                        disabled={isLoading || !write}
-                        onClick={() => write && write()}
+                        disabled={isLoading || isPending}
+                        onClick={handleDeactivate}
                         className="flex justify-center w-full py-2 px-4 border border-red-200 text-red-500 font-medium text-sm rounded-lg hover:bg-red-500 hover:text-white transition-colors"
                     >
-                        {isLoading ? <Loader color="currentColor" /> : "Deactivate"}
+                        {isLoading || isPending ? <Loader color="currentColor" /> : "Deactivate"}
                     </button>
                 )}
             </div>

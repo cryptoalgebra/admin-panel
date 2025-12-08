@@ -1,6 +1,6 @@
 import DataWithCopyButton from "@/components/common/DataWithCopyButton";
 import { PoolFieldsFragment } from "@/graphql/generated/graphql";
-import { Address } from "wagmi";
+import { Address } from "viem";
 
 interface IPoolDetails {
     poolId: Address;
