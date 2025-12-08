@@ -11,7 +11,8 @@ import { IRewards } from "@/types/rewards";
 import { tryParseAmount } from "@cryptoalgebra/integral-sdk";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useContractWrite, usePrepareContractWrite } from "wagmi";
+import { Address } from "viem";
+import { useAccount, useBalance, useContractWrite, usePrepareContractWrite } from "wagmi";
 
 interface ICreateFarmButton {
     hasSecondReward: boolean;
@@ -25,6 +26,7 @@ const CreateFarmButton = ({
     rewards: { reward, rewardBn, rewardRateBn, bonusReward, bonusRewardBn, bonusRewardRateBn },
 }: ICreateFarmButton) => {
     const navigate = useNavigate();
+    const { address: account } = useAccount();
 
     const { data: plugin } = useAlgebraPoolPlugin({
         address: pool,
@@ -36,6 +38,22 @@ const CreateFarmButton = ({
 
     const rewardCurrency = useCurrency(rewardToken);
     const bonusRewardCurrency = useCurrency(bonusRewardToken);
+
+    const { data: rewardBalance } = useBalance({
+        address: account,
+        token: rewardToken as Address,
+        enabled: Boolean(account && rewardToken),
+    });
+
+    const { data: bonusRewardBalance } = useBalance({
+        address: account,
+        token: bonusRewardToken as Address,
+        enabled: Boolean(account && bonusRewardToken && hasSecondReward),
+    });
+
+    const isRewardBalanceInsufficient = rewardBn && rewardBalance ? rewardBn > rewardBalance.value : false;
+    const isBonusRewardBalanceInsufficient =
+        hasSecondReward && bonusRewardBn && bonusRewardBalance ? bonusRewardBn > bonusRewardBalance.value : false;
 
     const [parsedRewardAmount, parsedBonusRewardAmount] = [
         tryParseAmount(reward, rewardCurrency),
@@ -90,7 +108,18 @@ const CreateFarmButton = ({
         }
     }, [isSuccess, navigate]);
 
-    const isDisabled = !isKeyReady || !areRewardsReady || !onCreate || isLoading;
+    const isDisabled =
+        !isKeyReady || !areRewardsReady || !onCreate || isLoading || isRewardBalanceInsufficient || isBonusRewardBalanceInsufficient;
+
+    if (isRewardBalanceInsufficient || isBonusRewardBalanceInsufficient) {
+        return (
+            <div className="flex flex-col gap-2">
+                <button disabled className="flex justify-center py-3 px-4 bg-neutral-400 text-white text-sm rounded-lg cursor-not-allowed">
+                    Insufficient {isRewardBalanceInsufficient ? rewardCurrency?.symbol : bonusRewardCurrency?.symbol} balance
+                </button>
+            </div>
+        );
+    }
 
     if (showApproveReward)
         return (
