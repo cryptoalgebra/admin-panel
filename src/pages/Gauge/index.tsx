@@ -1,11 +1,12 @@
 import PageContainer from "@/components/common/PageContainer";
-import GaugeDetails from "@/components/gauge/GaugeDetails";
-import { GaugeRewards } from "@/components/gauge/GaugeRewards";
+import Ve33Module from "@/modules/Ve33Module";
 import { useReadVoterGaugeToPool } from "@/generated";
-import { useVotingPool } from "@/hooks/gauges/useVotingPool";
 import { ArrowLeft } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { Address } from "viem";
+
+const { GaugeDetails, GaugeRewards } = Ve33Module.components;
+const { useVotingPool } = Ve33Module.hooks;
 
 const GaugePage = () => {
     const { gauge } = useParams<{ gauge: Address }>();

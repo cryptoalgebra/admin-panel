@@ -10,9 +10,9 @@ import {
     useReadVotingRewardTotalVotesInPeriod,
 } from "@/generated";
 import { useContractReads } from "wagmi";
-import { useNativePriceUSD } from "../common/useNativePriceUSD";
+import { useNativePriceUSD } from "@/hooks/common/useNativePriceUSD";
 import { RewardToken, VotingPool } from "@/types/gauge";
-import { useCurrency } from "../common/useCurrency";
+import { useCurrency } from "@/hooks/common/useCurrency";
 import { votingRewardABI } from "config/abis";
 
 export function useVotingPool(poolAddress: Address | undefined) {
@@ -20,7 +20,6 @@ export function useVotingPool(poolAddress: Address | undefined) {
 
     const { data: gauge, refetch: refetchGauge } = useReadVoterGetGauge({
         args: poolAddress ? [poolAddress] : undefined,
-        // enabled: !!poolAddress,
     });
 
     const { data: currentPeriod, isLoading: currentPeriodLoading } = useReadVoterGetCurrentPeriod();
@@ -43,7 +42,6 @@ export function useVotingPool(poolAddress: Address | undefined) {
             functionName: "rewardForPeriod",
             args: [nextPeriod ?? 0n, reward],
         })),
-        // enabled: rewardList && rewardList.length > 0,
     });
 
     const rewardsForPeriod = useMemo(() => rewardsForPeriodResults?.map((d) => d?.result as bigint), [rewardsForPeriodResults]);

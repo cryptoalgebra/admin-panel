@@ -14,7 +14,7 @@ import { useWriteContract } from "wagmi";
 import { algebraPoolABI } from "config/abis";
 import { PLUGIN_KEYS, usePoolPlugins } from "@/hooks/pools/usePoolPlugins";
 import { Puzzle, RotateCcw, Check, X } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/common/cn";
 
 interface IManagePlugins {
     poolId: Address;

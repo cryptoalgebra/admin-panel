@@ -4,10 +4,11 @@ import FarmPage from "@/pages/Farm";
 import NewFarmPage from "@/pages/NewFarm";
 import PoolsPage from "@/pages/Pools";
 import PoolPage from "@/pages/Pool";
-import { createBrowserRouter, Navigate, RouterProvider as _RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Navigate, RouterProvider as _RouterProvider, RouteObject } from "react-router-dom";
 import GaugesPage from "@/pages/Gauges";
 import NewGaugePage from "@/pages/NewGauge";
 import GaugePage from "@/pages/Gauge";
+import { enabledModules } from "config/app-modules";
 
 const router = createBrowserRouter([
     {
@@ -18,18 +19,6 @@ const router = createBrowserRouter([
         element: <App />,
         children: [
             {
-                path: "farms",
-                element: <FarmsPage />,
-            },
-            {
-                path: "farms/:farm",
-                element: <FarmPage />,
-            },
-            {
-                path: "new-farm",
-                element: <NewFarmPage />,
-            },
-            {
                 path: "pools",
                 element: <PoolsPage />,
             },
@@ -37,19 +26,41 @@ const router = createBrowserRouter([
                 path: "pools/:pool",
                 element: <PoolPage />,
             },
-            {
-                path: "gauges",
-                element: <GaugesPage />,
-            },
-            {
-                path: "gauges/:gauge",
-                element: <GaugePage />,
-            },
-            {
-                path: "new-gauge",
-                element: <NewGaugePage />,
-            },
-        ],
+
+            ...(enabledModules.FarmingModule
+                ? [
+                      {
+                          path: "farms",
+                          element: <FarmsPage />,
+                      },
+                      {
+                          path: "farms/:farm",
+                          element: <FarmPage />,
+                      },
+                      {
+                          path: "new-farm",
+                          element: <NewFarmPage />,
+                      },
+                  ]
+                : []),
+
+            ...(enabledModules.Ve33Module
+                ? [
+                      {
+                          path: "gauges",
+                          element: <GaugesPage />,
+                      },
+                      {
+                          path: "gauges/:gauge",
+                          element: <GaugePage />,
+                      },
+                      {
+                          path: "new-gauge",
+                          element: <NewGaugePage />,
+                      },
+                  ]
+                : []),
+        ].filter(Boolean) as RouteObject[],
     },
 ]);
 

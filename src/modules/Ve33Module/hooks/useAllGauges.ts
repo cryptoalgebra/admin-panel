@@ -2,7 +2,7 @@ import { TokenFieldsFragment, useAllPoolsQuery } from "@/graphql/generated/graph
 import { isDefined } from "@/utils/common/isDefined";
 import { useMemo } from "react";
 import { Address } from "viem";
-import { useClients } from "../graphql/useClients";
+import { useClients } from "@/hooks/graphql/useClients";
 import { useChainId, useReadContracts } from "wagmi";
 import { VOTER } from "config/contract-addresses";
 import { voterABI } from "config/abis";

@@ -1,12 +1,14 @@
 import { Link, NavLink, matchPath, useLocation } from "react-router-dom";
 import { useAccount, useBalance } from "wagmi";
-import SophonLogo from "@/assets/sophon-logo.png";
+import IntegralLogo from "@/assets/algebra-logo.svg";
 import { truncateHash } from "@/utils/common/truncateHash";
 import { useAppKit, useAppKitNetwork } from "@reown/appkit/react";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, WalletIcon } from "lucide-react";
 import { formatAmount } from "@/utils/common/formatAmount";
 import { formatUnits } from "viem";
+import { enabledModules } from "config/app-modules";
+import AdminAccount from "../AdminAccount";
 
 const Account = () => {
     const { open } = useAppKit();
@@ -45,27 +47,30 @@ const Account = () => {
 
 const PATHS = {
     POOLS: "/pools",
+    POOL: "/pools/:id",
     FARMS: "/farms",
+    FARM: "/farms/:id",
     GAUGES: "/gauges",
+    GAUGE: "/gauges/:id",
 };
 
 const menuItems = [
     {
         title: "Pools",
         link: "/pools",
-        active: [PATHS.POOLS],
+        active: [PATHS.POOLS, PATHS.POOL],
     },
-    {
+    enabledModules.FarmingModule && {
         title: "Farms",
         link: "/farms",
-        active: [PATHS.FARMS],
+        active: [PATHS.FARMS, PATHS.FARM],
     },
-    {
+    enabledModules.Ve33Module && {
         title: "Gauges",
         link: "/gauges",
-        active: [PATHS.GAUGES],
+        active: [PATHS.GAUGES, PATHS.GAUGE],
     },
-];
+].filter(Boolean) as { title: string; link: string; active: string[] }[];
 
 const Header = () => {
     const { pathname } = useLocation();
@@ -74,25 +79,28 @@ const Header = () => {
         paths.some((path) => matchPath(path, pathname)) ? "text-primary" : "text-black/50 hover:text-black/70";
 
     return (
-        <header className="sticky top-8 mt-4 bg-card z-10 flex justify-between items-center gap-4">
-            <Link to={"/"} className="font-bold flex gap-2 items-center">
-                <img src={SophonLogo} alt="Sophon Logo" className="inline-block mr-2 w-12 h-12" />
-                <span className="max-md:hidden">Admin Panel</span>
-            </Link>
-            <nav className="mr-auto">
-                <ul className="flex justify-center gap-1 rounded-full font-semibold whitespace-nowrap">
-                    {menuItems.map((item) => (
-                        <NavLink
-                            key={`nav-item-${item.link}`}
-                            to={item.link}
-                            className={`${setNavlinkClasses(item.active)} py-2 px-4 rounded-lg  select-none duration-200`}
-                        >
-                            {item.title}
-                        </NavLink>
-                    ))}
-                </ul>
-            </nav>
-            <Account />
+        <header className="fixed flex flex-col left-0 w-full top-0 bg-card z-10 ">
+            <AdminAccount />
+            <div className="flex gap-4 py-4 w-full max-w-[1248px] mx-auto">
+                <Link to={"/"} className="font-bold flex gap-2 items-center">
+                    <img src={IntegralLogo} alt="Integral Logo" className="inline-block mr-2 w-8 h-8" />
+                    <span className="max-md:hidden">Admin Panel</span>
+                </Link>
+                <nav className="mr-auto">
+                    <ul className="flex justify-center gap-1 rounded-full font-semibold whitespace-nowrap">
+                        {menuItems.map((item) => (
+                            <NavLink
+                                key={`nav-item-${item.link}`}
+                                to={item.link}
+                                className={`${setNavlinkClasses(item.active)} py-2 px-4 rounded-lg  select-none duration-200`}
+                            >
+                                {item.title}
+                            </NavLink>
+                        ))}
+                    </ul>
+                </nav>
+                <Account />
+            </div>
         </header>
     );
 };

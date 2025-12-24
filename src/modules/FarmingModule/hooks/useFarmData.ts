@@ -10,7 +10,7 @@ import { ADDRESS_ZERO } from "@cryptoalgebra/integral-sdk";
 import { formatUnits, Address, erc20Abi } from "viem";
 import { useReadContracts } from "wagmi";
 
-function useTokenInfo(address: Address | undefined) {
+export function useTokenInfo(address: Address | undefined) {
     const { data } = useReadContracts({
         allowFailure: false,
         contracts: address

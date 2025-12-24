@@ -7,7 +7,7 @@ import { useWriteVotingRewardIncentivize } from "@/generated";
 import { useApprove } from "@/hooks/common/useApprove";
 import { useCurrency } from "@/hooks/common/useCurrency";
 import { useTransactionAwait } from "@/hooks/common/useTransactionAwait";
-import { useWhitelistForGauge } from "@/hooks/gauges/useWhitelistForGauge";
+import { useWhitelistForGauge } from "../hooks/useWhitelistForGauge";
 import { ApprovalState } from "@/types/approve-state";
 import { RewardToken, VotingPool } from "@/types/gauge";
 import { Currency, CurrencyAmount } from "@cryptoalgebra/integral-sdk";
@@ -138,3 +138,5 @@ const GaugeRewardToken = ({ rewardToken }: { rewardToken: RewardToken }) => {
         </div>
     );
 };
+
+export default GaugeRewards;

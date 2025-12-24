@@ -2,7 +2,7 @@ import { ApprovalState, ApprovalStateType } from "@/types/approve-state";
 import { useCallback, useMemo } from "react";
 import { Address } from "viem";
 import { useReadVoterIsWhitelisted, useWriteVoterSetTokenStatus } from "@/generated";
-import { useTransactionAwait } from "../common/useTransactionAwait";
+import { useTransactionAwait } from "@/hooks/common/useTransactionAwait";
 
 export function useWhitelistForGauge(tokenAddress: Address | undefined) {
     const { data: isWhitelisted } = useReadVoterIsWhitelisted({

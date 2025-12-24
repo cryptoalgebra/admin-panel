@@ -1,6 +1,6 @@
 import Loader from "@/components/common/Loader";
 import { Button } from "@/components/ui/button";
-import ManageRewardsModal from "@/components/modals/farm/ManageRewardsModal";
+import ManageRewardsModal from "./ManageRewardsModal";
 import { useEthersSigner } from "@/hooks/common/useEthersProvider";
 import { useTransactionAwait } from "@/hooks/common/useTransactionAwait";
 import { IncentiveKey, PartialIncentiveKey } from "@/types/incentive-key";
@@ -10,6 +10,13 @@ import useSWR from "swr";
 import { useAccount, useChainId } from "wagmi";
 import { Address } from "viem";
 import { Gift } from "lucide-react";
+
+interface FetchTokenResult {
+    address: string;
+    symbol: string;
+    name: string;
+    decimals: number;
+}
 
 interface IFarmRewardDetails {
     token: FetchTokenResult;

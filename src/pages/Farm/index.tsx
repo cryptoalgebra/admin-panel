@@ -1,15 +1,15 @@
 import PageContainer from "@/components/common/PageContainer";
-import FarmDetails from "@/components/farm/FarmDetails";
-import FarmPoolDetails from "@/components/farm/FarmPoolDetails";
-import FarmRewardDetails from "@/components/farm/FarmRewardDetails";
+import FarmingModule from "@/modules/FarmingModule";
 import { useSingleFarmingQuery } from "@/graphql/generated/graphql";
-import { useFarmData } from "@/hooks/farms/useFarmData";
 import { useClients } from "@/hooks/graphql/useClients";
 import { IncentiveKey, PartialIncentiveKey } from "@/types/incentive-key";
 import { ADDRESS_ZERO } from "@cryptoalgebra/integral-sdk";
 import { ArrowLeft } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { Address } from "viem";
+
+const { FarmDetails, FarmPoolDetails, FarmRewardDetails } = FarmingModule.components;
+const { useFarmData } = FarmingModule.hooks;
 
 const FarmPage = () => {
     const { farmingClient } = useClients();

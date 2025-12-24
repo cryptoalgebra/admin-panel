@@ -1,6 +1,6 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { FarmingFieldsFragment, useAllFarmsQuery } from "@/graphql/generated/graphql";
-import { useFarmData } from "@/hooks/farms/useFarmData";
+import { useFarmData } from "../hooks/useFarmData";
 import { useClients } from "@/hooks/graphql/useClients";
 import { formatAmount } from "@/utils/common/formatAmount";
 import { useMemo, useState } from "react";
@@ -30,8 +30,6 @@ const FarmHeader = () => (
 
 const FarmRow = (farm: FarmingFieldsFragment) => {
     const { token0, token1, reward, bonusReward, rewardToken, bonusRewardToken } = useFarmData(farm);
-
-    // const isEmpty = isDeactivated && Number(reward) === 0 && (Number(bonusReward) === 0 || !bonusReward);
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-0 w-full text-left px-4 py-4 bg-card border-b border-border hover:bg-bg-200 transition-colors items-center">

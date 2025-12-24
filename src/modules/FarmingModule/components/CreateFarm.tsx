@@ -12,13 +12,13 @@ import { useActiveFarmingForPoolQuery, useAllPoolsQuery, useCustomPoolDeployerQu
 import CurrencyLogo from "@/components/common/CurrencyLogo";
 import { DEFAULT_CHAIN_ID } from "config/default-chain";
 import Loader from "@/components/common/Loader";
-import CreateFarmButton from "../CreateFarmButton";
+import CreateFarmButton from "./CreateFarmButton";
 import { PartialIncentiveKey } from "@/types/incentive-key";
 import { useReadAlgebraEternalFarmingNumOfIncentives } from "@/generated";
 import { IRewards } from "@/types/rewards";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/common/cn";
 import { useClients } from "@/hooks/graphql/useClients";
-import { CUSTOM_POOL_DEPLOYER_TITLES } from "config/custom-pool-deployer";
+import { CUSTOM_POOL_DEPLOYER_TITLES, PoolDeployerType } from "config/custom-pool-deployer";
 import { Button } from "@/components/ui/button";
 
 interface IFormState {
@@ -217,9 +217,7 @@ const Reward = ({ control, name }: { control: Control<IFormState>; name: "reward
                                     {value && <CurrencyLogo currency={value} size={20} />}
                                     <span>{value ? value.symbol : `Select Token`}</span>
                                     {value && balance && (
-                                        <span className="px-2 bg-bg-200 rounded-xl">{`${formatCurrency.format(
-                                            +balance.formatted
-                                        )}`}</span>
+                                        <span className="px-2 bg-bg-200 rounded-xl">{`${formatCurrency.format(+balance.formatted)}`}</span>
                                     )}
                                 </span>
                                 <span>
@@ -394,8 +392,6 @@ const CreateFarm = () => {
                                 isRequired={false}
                                 maxDecimals={0}
                             />
-
-                            {/* <InputToggle title="Enable farming for ALM" name={"enableAlmFarming"} control={control} isRequired={false} /> */}
                         </div>
 
                         <CreateFarmButton
@@ -454,7 +450,7 @@ export const PoolSelector = ({ control, reset }: { control: Control<IFormState>;
                                     <CurrencyLogo currency={new Token(DEFAULT_CHAIN_ID, pool.token0.id, +pool.token0.decimals)} size={20} />
                                     <CurrencyLogo currency={new Token(DEFAULT_CHAIN_ID, pool.token1.id, +pool.token1.decimals)} size={20} />
                                     <span className="ml-2">{pool.name}</span>
-                                    <span className="ml-2">{CUSTOM_POOL_DEPLOYER_TITLES[pool.deployer]}</span>
+                                    <span className="ml-2">{CUSTOM_POOL_DEPLOYER_TITLES[pool.deployer as PoolDeployerType]}</span>
                                 </div>
                             </SelectItem>
                         ))}

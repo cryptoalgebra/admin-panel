@@ -1,4 +1,4 @@
-import { FormattedGauge, useAllGauges } from "@/hooks/gauges/useAllGauges";
+import { useAllGauges, FormattedGauge } from "../hooks/useAllGauges";
 import { formatAmount } from "@/utils/common/formatAmount";
 import { customPoolDeployerTitleByAddress } from "config/custom-pool-deployer";
 import { Link } from "react-router-dom";

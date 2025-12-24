@@ -1,10 +1,12 @@
-import GaugesList from "@/components/gauges/GaugesList";
+import Ve33Module from "@/modules/Ve33Module";
 import { Button } from "@/components/ui/button";
 import PageContainer from "../../components/common/PageContainer";
 import { useTransactionAwait } from "@/hooks/common/useTransactionAwait";
 import Loader from "@/components/common/Loader";
 import { useWriteVoterDistributeAll } from "@/generated";
 import { Link } from "react-router-dom";
+
+const { GaugesList } = Ve33Module.components;
 
 const GaugesPage = () => {
     const { writeContract, data: hash, isPending, isError } = useWriteVoterDistributeAll();

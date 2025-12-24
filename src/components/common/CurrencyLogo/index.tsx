@@ -1,11 +1,10 @@
-import { Currency } from "@cryptoalgebra/integral-sdk";
+import { Currency, WNATIVE } from "@cryptoalgebra/integral-sdk";
 import React from "react";
 import { Address } from "viem";
 import USDCLogo from "@/assets/tokens/usdc.svg";
 import EthLogo from "@/assets/tokens/ether.svg";
-import SOPHLogo from "@/assets/sophon-logo-dark.png";
-import { cn } from "@/lib/utils";
-import { DEFAULT_NATIVE_SYMBOL } from "config/default-chain";
+import { cn } from "@/utils/common/cn";
+import { DEFAULT_CHAIN_ID, DEFAULT_NATIVE_SYMBOL } from "config/default-chain";
 
 interface CurrencyLogoProps {
     currency: Currency | undefined | null;
@@ -17,9 +16,9 @@ interface CurrencyLogoProps {
 export const specialTokens: {
     [key: Address]: { symbol: string; logo: string };
 } = {
-    ["0x577bdff849e65c1effeb8114e9cd243c1180f158"]: {
-        symbol: "SOPH",
-        logo: SOPHLogo,
+    [WNATIVE[DEFAULT_CHAIN_ID].address.toLowerCase()]: {
+        symbol: "WETH",
+        logo: EthLogo,
     },
     ["0xabac6f23fdf1313fc2e9c9244f666157ccd32990"]: {
         symbol: "USDC",

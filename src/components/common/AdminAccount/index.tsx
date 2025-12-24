@@ -20,11 +20,7 @@ const AdminAccount = () => {
 
     if (!account) return;
 
-    return (
-        !isAdmin &&
-        !isPoolAdmin &&
-        !isLoading && <div className="fixed top-0 left-0 right-0 z-20 text-white text-center bg-red-500">Connect admin account</div>
-    );
+    return !isAdmin && !isPoolAdmin && !isLoading && <div className="w-full text-white text-center bg-red-500">Connect admin account</div>;
 };
 
 export default AdminAccount;

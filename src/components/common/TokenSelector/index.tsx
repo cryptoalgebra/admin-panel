@@ -13,7 +13,7 @@ import { ADDRESS_ZERO, Currency, ExtendedNative, Token } from "@cryptoalgebra/in
 import { formatCurrency } from "@/utils/common/formatCurrency";
 import { useTokensState } from "@/state/tokensStore";
 import { Copy } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/common/cn";
 import { Button } from "@/components/ui/button";
 
 const TokenSelectorView = {

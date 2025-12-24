@@ -58,7 +58,7 @@ const PoolDetails = ({ pool, poolId }: IPoolDetails) => {
                     </div>
                     <div className="p-3 bg-bg-200 rounded-lg border border-border">
                         <p className="text-xs text-text/50 mb-0.5">Fee</p>
-                        <p className="text-lg font-semibold text-text">{pool.fee}</p>
+                        <p className="text-lg font-semibold text-text">{pool.fee / 10_000}%</p>
                     </div>
                     <div className="p-3 bg-bg-200 rounded-lg border border-border">
                         <p className="text-xs text-text/50 mb-0.5">Fees USD</p>

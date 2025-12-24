@@ -1,14 +1,16 @@
 import { useForm } from "react-hook-form";
 import Loader from "@/components/common/Loader";
 import { Button } from "@/components/ui/button";
-import { PoolSelector } from "@/components/farms/CreateFarm";
+import FarmingModule from "@/modules/FarmingModule";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useWhitelistForGauge } from "@/hooks/gauges/useWhitelistForGauge";
+import { useWhitelistForGauge } from "../hooks/useWhitelistForGauge";
 import { ApprovalState } from "@/types/approve-state";
 import { useReadAlgebraPoolToken0, useReadAlgebraPoolToken1, useReadVoterGetGauge, useWriteVoterCreateAlgebraGauge } from "@/generated";
 import { Address } from "viem";
 import { useTransactionAwait } from "@/hooks/common/useTransactionAwait";
+
+const { PoolSelector } = FarmingModule.components;
 
 interface IFormState {
     pool: string | undefined;

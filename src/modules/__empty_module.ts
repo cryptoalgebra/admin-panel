@@ -1,8 +1,18 @@
 // AUTO-GENERATED FILE
-// This file is used as a stub when modules are disabled
 
 export default {
-    hooks: {},
-    components: {},
-    utils: {},
+  hooks: {
+    useTokenInfo: () => ({}),
+    useFarmData: () => ({}),
+    useAllGauges: () => ({}),
+    useVotingPool: () => ({}),
+    useWhitelistForGauge: () => ({}),
+  },
+  components: {
+    InputToggle: () => null,
+    PoolSelector: () => null,
+    GaugeRewards: () => null,
+  },
+  utils: {
+  },
 };

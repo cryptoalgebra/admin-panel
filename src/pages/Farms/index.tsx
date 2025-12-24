@@ -1,6 +1,8 @@
-import FarmList from "@/components/farms/FarmList";
+import FarmingModule from "@/modules/FarmingModule";
 import PageContainer from "../../components/common/PageContainer";
 import { Link } from "react-router-dom";
+
+const { FarmList } = FarmingModule.components;
 
 const FarmsPage = () => {
     return (
