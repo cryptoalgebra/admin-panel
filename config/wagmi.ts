@@ -13,6 +13,7 @@ import {
 } from "./abis";
 import { ALGEBRA_ETERNAL_FARMING, ALGEBRA_FACTORY, FARMING_CENTER, PLUGIN_FACTORY, VOTER } from "./contract-addresses";
 import { defineChain } from "viem";
+import { slidingFeePluginAbi } from "./abis/plugins/slidingFeePlugin";
 
 const baseSepoliaChain = /*#__PURE__*/ defineChain({
     id: 84532,
@@ -58,6 +59,7 @@ const rawContracts = [
     { name: "AlgebraVirtualPool", abi: algebraVirtualPoolABI },
     { name: "Voter", abi: voterABI },
     { name: "VotingReward", abi: votingRewardABI },
+    { name: "SlidingFeePlugin", abi: slidingFeePluginAbi },
 ];
 
 const contractAddresses = {

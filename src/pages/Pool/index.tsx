@@ -36,11 +36,11 @@ const PoolPage = () => {
                         <PoolDetails poolId={poolId} pool={pool.pool} />
                         <ManagePlugins poolId={poolId} />
                         <TokenDetails poolId={poolId} name="Tokens" />
-                        <PoolSettings poolId={poolId} deployer={pool.pool.deployer} />
+                        <PoolSettings poolId={poolId} />
                     </div>
                 </>
             ) : (
-                <div className="flex items-center justify-center py-16">
+                <div className="flex items-center justify-center py-32 mx-auto w-fit">
                     <div className="flex flex-col items-center gap-3">
                         <div className="w-6 h-6 border-2 border-border border-t-text rounded-full animate-spin" />
                         <span className="text-sm text-text/50">Loading pool data...</span>

@@ -1,5 +1,6 @@
 import DataWithCopyButton from "@/components/common/DataWithCopyButton";
 import ManagePoolSettingsModal from "@/components/modals/pool/ManagePoolSettingsModal";
+import ManageFeeModal from "@/components/modals/pool/ManageFeeModal";
 import { Button } from "@/components/ui/button";
 import { PLUGIN_FACTORY } from "config/contract-addresses";
 import { DEFAULT_CHAIN_ID } from "config/default-chain";
@@ -7,16 +8,14 @@ import { usePool } from "@/hooks/pools/usePool";
 import { Address } from "viem";
 import { useReadContract } from "wagmi";
 import PoolActivationModal from "@/components/modals/pool/PoolActivationModal";
-import { ADDRESS_ZERO } from "@cryptoalgebra/integral-sdk";
 import { pluginFactoryABI } from "config/abis";
 import { Settings } from "lucide-react";
 
 interface IPoolSettings {
     poolId: Address;
-    deployer: Address;
 }
 
-const PoolSettings = ({ poolId, deployer }: IPoolSettings) => {
+const PoolSettings = ({ poolId }: IPoolSettings) => {
     // const { data: pluginId } = useReadAlgebraPoolPlugin({
     //     address: poolId,
     // });
@@ -63,13 +62,11 @@ const PoolSettings = ({ poolId, deployer }: IPoolSettings) => {
                                 Community Fee
                             </Button>
                         </ManagePoolSettingsModal>
-                        {deployer === ADDRESS_ZERO && (
-                            <ManagePoolSettingsModal poolId={poolId} functionName="setFee" title="Fee" isAdaptiveFee>
-                                <Button variant="outline" className="flex-1">
-                                    Fee
-                                </Button>
-                            </ManagePoolSettingsModal>
-                        )}
+                        <ManageFeeModal poolId={poolId}>
+                            <Button variant="outline" className="flex-1">
+                                Fee
+                            </Button>
+                        </ManageFeeModal>
                         <ManagePoolSettingsModal poolId={poolId} functionName="setTickSpacing" title="Tick Spacing">
                             <Button variant="outline" className="flex-1">
                                 Tick Spacing
