@@ -23,7 +23,7 @@ const AdminAccount = () => {
     return (
         !isAdmin &&
         !isPoolAdmin &&
-        !isLoading && <div className="fixed top-0 left-0 right-0 text-white text-center bg-red-500">Connect admin account</div>
+        !isLoading && <div className="fixed top-0 left-0 right-0 z-20 text-white text-center bg-red-500">Connect admin account</div>
     );
 };
 

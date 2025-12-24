@@ -2,21 +2,16 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { FarmingFieldsFragment, useAllFarmsQuery } from "@/graphql/generated/graphql";
 import { useFarmData } from "@/hooks/farms/useFarmData";
 import { useClients } from "@/hooks/graphql/useClients";
+import { formatAmount } from "@/utils/common/formatAmount";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
 const Toolbar = ({ changeShowDeactivated }: { changeShowDeactivated: (state: boolean) => void }) => {
     return (
-        <div className="flex justify-between">
-            {/* <div>
-            <input 
-                className="px-4 py-2 border border-gray-300 rounded-xl"
-                placeholder="Search pools or rewards"
-            />
-        </div> */}
+        <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
                 <Checkbox id="showDeactivated" onCheckedChange={changeShowDeactivated} />
-                <label htmlFor="showDeactivated" className="text-sm font-medium leading-none">
+                <label htmlFor="showDeactivated" className="text-sm font-medium text-text leading-none cursor-pointer">
                     Show deactivated
                 </label>
             </div>
@@ -25,65 +20,55 @@ const Toolbar = ({ changeShowDeactivated }: { changeShowDeactivated: (state: boo
 };
 
 const FarmHeader = () => (
-    <div className="hidden md:grid grid-cols-5 text-sm text-black font-semibold px-4 py-3 bg-neutral-200 border-b border-neutral-100">
+    <div className="hidden md:grid grid-cols-4 text-xs font-medium text-text/50 uppercase tracking-wider px-4 py-3 bg-bg-200 border-b border-border">
         <div>Pool</div>
         <div>Rewards</div>
         <div>Bonus Rewards</div>
-        <div>Dynamic Rates</div>
         <div></div>
     </div>
 );
 
 const FarmRow = (farm: FarmingFieldsFragment) => {
-    const { token0, token1, reward, bonusReward, rewardToken, bonusRewardToken, isDeactivated, isDynamicRateActivated } = useFarmData(farm);
+    const { token0, token1, reward, bonusReward, rewardToken, bonusRewardToken } = useFarmData(farm);
 
-    const isEmpty = isDeactivated && Number(reward) === 0 && (Number(bonusReward) === 0 || !bonusReward);
+    // const isEmpty = isDeactivated && Number(reward) === 0 && (Number(bonusReward) === 0 || !bonusReward);
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-0 w-full text-left px-4 py-4 bg-white border-b border-neutral-200 hover:bg-neutral-50 transition-colors items-center">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-0 w-full text-left px-4 py-4 bg-card border-b border-border hover:bg-bg-200 transition-colors items-center">
             {token0 && token1 ? (
                 <div className="flex w-full justify-between md:justify-start">
-                    <div className="md:hidden text-xs text-neutral-500 font-medium">Pool</div>
-                    <div className="font-medium text-sm">{`${token0.symbol} / ${token1.symbol}`}</div>
+                    <div className="md:hidden text-xs text-text/50 font-medium">Pool</div>
+                    <div className="font-medium text-sm text-text">{`${token0.symbol} / ${token1.symbol}`}</div>
                 </div>
             ) : (
                 <div></div>
             )}
             {rewardToken && reward ? (
                 <div className="flex w-full justify-between md:justify-start">
-                    <div className="md:hidden text-xs text-neutral-500 font-medium">Rewards</div>
-                    <div className="text-sm">{`${reward} ${rewardToken.symbol}`}</div>
+                    <div className="md:hidden text-xs text-text/50 font-medium">Rewards</div>
+                    <div className="text-sm text-text">{`${formatAmount(reward)} ${rewardToken.symbol}`}</div>
                 </div>
             ) : (
                 <div></div>
             )}
             {bonusRewardToken && bonusReward ? (
                 <div className="flex w-full justify-between md:justify-start">
-                    <div className="md:hidden text-xs text-neutral-500 font-medium">Bonus Rewards</div>
-                    <div className="text-sm">{`${bonusReward} ${bonusRewardToken.symbol}`}</div>
+                    <div className="md:hidden text-xs text-text/50 font-medium">Bonus Rewards</div>
+                    <div className="text-sm text-text">{`${formatAmount(bonusReward)} ${bonusRewardToken.symbol}`}</div>
                 </div>
             ) : (
                 <div></div>
             )}
-            {token0 && token1 ? (
-                <div className="flex w-full justify-between md:justify-start">
-                    <div className="md:hidden text-xs text-neutral-500 font-medium">Dynamic Rates</div>
-                    <div className="text-sm">{isDynamicRateActivated ? "Yes" : "No"}</div>
-                </div>
-            ) : (
-                <div></div>
-            )}
-            {!isEmpty && (
-                <div className="text-right">
-                    <Link
-                        to={`/farms/${farm.id}`}
-                        state={farm}
-                        className="inline-block px-4 py-2 bg-black text-white text-sm rounded-lg hover:bg-neutral-800 transition-colors"
-                    >
-                        Manage →
-                    </Link>
-                </div>
-            )}
+
+            <div className="text-right">
+                <Link
+                    to={`/farms/${farm.id}`}
+                    state={farm}
+                    className="inline-block px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:opacity-90 transition-opacity"
+                >
+                    Manage →
+                </Link>
+            </div>
         </div>
     );
 };
@@ -131,11 +116,16 @@ const FarmList = () => {
                 <Toolbar changeShowDeactivated={(state) => setShowDeactivated(state)} />
             </div>
             {loading ? (
-                "Loading"
+                <div className="flex items-center justify-center p-8">
+                    <div className="flex flex-col items-center gap-3">
+                        <div className="w-5 h-5 border-2 border-border border-t-text rounded-full animate-spin" />
+                        <span className="text-sm text-text/50">Loading farms...</span>
+                    </div>
+                </div>
             ) : (
                 <div>
-                    <div className="text-lg font-semibold mb-4">Active Farms</div>
-                    <div className="bg-white border border-neutral-200 rounded-lg overflow-hidden mb-8">
+                    <div className="text-lg font-semibold text-text mb-4">Active Farms</div>
+                    <div className="bg-card border border-border rounded-lg overflow-hidden mb-8">
                         <FarmHeader />
                         <div>
                             {activeFarms.map((farm) => (
@@ -145,8 +135,8 @@ const FarmList = () => {
                     </div>
                     {showDeactivated ? (
                         <>
-                            <div className="text-lg font-semibold mb-4">Deactivated Farms</div>
-                            <div className="bg-white border border-neutral-200 rounded-lg overflow-hidden">
+                            <div className="text-lg font-semibold text-text mb-4">Deactivated Farms</div>
+                            <div className="bg-card border border-border rounded-lg overflow-hidden">
                                 <FarmHeader />
                                 <div>
                                     {deactivatedFarms.map((farm) => (

@@ -14,6 +14,7 @@ import { formatCurrency } from "@/utils/common/formatCurrency";
 import { useTokensState } from "@/state/tokensStore";
 import { Copy } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 const TokenSelectorView = {
     DEFAULT_LIST: "DEFAULT_LIST",
@@ -21,7 +22,7 @@ const TokenSelectorView = {
     NOT_FOUND: "NOT_FOUND",
 };
 
-type TokenSelectorViewType = (typeof TokenSelectorView)[keyof typeof TokenSelectorView];
+type TokenSelectorViewType = typeof TokenSelectorView[keyof typeof TokenSelectorView];
 
 const Search = ({
     data,
@@ -107,9 +108,10 @@ const TokenRow = ({
     };
 
     return (
-        <button
+        <Button
+            variant="ghost"
             disabled={lock}
-            className="flex items-center justify-between w-full py-3 px-4 text-left bg-white border border-neutral-200 rounded-lg transition-colors hover:bg-neutral-50 disabled:hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center justify-between w-full py-3 px-4 h-auto text-left bg-white border border-neutral-200 rounded-lg transition-colors hover:bg-neutral-50 disabled:hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={() => currency && onSelect(currency)}
             style={{ ...style, height: 76 - 16 }}
         >
@@ -120,21 +122,23 @@ const TokenRow = ({
                 <div>
                     <div className="flex gap-2 items-center text-sm font-medium">
                         <div>{token.symbol}</div>
-                        <button
+                        <Button
+                            variant="ghost"
+                            size="icon"
                             className={cn(
-                                'relative transition-colors hover:text-neutral-600 after:absolute after:text-xs after:left-5 after:top-0 after:content-["Copied"] after:duration-100',
+                                'relative h-auto w-auto p-0 transition-colors hover:text-neutral-600 after:absolute after:text-xs after:left-5 after:top-0 after:content-["Copied"] after:duration-100',
                                 isCopied ? "after:block" : "after:hidden"
                             )}
                             onClick={handleCopy}
                         >
                             <Copy size={12} />
-                        </button>
+                        </Button>
                     </div>
                     <div className="text-xs text-neutral-500">{token.name}</div>
                 </div>
             </div>
             <div className="text-sm">{isLoading ? "Loading..." : balance ? formatCurrency.format(Number(balance.formatted)) : ""}</div>
-        </button>
+        </Button>
     );
 };
 
@@ -149,12 +153,7 @@ const ImportTokenRow = ({ token, onImport }: { token: Token; onImport: (token: T
                 <div className="text-xs text-neutral-500">{token.name}</div>
             </div>
         </div>
-        <button
-            className="px-4 py-2 bg-black text-white text-sm rounded-lg hover:bg-neutral-800 transition-colors"
-            onClick={() => onImport(token)}
-        >
-            Import
-        </button>
+        <Button onClick={() => onImport(token)}>Import</Button>
     </div>
 );
 

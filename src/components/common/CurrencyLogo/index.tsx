@@ -5,6 +5,7 @@ import USDCLogo from "@/assets/tokens/usdc.svg";
 import EthLogo from "@/assets/tokens/ether.svg";
 import SOPHLogo from "@/assets/sophon-logo-dark.png";
 import { cn } from "@/lib/utils";
+import { DEFAULT_NATIVE_SYMBOL } from "config/default-chain";
 
 interface CurrencyLogoProps {
     currency: Currency | undefined | null;
@@ -57,7 +58,7 @@ const CurrencyLogo = ({ currency, size, className, style = {} }: CurrencyLogoPro
         return (
             <img
                 src={EthLogo}
-                alt={"SOPH"}
+                alt={DEFAULT_NATIVE_SYMBOL}
                 className={classString}
                 style={{
                     ...style,

@@ -44,20 +44,26 @@ const Account = () => {
 };
 
 const PATHS = {
-    FARMS: "/farms",
     POOLS: "/pools",
+    FARMS: "/farms",
+    GAUGES: "/gauges",
 };
 
 const menuItems = [
+    {
+        title: "Pools",
+        link: "/pools",
+        active: [PATHS.POOLS],
+    },
     {
         title: "Farms",
         link: "/farms",
         active: [PATHS.FARMS],
     },
     {
-        title: "Pools",
-        link: "/pools",
-        active: [PATHS.POOLS],
+        title: "Gauges",
+        link: "/gauges",
+        active: [PATHS.GAUGES],
     },
 ];
 
@@ -68,7 +74,7 @@ const Header = () => {
         paths.some((path) => matchPath(path, pathname)) ? "text-primary" : "text-black/50 hover:text-black/70";
 
     return (
-        <header className="sticky top-4 mt-4 z-10 flex justify-between items-center rounded-xl gap-4">
+        <header className="sticky top-8 mt-4 bg-card z-10 flex justify-between items-center gap-4">
             <Link to={"/"} className="font-bold flex gap-2 items-center">
                 <img src={SophonLogo} alt="Sophon Logo" className="inline-block mr-2 w-12 h-12" />
                 <span className="max-md:hidden">Admin Panel</span>

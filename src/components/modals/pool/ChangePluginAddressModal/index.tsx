@@ -1,4 +1,5 @@
 import Loader from "@/components/common/Loader";
+import { Button } from "@/components/ui/button";
 import { Credenza, CredenzaBody, CredenzaContent, CredenzaHeader, CredenzaTitle, CredenzaTrigger } from "@/components/ui/credenza";
 import { Input } from "@/components/ui/input";
 import { algebraPoolABI } from "config";
@@ -17,9 +18,9 @@ const ChangePluginAddressModal = ({ title, children, poolId }: IChangePluginAddr
     const [value, setValue] = useState<string>("");
     const [isAddressValid, setIsAddressValid] = useState<boolean>(false);
 
-    const { data, writeContract } = useWriteContract();
+    const { data, writeContract, isPending } = useWriteContract();
 
-    const { isLoading } = useTransactionAwait(data, title);
+    const { isLoading } = useTransactionAwait(data, { title });
 
     const handleConfirm = () => {
         if (isAddress(value)) {
@@ -50,13 +51,9 @@ const ChangePluginAddressModal = ({ title, children, poolId }: IChangePluginAddr
                         onChange={(e) => setValue(e.target.value)}
                     />
                     {isAddressValid && <p className="text-red-500 text-sm">Incorrect address!</p>}
-                    <button
-                        disabled={isLoading}
-                        onClick={handleConfirm}
-                        className="flex items-center justify-center mt-2 py-2 px-4 w-full bg-black text-white text-sm rounded-lg disabled:bg-neutral-400 hover:bg-neutral-800 transition-colors"
-                    >
-                        {isLoading ? <Loader /> : "Confirm"}
-                    </button>
+                    <Button disabled={isLoading || isPending} onClick={handleConfirm} className="w-full mt-2">
+                        {isLoading || isPending ? <Loader /> : "Confirm"}
+                    </Button>
                 </CredenzaBody>
             </CredenzaContent>
         </Credenza>

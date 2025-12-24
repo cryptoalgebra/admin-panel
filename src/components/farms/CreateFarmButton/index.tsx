@@ -1,5 +1,5 @@
-import { eternalFarmingABI } from "config/abis";
 import Loader from "@/components/common/Loader";
+import { Button } from "@/components/ui/button";
 import { ALGEBRA_ETERNAL_FARMING } from "config/contract-addresses";
 import { DEFAULT_CHAIN_ID } from "config/default-chain";
 import { useReadAlgebraPoolPlugin } from "@/generated";
@@ -14,17 +14,21 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Address } from "viem";
 import { useAccount, useBalance, useWriteContract } from "wagmi";
+import { algebraEternalFarmingABI } from "config/abis";
 
 interface ICreateFarmButton {
     hasSecondReward: boolean;
     incentiveKey: PartialIncentiveKey;
     rewards: IRewards;
+    minimalPositionWidth: number;
+    poolDeployer: Address;
 }
 
 const CreateFarmButton = ({
     hasSecondReward,
     incentiveKey: { rewardToken, bonusRewardToken, pool, nonce },
     rewards: { reward, rewardBn, rewardRateBn, bonusReward, bonusRewardBn, bonusRewardRateBn },
+    minimalPositionWidth,
 }: ICreateFarmButton) => {
     const navigate = useNavigate();
     const { address: account } = useAccount();
@@ -74,7 +78,7 @@ const CreateFarmButton = ({
 
     const { data, writeContract: onCreate, isPending } = useWriteContract();
 
-    const { isLoading, isSuccess } = useTransactionAwait(data, `Create Farm`);
+    const { isLoading, isSuccess } = useTransactionAwait(data, { title: "Create Farm" });
 
     useEffect(() => {
         if (isSuccess) {
@@ -88,19 +92,19 @@ const CreateFarmButton = ({
     if (isRewardBalanceInsufficient || isBonusRewardBalanceInsufficient) {
         return (
             <div className="flex flex-col gap-2">
-                <button disabled className="flex justify-center py-3 px-4 bg-neutral-400 text-white text-sm rounded-lg cursor-not-allowed">
+                <Button disabled className="w-full">
                     Insufficient {isRewardBalanceInsufficient ? rewardCurrency?.symbol : bonusRewardCurrency?.symbol} balance
-                </button>
+                </Button>
             </div>
         );
     }
 
     if (showApproveReward)
         return (
-            <button
+            <Button
                 disabled={approvalStateReward !== ApprovalState.NOT_APPROVED}
                 onClick={() => approvalCallbackReward && approvalCallbackReward()}
-                className="flex justify-center py-3 px-4 bg-black text-white text-sm rounded-lg hover:bg-neutral-800 disabled:bg-neutral-400 disabled:cursor-not-allowed transition-colors"
+                className="w-full"
             >
                 {approvalStateReward === ApprovalState.PENDING ? (
                     <Loader />
@@ -109,15 +113,15 @@ const CreateFarmButton = ({
                 ) : (
                     `Approve ${rewardCurrency?.symbol}`
                 )}
-            </button>
+            </Button>
         );
 
     if (showApproveBonusReward)
         return (
-            <button
+            <Button
                 disabled={approvalStateBonusReward !== ApprovalState.NOT_APPROVED}
                 onClick={() => approvalCallbackBonusReward && approvalCallbackBonusReward()}
-                className="flex justify-center py-3 px-4 bg-black text-white text-sm rounded-lg hover:bg-neutral-800 disabled:bg-neutral-400 disabled:cursor-not-allowed transition-colors"
+                className="w-full"
             >
                 {approvalStateBonusReward === ApprovalState.PENDING ? (
                     <Loader />
@@ -126,17 +130,17 @@ const CreateFarmButton = ({
                 ) : (
                     `Approve ${bonusRewardCurrency?.symbol}`
                 )}
-            </button>
+            </Button>
         );
 
     return (
-        <button
+        <Button
             disabled={isDisabled}
             onClick={() => {
                 if (isKeyReady && areRewardsReady && !showApproveReward && !showApproveBonusReward) {
                     onCreate({
                         address: ALGEBRA_ETERNAL_FARMING[DEFAULT_CHAIN_ID],
-                        abi: eternalFarmingABI,
+                        abi: algebraEternalFarmingABI,
                         functionName: "createEternalFarming",
                         args: [
                             {
@@ -150,7 +154,7 @@ const CreateFarmButton = ({
                                 rewardRate: rewardRateBn,
                                 bonusReward: bonusRewardBn || 0n,
                                 bonusRewardRate: bonusRewardRateBn || 0n,
-                                minimalPositionWidth: 0,
+                                minimalPositionWidth,
                             },
                             plugin,
                         ],
@@ -158,10 +162,10 @@ const CreateFarmButton = ({
                 }
             }}
             type={"submit"}
-            className="flex justify-center py-3 px-4 bg-black text-white text-sm rounded-lg hover:bg-neutral-800 disabled:bg-neutral-400 disabled:cursor-not-allowed transition-colors"
+            className="w-full"
         >
             {isLoading || isPending ? <Loader color="currentColor" /> : "Create Farm"}
-        </button>
+        </Button>
     );
 };
 

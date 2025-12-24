@@ -5,7 +5,7 @@ import {
     useReadAlgebraVirtualPoolRewardRates,
     useReadAlgebraVirtualPoolRewardReserves,
 } from "@/generated";
-import { FarmingFieldsFragment } from "@/graphql/generated/graphql";
+import { FarmingFieldsFragment, useCustomPoolDeployerQuery } from "@/graphql/generated/graphql";
 import { ADDRESS_ZERO } from "@cryptoalgebra/integral-sdk";
 import { formatUnits, Address, erc20Abi } from "viem";
 import { useReadContracts } from "wagmi";
@@ -33,7 +33,13 @@ function useTokenInfo(address: Address | undefined) {
 }
 
 export function useFarmData(farm: FarmingFieldsFragment | null | undefined) {
-    const { pool, rewardToken, bonusRewardToken, nonce, isDeactivated, virtualPool } = farm || {};
+    const { pool, rewardToken, bonusRewardToken, nonce, isDeactivated, virtualPool, minRangeLength } = farm || {};
+
+    const { data: poolDeployer } = useCustomPoolDeployerQuery({
+        variables: {
+            poolId: pool?.toLowerCase() || "",
+        },
+    });
 
     const { data: rates } = useReadAlgebraVirtualPoolRewardRates({
         address: virtualPool,
@@ -97,5 +103,7 @@ export function useFarmData(farm: FarmingFieldsFragment | null | undefined) {
         rewardRates,
         isDeactivated: Boolean(isDeactivated),
         isDynamicRateActivated,
+        minimalPositionWidth: minRangeLength,
+        poolDeployer: poolDeployer?.pool?.deployer,
     };
 }

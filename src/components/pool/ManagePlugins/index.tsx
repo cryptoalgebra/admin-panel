@@ -1,10 +1,7 @@
 import DataWithCopyButton from "@/components/common/DataWithCopyButton";
-import Loader from "@/components/common/Loader";
+import { Button } from "@/components/ui/button";
 import SetPluginAddressModal from "@/components/modals/pool/ChangePluginAddressModal";
 import ManagePluginConfigModal from "@/components/modals/pool/ManagePluginConfigModal";
-import { Switch } from "@/components/ui/switch";
-import { ALGEBRA_STUB_PLUGIN } from "config/contract-addresses";
-import { DEFAULT_CHAIN_ID } from "config/default-chain";
 import { useReadAlgebraBasePluginDefaultPluginConfig, useReadAlgebraPoolPlugin } from "@/generated";
 import { useTransactionAwait } from "@/hooks/common/useTransactionAwait";
 import { usePluginFlags } from "@/hooks/pools/usePluginFlags";
@@ -15,6 +12,9 @@ import { useEffect, useMemo, useState } from "react";
 import { Address } from "viem";
 import { useWriteContract } from "wagmi";
 import { algebraPoolABI } from "config/abis";
+import { PLUGIN_KEYS, usePoolPlugins } from "@/hooks/pools/usePoolPlugins";
+import { Puzzle, RotateCcw, Check, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface IManagePlugins {
     poolId: Address;
@@ -29,25 +29,23 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
         return parsePluginFlags(flags);
     }, [flags]);
 
+    const { data: pluginActiveModules } = usePoolPlugins(poolId);
+    const activeModules = useMemo(() => {
+        if (!pluginActiveModules) return;
+        return Object.entries(pluginActiveModules);
+    }, [pluginActiveModules]);
+
     const { data: pluginId } = useReadAlgebraPoolPlugin({
         address: poolId,
     });
-
-    const isToActivate = pluginId === ALGEBRA_STUB_PLUGIN[DEFAULT_CHAIN_ID];
-
-    const isSwapDisabled = flags?.AFTER_SWAP_FLAG === 1 || flags?.BEFORE_SWAP_FLAG === 1;
-
-    const isMintBurnDisabled = flags?.BEFORE_POSITION_MODIFY_FLAG === 1;
-
-    const isFlashesDisabled = flags?.AFTER_FLASH_FLAG === 1 || flags?.BEFORE_FLASH_FLAG === 1;
 
     const { data: defaultPluginConfig } = useReadAlgebraBasePluginDefaultPluginConfig({
         address: pluginId,
     });
 
-    const { data: setPluginConfigHash, writeContract } = useWriteContract();
+    const { data: setPluginConfigHash, writeContract, isPending } = useWriteContract();
 
-    const { isLoading } = useTransactionAwait(setPluginConfigHash, "Set Plugin");
+    const { isLoading } = useTransactionAwait(setPluginConfigHash, { title: "Set Plugin" });
 
     useEffect(() => {
         if (!pluginFlags) return;
@@ -72,7 +70,7 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
     };
 
     const handleConfirm = () => {
-        if (isLoading || pluginConfig === undefined) return;
+        if (isLoading || isPending || pluginConfig === undefined) return;
         writeContract({
             address: poolId,
             abi: algebraPoolABI,
@@ -87,114 +85,85 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
     };
 
     return (
-        <div className="flex flex-col gap-4 text-left p-6 bg-white border border-neutral-200 rounded-lg">
-            <div className="font-semibold text-lg mb-2">Manage Plugins</div>
-            {pluginId && flags ? (
-                <div className="flex flex-col gap-4">
+        <div className="flex flex-col text-left p-6 bg-white border border-border rounded-lg transition-colors">
+            <div className="flex items-center gap-3 mb-6">
+                <div className="p-2 bg-bg-200 rounded-xl">
+                    <Puzzle size={18} className="text-text" />
+                </div>
+                <h3 className="font-semibold text-lg text-text">Plugin Management</h3>
+            </div>
+
+            {pluginId && flags && activeModules ? (
+                <div className="flex flex-col gap-5 flex-1">
+                    {/* Plugin Address */}
                     <div>
-                        <p className="text-xs text-neutral-500 mb-1">Current Plugin address</p>
+                        <p className="text-xs font-medium text-text/50 uppercase tracking-wider mb-1.5">Plugin Address</p>
                         <DataWithCopyButton data={pluginId} />
                     </div>
-                    <div className="flex justify-between ">
-                        <div>
-                            <p className="text-xs text-neutral-500 mb-1">Pool Plugin Config (uint8)</p>
-                            <div className="flex justify-between items-center">
-                                <p className="text-sm">{pluginConfig}</p>
-                                {defaultPluginConfig !== pluginConfig && (
-                                    <button
-                                        onClick={handleResetPluginConfig}
-                                        className="flex items-center justify-center border border-neutral-200 px-3 py-1 text-xs rounded-lg hover:bg-neutral-100 transition-colors"
+
+                    <div className="h-px bg-border" />
+
+                    {/* Active Modules */}
+                    <div>
+                        <p className="text-xs font-medium text-text/50 uppercase tracking-wider mb-3">Active Modules</p>
+                        {activeModules.length > 0 ? (
+                            <div className="flex flex-wrap gap-2">
+                                {activeModules.map(([key, value]) => (
+                                    <span
+                                        key={key}
+                                        className={cn(
+                                            "inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full border",
+                                            value
+                                                ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                                                : "bg-red-50 text-red-700 border-red-200"
+                                        )}
                                     >
-                                        reset
-                                    </button>
-                                )}
+                                        {value ? <Check size={12} /> : <X size={12} />}
+                                        {PLUGIN_KEYS[key as keyof typeof PLUGIN_KEYS].split("Plugin")[0]}
+                                    </span>
+                                ))}
                             </div>
-                        </div>
-                        {defaultPluginConfig ? (
-                            <div>
-                                <p className="text-xs text-neutral-500 mb-1">Default Plugin Config (uint8)</p>
-                                <p className="text-sm">{defaultPluginConfig}</p>
-                            </div>
-                        ) : null}
+                        ) : (
+                            <p className="text-sm text-text/50">No active modules</p>
+                        )}
                     </div>
-                    <hr />
-                    {!isToActivate ? (
-                        <>
-                            <div className="flex items-center justify-between">
-                                <label htmlFor="farmingsPlugin">
-                                    <p className="text-sm font-medium">On-chain farmings Setup</p>
-                                    <p className="text-xs text-neutral-500">AFTER_SWAP_FLAG = {flags.AFTER_SWAP_FLAG}</p>
-                                </label>
-                                <Switch
-                                    id="farmingsPlugin"
-                                    checked={Boolean(flags.AFTER_SWAP_FLAG)}
-                                    onCheckedChange={() => handleCheckFlag("AFTER_SWAP_FLAG")}
-                                />
+                    <div className="h-px bg-border" />
+
+                    {/* Plugin Config */}
+                    <div className=" rounded-xl mb-4 space-y-4">
+                        <div className="flex items-center justify-between mb-3">
+                            <p className="text-xs font-medium text-text/50 uppercase tracking-wider mb-1.5">Plugin Configuration</p>
+
+                            {defaultPluginConfig !== pluginConfig && (
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={handleResetPluginConfig}
+                                    className="flex items-center gap-1.5 h-auto py-1 px-2 text-xs text-text/50 hover:text-text"
+                                >
+                                    <RotateCcw size={12} />
+                                    Reset
+                                </Button>
+                            )}
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                            <div className="p-3 bg-bg-200 rounded-lg border border-neutral-200">
+                                <p className="text-xs text-text/50 mb-0.5">Current</p>
+                                <p className="text-lg font-semibold text-text">{pluginConfig}</p>
                             </div>
-                            <div className="flex items-center justify-between">
-                                <label htmlFor="oraclePlugin">
-                                    <p className="text-sm font-medium">TWAP Oracle Setup</p>
-                                    <p className="text-xs text-neutral-500">BEFORE_SWAP_FLAG = {flags.BEFORE_SWAP_FLAG}</p>
-                                </label>
-                                <Switch
-                                    id="oraclePlugin"
-                                    checked={Boolean(flags.BEFORE_SWAP_FLAG)}
-                                    onCheckedChange={() => handleCheckFlag("BEFORE_SWAP_FLAG")}
-                                />
-                            </div>
-                            <div className="flex items-center justify-between">
-                                <label htmlFor="dynamicFeePlugin">
-                                    <p className="text-sm font-medium">Dynamic Fees Setup</p>
-                                    <p className="text-xs text-neutral-500">BEFORE_SWAP_FLAG = {flags.BEFORE_SWAP_FLAG}</p>
-                                    <p className="text-xs text-neutral-500">DYNAMIC_FEE = {flags.DYNAMIC_FEE_FLAG}</p>
-                                </label>
-                                <Switch
-                                    id="dynamicFeePlugin"
-                                    checked={Boolean(flags.DYNAMIC_FEE_FLAG && flags.BEFORE_SWAP_FLAG)}
-                                    onCheckedChange={() => {
-                                        handleCheckFlag("DYNAMIC_FEE_FLAG");
-                                    }}
-                                />
-                            </div>
-                            <button
-                                disabled={isLoading}
-                                onClick={handleConfirm}
-                                className="flex items-center justify-center py-2 px-4 w-full mt-auto text-sm bg-black text-white rounded-lg disabled:bg-neutral-400 hover:bg-neutral-800 transition-colors"
-                            >
-                                {isLoading ? <Loader /> : "Confirm"}
-                            </button>
-                        </>
-                    ) : (
-                        <>
-                            <div>
-                                <p className="text-xs text-neutral-500 mb-1">Swap status</p>
-                                {isSwapDisabled ? (
-                                    <p className="text-sm text-red-600">Disabled</p>
-                                ) : (
-                                    <p className="text-sm text-green-600">Enabled</p>
-                                )}
-                            </div>
-                            <div>
-                                <p className="text-xs text-neutral-500 mb-1">Mint / Burn status</p>
-                                {isMintBurnDisabled ? (
-                                    <p className="text-sm text-red-600">Disabled</p>
-                                ) : (
-                                    <p className="text-sm text-green-600">Enabled</p>
-                                )}
-                            </div>
-                            <div>
-                                <p className="text-xs text-neutral-500 mb-1">Flash status</p>
-                                {isFlashesDisabled ? (
-                                    <p className="text-sm text-red-600">Disabled</p>
-                                ) : (
-                                    <p className="text-sm text-green-600">Enabled</p>
-                                )}
-                            </div>
-                        </>
-                    )}
+                            {defaultPluginConfig !== undefined && (
+                                <div className="p-3 bg-bg-200 rounded-lg border border-neutral-200">
+                                    <p className="text-xs text-text/50 mb-0.5">Default</p>
+                                    <p className="text-lg font-semibold text-text">{defaultPluginConfig}</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
                 </div>
             ) : (
-                <p>Loading...</p>
+                <div className="flex items-center justify-center py-8">
+                    <div className="w-5 h-5 border-2 border-neutral-300 border-t-neutral-900 rounded-full animate-spin" />
+                </div>
             )}
 
             <div className="flex flex-col gap-4 mt-auto">
@@ -204,20 +173,20 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
                         onChange={handleCheckFlag}
                         onReset={handleResetPluginConfig}
                         onConfirm={handleConfirm}
-                        isLoading={isLoading}
+                        isLoading={isLoading || isPending}
                         title="Custom Hooks Settings"
                         flags={flags}
                     >
-                        <button className="py-2 px-4 w-full mt-auto text-sm border border-neutral-200 text-black bg-white rounded-lg hover:bg-neutral-100 transition-colors">
+                        <Button variant="outline" className="w-full">
                             Manage Plugin Config
-                        </button>
+                        </Button>
                     </ManagePluginConfigModal>
                 )}
                 {pluginId && (
                     <SetPluginAddressModal poolId={poolId} title="Set Plugin Address">
-                        <button className="py-2 px-4 w-full mt-auto text-sm border border-neutral-200 text-black bg-white rounded-lg hover:bg-neutral-100 transition-colors">
+                        <Button variant="outline" className="w-full">
                             Change Plugin Address
-                        </button>
+                        </Button>
                     </SetPluginAddressModal>
                 )}
             </div>

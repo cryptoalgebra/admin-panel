@@ -1,17 +1,12 @@
 import Loader from "@/components/common/Loader";
+import { Button } from "@/components/ui/button";
 import { Credenza, CredenzaBody, CredenzaContent, CredenzaHeader, CredenzaTitle, CredenzaTrigger } from "@/components/ui/credenza";
 import { Input } from "@/components/ui/input";
-import {
-    useReadAlgebraFactoryDefaultCommunityFee,
-    useReadAlgebraFactoryDefaultTickspacing,
-    useReadAlgebraFactoryDefaultFee,
-} from "@/generated";
 import { ALGEBRA_FACTORY, PLUGIN_FACTORY } from "config/contract-addresses";
 import { DEFAULT_CHAIN_ID } from "config/default-chain";
 import { useTransactionAwait } from "@/hooks/common/useTransactionAwait";
-import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
-import { useWriteContract } from "wagmi";
+import { useReadContracts, useWriteContract } from "wagmi";
 import { algebraFactoryABI, pluginFactoryABI } from "config/abis";
 
 interface IPoolsDefaultSettingsModal {
@@ -25,11 +20,7 @@ enum SettingsKeys {
     TICK_SPACING = "Tick Spacing",
 }
 
-interface Settings {
-    [SettingsKeys.COMMUNITY_FEE]: number;
-    [SettingsKeys.FEE]: number;
-    [SettingsKeys.TICK_SPACING]: number;
-}
+type Settings = Record<SettingsKeys, number>;
 
 const PoolsDefaultSettingsModal = ({ title, children }: IPoolsDefaultSettingsModal) => {
     const [settingsData, setSettingsData] = useState<Settings>({
@@ -38,36 +29,55 @@ const PoolsDefaultSettingsModal = ({ title, children }: IPoolsDefaultSettingsMod
         [SettingsKeys.TICK_SPACING]: 0,
     });
 
-    const { data: defaultFee } = useReadAlgebraFactoryDefaultFee();
-
-    const { data: defaultCommunityFee } = useReadAlgebraFactoryDefaultCommunityFee();
-
-    const { data: defaultTickSpacing } = useReadAlgebraFactoryDefaultTickspacing();
+    /* Get Default Settings */
+    const { data: defaultSettingsResults } = useReadContracts({
+        contracts: [
+            {
+                address: ALGEBRA_FACTORY[DEFAULT_CHAIN_ID],
+                abi: algebraFactoryABI,
+                functionName: "defaultCommunityFee",
+            },
+            {
+                address: ALGEBRA_FACTORY[DEFAULT_CHAIN_ID],
+                abi: algebraFactoryABI,
+                functionName: "defaultFee",
+            },
+            {
+                address: ALGEBRA_FACTORY[DEFAULT_CHAIN_ID],
+                abi: algebraFactoryABI,
+                functionName: "defaultTickspacing",
+            },
+        ],
+    });
 
     useEffect(() => {
-        if (defaultCommunityFee === undefined || defaultTickSpacing === undefined || defaultFee === undefined) return;
-        setSettingsData({
-            [SettingsKeys.COMMUNITY_FEE]: defaultCommunityFee,
-            [SettingsKeys.FEE]: defaultFee,
-            [SettingsKeys.TICK_SPACING]: defaultTickSpacing,
-        });
-    }, [defaultCommunityFee, defaultTickSpacing, defaultFee]);
+        if (!defaultSettingsResults) return;
+        const results = defaultSettingsResults.map((d) => d.result);
+        if (!results.length) return;
+
+        const defaultSettings: Settings = {
+            [SettingsKeys.COMMUNITY_FEE]: Number(results[0]),
+            [SettingsKeys.FEE]: Number(results[1]),
+            [SettingsKeys.TICK_SPACING]: Number(results[2]),
+        };
+
+        setSettingsData(defaultSettings);
+    }, [defaultSettingsResults]);
 
     /* Set Default Community Fee */
-    const { data: communityFeeHash, writeContract: setDefaultCommunityFee } = useWriteContract();
+    const { data: communityFeeHash, writeContract: setDefaultCommunityFee, isPending: isCommunityFeePending } = useWriteContract();
 
     /* Set Default Fee */
-    const { data: feeHash, writeContract: setDefaultFeeConfiguration } = useWriteContract();
+    const { data: feeHash, writeContract: setDefaultFeeConfiguration, isPending: isFeePending } = useWriteContract();
 
     /* Set Tick Spacing */
-    const { data: tickSpacingHash, writeContract: setDefaultTickSpacing } = useWriteContract();
+    const { data: tickSpacingHash, writeContract: setDefaultTickSpacing, isPending: isTickSpacingPending } = useWriteContract();
 
-    const { isLoading: feeLoading } = useTransactionAwait(feeHash, "Set Default Fee");
-    const { isLoading: communityFeeLoading } = useTransactionAwait(communityFeeHash, "Set Community Fee");
-    const { isLoading: tickSpacingLoading } = useTransactionAwait(tickSpacingHash, "Set Tick Spacing");
+    const { isLoading: feeLoading } = useTransactionAwait(feeHash, { title: "Set Default Fee" });
+    const { isLoading: communityFeeLoading } = useTransactionAwait(communityFeeHash, { title: "Set Community Fee" });
+    const { isLoading: tickSpacingLoading } = useTransactionAwait(tickSpacingHash, { title: "Set Tick Spacing" });
 
-    const handleSubmit = (e: React.FormEvent, key: SettingsKeys) => {
-        e.preventDefault();
+    const handleSubmit = (key: SettingsKeys) => {
         switch (key) {
             case SettingsKeys.COMMUNITY_FEE:
                 setDefaultCommunityFee({
@@ -98,6 +108,22 @@ const PoolsDefaultSettingsModal = ({ title, children }: IPoolsDefaultSettingsMod
         }
     };
 
+    const isLoading =
+        feeLoading || communityFeeLoading || tickSpacingLoading || isFeePending || isCommunityFeePending || isTickSpacingPending;
+
+    const isButtonLoading = (key: SettingsKeys): boolean => {
+        switch (key) {
+            case SettingsKeys.COMMUNITY_FEE:
+                return communityFeeLoading || isCommunityFeePending;
+            case SettingsKeys.FEE:
+                return feeLoading || isFeePending;
+            case SettingsKeys.TICK_SPACING:
+                return tickSpacingLoading || isTickSpacingPending;
+            default:
+                return false;
+        }
+    };
+
     return (
         <Credenza>
             <CredenzaTrigger asChild>{children}</CredenzaTrigger>
@@ -108,29 +134,21 @@ const PoolsDefaultSettingsModal = ({ title, children }: IPoolsDefaultSettingsMod
                 <CredenzaBody className="flex flex-col gap-4">
                     <form className="flex flex-col gap-4 items-center">
                         {Object.entries(settingsData as Settings).map(([key, value]) => (
-                            <label
-                                className={cn("gap-2 mb-2 w-full", key === SettingsKeys.FEE ? "grid grid-cols-2" : "flex flex-col")}
-                                key={key}
-                            >
+                            <label className="gap-2 mb-2 w-full flex flex-col" key={key}>
                                 <h4 className="w-full text-sm font-medium col-span-2">{key}</h4>
                                 <Input
                                     key={key}
-                                    onChange={(e) =>
+                                    onUserInput={(v) =>
                                         setSettingsData({
                                             ...settingsData,
-                                            [key]: e.target.value,
+                                            [key]: v,
                                         })
                                     }
                                     value={value}
-                                    type={"number"}
                                 />
-                                <button
-                                    disabled={feeLoading || communityFeeLoading || tickSpacingLoading}
-                                    onClick={(e) => handleSubmit(e, key as SettingsKeys)}
-                                    className="flex col-span-2 justify-center w-full py-2 px-4 bg-black text-white text-sm rounded-lg hover:bg-neutral-800 disabled:bg-neutral-400 transition-colors"
-                                >
-                                    {feeLoading || communityFeeLoading || tickSpacingLoading ? <Loader /> : "Confirm"}
-                                </button>
+                                <Button disabled={isLoading} onClick={() => handleSubmit(key as SettingsKeys)} className="w-full">
+                                    {isButtonLoading(key as SettingsKeys) ? <Loader /> : "Confirm"}
+                                </Button>
                             </label>
                         ))}
                     </form>

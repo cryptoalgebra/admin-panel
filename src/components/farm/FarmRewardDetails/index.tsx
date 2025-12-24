@@ -1,8 +1,15 @@
+import Loader from "@/components/common/Loader";
+import { Button } from "@/components/ui/button";
 import ManageRewardsModal from "@/components/modals/farm/ManageRewardsModal";
-import { cn } from "@/lib/utils";
+import { useEthersSigner } from "@/hooks/common/useEthersProvider";
+import { useTransactionAwait } from "@/hooks/common/useTransactionAwait";
 import { IncentiveKey, PartialIncentiveKey } from "@/types/incentive-key";
-import { useMemo, useState } from "react";
-import { FetchTokenResult } from "wagmi/actions";
+import { addRewardTokenToDistributor, getTokenRewardAddresses, getVaultsByPool } from "@cryptoalgebra/alm-sdk";
+import { useCallback, useMemo, useState } from "react";
+import useSWR from "swr";
+import { useAccount, useChainId } from "wagmi";
+import { Address } from "viem";
+import { Gift } from "lucide-react";
 
 interface IFarmRewardDetails {
     token: FetchTokenResult;
@@ -64,100 +71,133 @@ const FarmRewardDetails = ({ token, rate, reward, incentiveKey, isBonus, rewardR
         return;
     }, [rewardLeftForSpan, rate, reward]);
 
+    const { address: account } = useAccount();
+    const chainId = useChainId();
+    const ethersProvider = useEthersSigner();
+
+    const { data: isRewardEnabledForALM, isLoading: isRewardEnabledForALMLoading, error: almError } = useSWR(
+        [`isReward${reward}Enabled`, incentiveKey, chainId, token, ethersProvider],
+        async () => {
+            if (!incentiveKey.pool || !token || !ethersProvider) throw new Error("No incentive key or provider");
+            const pool = incentiveKey.pool;
+            const vaultAddresses: string[] = await getVaultsByPool(pool, chainId);
+
+            const tokenRewardAddresses = await getTokenRewardAddresses(vaultAddresses[0], ethersProvider);
+
+            return tokenRewardAddresses.includes(token.address);
+        }
+    );
+
+    const [almTxHash, setAlmTxHash] = useState<Address>();
+
+    const onEnableAlmFarming = useCallback(async () => {
+        if (!ethersProvider || !incentiveKey?.pool || !account || !token) return;
+        const pool = incentiveKey.pool;
+
+        const vaultAddresses: string[] = await getVaultsByPool(pool, chainId);
+
+        const tx = await addRewardTokenToDistributor(account, vaultAddresses[0], token.address, ethersProvider);
+        setAlmTxHash(tx.hash as Address);
+    }, [account, chainId, ethersProvider, incentiveKey.pool, token]);
+
+    const { isLoading: isLoadingAlm } = useTransactionAwait(almTxHash, { title: "Add reward to ALM Farming Distributor" });
+
     return (
-        <div className="text-left p-6 bg-white border border-neutral-200 rounded-lg">
-            <div className="flex items-center justify-between mb-4">
-                <div className="font-semibold text-lg">{`${token.symbol} Reward`}</div>
-                <div className="text-xs text-neutral-500">{isBonus ? "Reward 2" : "Reward 1"}</div>
+        <div className="flex flex-col text-left p-6 bg-card border border-border rounded-lg transition-colors">
+            <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                    <div className="p-2 bg-bg-200 rounded-xl">
+                        <Gift size={18} className="text-text" />
+                    </div>
+                    <h3 className="font-semibold text-lg text-text">{token.symbol} Reward</h3>
+                </div>
+                <span className="text-xs font-medium text-text/50 bg-bg-200 px-2 py-1 rounded-full">
+                    {isBonus ? "Reward 2" : "Reward 1"}
+                </span>
             </div>
-            <div className="text-xl font-semibold mb-6">{`${reward} ${token.symbol}`}</div>
+
+            {/* Reward Amount */}
+            <div className="p-4 bg-bg-200 rounded-lg border border-border mb-6">
+                <p className="text-xs text-text/50 mb-1">Total Reward</p>
+                <p className="text-2xl font-semibold text-text">
+                    {reward} {token.symbol}
+                </p>
+            </div>
+
             {!isDeactivated && (
                 <>
-                    <div className="mb-4">
-                        <div className="text-xs text-neutral-500 mb-2">Distribution Rate</div>
+                    {/* Distribution Rate */}
+                    <div className="mb-5">
+                        <p className="text-xs font-medium text-text/50 uppercase tracking-wider mb-2">Distribution Rate</p>
                         <div className="flex items-center justify-between">
-                            <div className="text-sm">{rewardRate}</div>
+                            <p className="text-sm text-text">{rewardRate}</p>
                             <div className="flex items-center gap-2">
-                                <button
+                                <Button
+                                    size="sm"
+                                    variant={rewardRateSpan === RewardRateSpan.SECOND ? "primary" : "outline"}
                                     onClick={() => setRewardRateSpan(RewardRateSpan.SECOND)}
-                                    className={cn(
-                                        "py-1 px-2 text-xs rounded-lg transition-colors",
-                                        rewardRateSpan === RewardRateSpan.SECOND
-                                            ? "bg-black text-white border border-black"
-                                            : "border border-neutral-200 hover:bg-neutral-100"
-                                    )}
+                                    className="h-7 px-2 text-xs"
                                 >
                                     Sec
-                                </button>
-                                <button
+                                </Button>
+                                <Button
+                                    size="sm"
+                                    variant={rewardRateSpan === RewardRateSpan.DAY ? "primary" : "outline"}
                                     onClick={() => setRewardRateSpan(RewardRateSpan.DAY)}
-                                    className={cn(
-                                        "py-1 px-2 text-xs rounded-lg transition-colors",
-                                        rewardRateSpan === RewardRateSpan.DAY
-                                            ? "bg-black text-white border border-black"
-                                            : "border border-neutral-200 hover:bg-neutral-100"
-                                    )}
+                                    className="h-7 px-2 text-xs"
                                 >
                                     Day
-                                </button>
-                                <button
+                                </Button>
+                                <Button
+                                    size="sm"
+                                    variant={rewardRateSpan === RewardRateSpan.MONTH ? "primary" : "outline"}
                                     onClick={() => setRewardRateSpan(RewardRateSpan.MONTH)}
-                                    className={cn(
-                                        "py-1 px-2 text-xs rounded-lg transition-colors",
-                                        rewardRateSpan === RewardRateSpan.MONTH
-                                            ? "bg-black text-white border border-black"
-                                            : "border border-neutral-200 hover:bg-neutral-100"
-                                    )}
+                                    className="h-7 px-2 text-xs"
                                 >
                                     Month
-                                </button>
+                                </Button>
                             </div>
                         </div>
                     </div>
+
+                    {/* Rewards Left */}
                     <div>
-                        <div className="text-xs text-neutral-500 mb-2">Rewards left for</div>
+                        <p className="text-xs font-medium text-text/50 uppercase tracking-wider mb-2">Rewards Left For</p>
                         <div className="flex items-center justify-between">
-                            <div className="text-sm">{rewardLeftFor}</div>
+                            <p className="text-sm text-text">{rewardLeftFor}</p>
                             <div className="flex items-center gap-2">
-                                <button
+                                <Button
+                                    size="sm"
+                                    variant={rewardLeftForSpan === RewardLeftForSpan.MINUTES ? "primary" : "outline"}
                                     onClick={() => setRewardLeftForSpan(RewardLeftForSpan.MINUTES)}
-                                    className={cn(
-                                        "py-1 px-2 text-xs rounded-lg transition-colors",
-                                        rewardLeftForSpan === RewardLeftForSpan.MINUTES
-                                            ? "bg-black text-white border border-black"
-                                            : "border border-neutral-200 hover:bg-neutral-100"
-                                    )}
+                                    className="h-7 px-2 text-xs"
                                 >
                                     Min
-                                </button>
-                                <button
+                                </Button>
+                                <Button
+                                    size="sm"
+                                    variant={rewardLeftForSpan === RewardLeftForSpan.HOURS ? "primary" : "outline"}
                                     onClick={() => setRewardLeftForSpan(RewardLeftForSpan.HOURS)}
-                                    className={cn(
-                                        "py-1 px-2 text-xs rounded-lg transition-colors",
-                                        rewardLeftForSpan === RewardLeftForSpan.HOURS
-                                            ? "bg-black text-white border border-black"
-                                            : "border border-neutral-200 hover:bg-neutral-100"
-                                    )}
+                                    className="h-7 px-2 text-xs"
                                 >
                                     Hour
-                                </button>
-                                <button
+                                </Button>
+                                <Button
+                                    size="sm"
+                                    variant={rewardLeftForSpan === RewardLeftForSpan.DAYS ? "primary" : "outline"}
                                     onClick={() => setRewardLeftForSpan(RewardLeftForSpan.DAYS)}
-                                    className={cn(
-                                        "py-1 px-2 text-xs rounded-lg transition-colors",
-                                        rewardLeftForSpan === RewardLeftForSpan.DAYS
-                                            ? "bg-black text-white border border-black"
-                                            : "border border-neutral-200 hover:bg-neutral-100"
-                                    )}
+                                    className="h-7 px-2 text-xs"
                                 >
                                     Day
-                                </button>
+                                </Button>
                             </div>
                         </div>
                     </div>
                 </>
             )}
-            <div className="flex gap-2 w-full mt-8">
+
+            {/* Action Buttons */}
+            <div className="flex gap-2 w-full mt-6 pt-4 border-t border-border">
                 {!isDeactivated && (
                     <ManageRewardsModal
                         title={"Refill"}
@@ -166,9 +206,7 @@ const FarmRewardDetails = ({ token, rate, reward, incentiveKey, isBonus, rewardR
                         rewardRates={rewardRates}
                         isBonus={isBonus}
                     >
-                        <button className="w-full py-2 px-4 bg-black text-white text-sm font-medium rounded-lg hover:bg-neutral-800 transition-colors">
-                            Refill
-                        </button>
+                        <Button className="flex-1">Refill</Button>
                     </ManageRewardsModal>
                 )}
                 <ManageRewardsModal
@@ -178,9 +216,9 @@ const FarmRewardDetails = ({ token, rate, reward, incentiveKey, isBonus, rewardR
                     rewardRates={rewardRates}
                     isBonus={isBonus}
                 >
-                    <button className="w-full py-2 px-4 bg-black text-white text-sm font-medium rounded-lg hover:bg-neutral-800 transition-colors">
+                    <Button variant="outline" className="flex-1">
                         Withdraw
-                    </button>
+                    </Button>
                 </ManageRewardsModal>
                 {!isDeactivated && (
                     <ManageRewardsModal
@@ -190,12 +228,30 @@ const FarmRewardDetails = ({ token, rate, reward, incentiveKey, isBonus, rewardR
                         rewardRates={rewardRates}
                         isBonus={isBonus}
                     >
-                        <button className="w-full py-2 px-4 bg-black text-white text-sm font-medium rounded-lg hover:bg-neutral-800 transition-colors">
+                        <Button variant="outline" className="flex-1">
                             Change Rate
-                        </button>
+                        </Button>
                     </ManageRewardsModal>
                 )}
             </div>
+
+            {/* ALM Integration */}
+            {!almError && (
+                <Button
+                    onClick={onEnableAlmFarming}
+                    disabled={isRewardEnabledForALM || isLoadingAlm || isRewardEnabledForALMLoading}
+                    variant="outline"
+                    className="w-full mt-4"
+                >
+                    {isLoadingAlm || isRewardEnabledForALMLoading ? (
+                        <Loader color="currentColor" />
+                    ) : isRewardEnabledForALM ? (
+                        "Enabled for ALM"
+                    ) : (
+                        "Enable for ALM"
+                    )}
+                </Button>
+            )}
         </div>
     );
 };

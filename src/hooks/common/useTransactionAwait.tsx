@@ -5,7 +5,13 @@ import { ExternalLinkIcon } from "lucide-react";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Address } from "viem";
-import { useWaitForTransactionReceipt } from "wagmi";
+import { useAccount, useWaitForTransactionReceipt } from "wagmi";
+
+export interface TransactionInfo {
+    title: string;
+    description?: string;
+    callback?: () => void;
+}
 
 export const ViewTxOnExplorer = ({ hash }: { hash: Address | undefined }) => {
     const { caipNetwork: chain } = useAppKitNetwork();
@@ -26,52 +32,52 @@ export const ViewTxOnExplorer = ({ hash }: { hash: Address | undefined }) => {
     );
 };
 
-export function useTransactionAwait(
-    hash: Address | undefined,
-    title: string,
-    description?: string,
-    redirectPath?: string
-) {
+export function useTransactionAwait(hash: Address | undefined, transactionInfo: TransactionInfo, redirectPath?: string) {
     const { toast } = useToast();
 
     const navigate = useNavigate();
+
+    const { address: account } = useAccount();
 
     const { data, isError, isLoading, isSuccess } = useWaitForTransactionReceipt({
         hash,
     });
 
     useEffect(() => {
-        if (isLoading && hash) {
+        if (isLoading && hash && account) {
             toast({
-                title: title,
-                description: description || "Transaction was sent",
+                title: transactionInfo.title,
+                description: transactionInfo.description || "Transaction was sent",
                 action: <ViewTxOnExplorer hash={hash} />,
             });
         }
-    }, [isLoading, hash]);
+    }, [isLoading, hash, account]);
 
     useEffect(() => {
         if (isError && hash) {
             toast({
-                title: title,
-                description: description || "Transaction failed",
+                title: transactionInfo.title,
+                description: transactionInfo.description || "Transaction failed",
                 action: <ViewTxOnExplorer hash={hash} />,
             });
         }
-    }, [isError, hash]);
+    }, [isError]);
 
     useEffect(() => {
         if (isSuccess && hash) {
             toast({
-                title: title,
-                description: description || "Transaction confirmed",
+                title: transactionInfo.title,
+                description: transactionInfo.description || "Transaction confirmed",
                 action: <ViewTxOnExplorer hash={hash} />,
             });
+            if (transactionInfo.callback) {
+                transactionInfo.callback();
+            }
             if (redirectPath) {
                 navigate(redirectPath);
             }
         }
-    }, [isSuccess, hash]);
+    }, [isSuccess]);
 
     return {
         data,

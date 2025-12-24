@@ -6,7 +6,7 @@
     "scripts": {
         "dev": "vite",
         "wagmi-generate": "wagmi generate",
-        "build": "yarn codegen && yarn wagmi-generate && vite build",
+        "build": "vite build",
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
         "preview": "vite preview",
         "codegen": "graphql-codegen --config codegen.ts",
@@ -14,7 +14,8 @@
     },
     "dependencies": {
         "@apollo/client": "^3.8.4",
-        "@cryptoalgebra/integral-sdk": "npm:@cryptoalgebra/sophon-os-sdk@1.0.0",
+        "@cryptoalgebra/alm-sdk": "^1.0.14",
+        "@cryptoalgebra/integral-sdk": "^1.0.3",
         "@radix-ui/react-checkbox": "^1.0.4",
         "@radix-ui/react-dialog": "^1.0.5",
         "@radix-ui/react-select": "^2.0.0",
@@ -37,6 +38,7 @@
         "react-hook-form": "^7.51.0",
         "react-router-dom": "^6.16.0",
         "react-window": "^1.8.10",
+        "swr": "^2.3.7",
         "tailwind-merge": "^3.3.1",
         "tailwindcss": "^4.1.10",
         "vaul": "^0.9.0",

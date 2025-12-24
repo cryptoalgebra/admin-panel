@@ -7,10 +7,7 @@ import { useWriteContract } from "wagmi";
 import { useTransactionAwait } from "./useTransactionAwait";
 import { formatCurrency } from "@/utils/common/formatCurrency";
 
-export function useApprove(
-    amountToApprove: CurrencyAmount<Currency> | undefined,
-    spender: Address
-) {
+export function useApprove(amountToApprove: CurrencyAmount<Currency> | undefined, spender: Address) {
     const token = amountToApprove?.currency?.isToken ? amountToApprove.currency : undefined;
     const [shouldPolling, setShouldPolling] = useState(false);
 

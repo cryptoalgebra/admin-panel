@@ -13,7 +13,7 @@
     --text-200: #ffffff1a; /* muted text color */
 
     /* BACKGROUND */
-    --bg-100: #fafafa; /* app background */
-    --bg-200: #f5f5f5; /* card background */
+    --bg-100: #ffffff; /* app background */
+    --bg-200: #fafafa; /* card background */
     --bg-300: #dedede; /* border color */
 }

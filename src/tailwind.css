@@ -23,7 +23,7 @@
     --color-foreground: var(--text-100);
 
     --color-primary: var(--primary-100);
-    --color-primary-foreground: var(--text-100);
+    --color-primary-foreground: white;
     --color-primary-button: var(--primary-100);
     --color-primary-text: var(--primary-300);
 
@@ -43,7 +43,7 @@
     --color-popover: var(--bg-200);
     --color-popover-foreground: var(--text-100);
 
-    --color-card: var(--bg-200);
+    --color-card: white;
     --color-card-foreground: var(--text-100);
     --color-card-hover: color-mix(in srgb, var(--bg-200) 50%, transparent);
     --color-card-dark: var(--bg-100);

@@ -1,4 +1,5 @@
 // import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from "@/components/ui/toaster";
 import AdminAccount from "../AdminAccount";
 import Header from "../Header";
 
@@ -12,7 +13,7 @@ const Layout = ({ children }: LayoutProps) => {
             <AdminAccount />
             <Header />
             <main className="h-full">{children}</main>
-            {/* <Toaster/> */}
+            <Toaster />
         </div>
     );
 };

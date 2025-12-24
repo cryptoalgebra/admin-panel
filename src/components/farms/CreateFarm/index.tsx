@@ -8,7 +8,7 @@ import { Address, parseUnits } from "viem";
 import { formatCurrency } from "@/utils/common/formatCurrency";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useActiveFarmingForPoolQuery, useAllPoolsQuery } from "@/graphql/generated/graphql";
+import { useActiveFarmingForPoolQuery, useAllPoolsQuery, useCustomPoolDeployerQuery } from "@/graphql/generated/graphql";
 import CurrencyLogo from "@/components/common/CurrencyLogo";
 import { DEFAULT_CHAIN_ID } from "config/default-chain";
 import Loader from "@/components/common/Loader";
@@ -18,6 +18,8 @@ import { useReadAlgebraEternalFarmingNumOfIncentives } from "@/generated";
 import { IRewards } from "@/types/rewards";
 import { cn } from "@/lib/utils";
 import { useClients } from "@/hooks/graphql/useClients";
+import { CUSTOM_POOL_DEPLOYER_TITLES } from "config/custom-pool-deployer";
+import { Button } from "@/components/ui/button";
 
 interface IFormState {
     pool: string | undefined;
@@ -27,6 +29,7 @@ interface IFormState {
     bonusRewardAmount: string | undefined;
     rewardRate: string | undefined;
     bonusRewardRate: string | undefined;
+    minimalPositionWidth: string | undefined;
 }
 
 const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`);
@@ -51,7 +54,7 @@ const InputNumber = ({
         disabled={disabled}
         control={control}
         rules={{
-            required: `Enter ${title}`,
+            required: isRequired ? `Enter ${title}` : false,
             validate: {
                 required: () => `Enter ${title}`,
             },
@@ -59,7 +62,7 @@ const InputNumber = ({
         render={({ field: { onChange, value }, fieldState: { invalid } }) => (
             <div
                 className={cn(
-                    "flex items-end w-full h-[62px] relative group bg-white rounded-lg border border-neutral-200 focus-within:border-neutral-400 transition-colors",
+                    "flex items-end w-full h-[62px] relative group bg-white rounded-2xl border border-solid border-[#eaeaea] focus-within:bg-white focus-within:border-[#8248E5]",
                     disabled ? "opacity-30 pointer-events-none" : ""
                 )}
             >
@@ -68,7 +71,7 @@ const InputNumber = ({
                     required={isRequired}
                     autoComplete="off"
                     autoCorrect="off"
-                    className="w-full h-[42px] px-4 text-sm peer outline-none rounded-lg bg-inherit"
+                    className="w-full h-[42px] px-4 text-[18px] peer outline-none rounded-2xl bg-inherit"
                     pattern="^[0-9]*[.,]?[0-9]*$"
                     spellCheck="false"
                     inputMode="decimal"
@@ -87,16 +90,16 @@ const InputNumber = ({
                 <label
                     htmlFor={name}
                     className={
-                        isRequired
-                            ? "transform transition-all absolute top-0 left-0 h-full flex items-center pl-5 text-sm cursor-text group-focus-within:text-xs peer-valid:text-xs group-focus-within:h-1/2 peer-valid:h-1/2 group-focus-within:-translate-y-[0px] group-focus-within:translate-x-[16px] peer-valid:-translate-y-[0px] peer-valid:translate-x-[16px] group-focus-within:text-neutral-500 peer-valid:text-neutral-500 group-focus-within:pl-0 peer-valid:pl-0"
-                            : `transform transition-all absolute top-0 left-0 h-full flex items-center pl-5 text-sm cursor-text group-focus-within:text-xs group-focus-within:h-1/2 group-focus-within:-translate-y-[0px] group-focus-within:translate-x-[16px] group-focus-within:text-neutral-500 group-focus-within:pl-0`
+                        (isRequired && value) || (!isRequired && value)
+                            ? "transform transition-all absolute top-0 left-0 h-full flex items-center pl-5 text-[16px] cursor-text group-focus-within:text-xs peer-valid:text-xs group-focus-within:h-1/2 peer-valid:h-1/2 group-focus-within:-translate-y-[0px] group-focus-within:translate-x-[16px] peer-valid:-translate-y-[0px] peer-valid:translate-x-[16px] group-focus-within:opacity-40 peer-valid:opacity-40 group-focus-within:pl-0 peer-valid:pl-0"
+                            : `transform transition-all absolute top-0 left-0 h-full flex items-center pl-5 text-[16px] cursor-text group-focus-within:text-xs group-focus-within:h-1/2 group-focus-within:-translate-y-[0px] group-focus-within:translate-x-[16px] group-focus-within:opacity-40 group-focus-within:pl-0`
                     }
                 >
                     {title}
                 </label>
-                {!value && <span className="absolute text-red-500 top-4 right-5 text-[22px]">*</span>}
-                {!invalid && !disabled && (
-                    <span className={`absolute text-[#DB0170] top-5 right-5 text-[22px] peer-valid:inline peer-invalid:hidden`}>
+                {isRequired && !value && <span className="absolute text-red-500 top-4 right-5 text-[22px]">*</span>}
+                {!invalid && !disabled && value?.toString().trim() !== "" && (
+                    <span className="absolute text-[#DB0170] top-5 right-5 text-[22px]">
                         <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M4 11L9.5 16.5L19.5 6.5"
@@ -112,6 +115,45 @@ const InputNumber = ({
         )}
     />
 );
+
+export const InputToggle = ({
+    title,
+    name,
+    control,
+    disabled,
+    isRequired,
+}: {
+    title: string;
+    name: keyof IFormState;
+    control: Control<IFormState>;
+    disabled?: boolean;
+    isRequired?: boolean;
+}) => {
+    return (
+        <Controller
+            name={name}
+            control={control}
+            rules={{
+                required: isRequired ? `Select ${title}` : false,
+            }}
+            render={({ field: { value, onChange }, fieldState: { error } }) => (
+                <div
+                    className={cn(
+                        "flex items-center gap-2 p-5 bg-white rounded-2xl border border-[#eaeaea]",
+                        disabled ? "opacity-30 pointer-events-none" : ""
+                    )}
+                >
+                    <label htmlFor={name} className="flex-1 cursor-pointer">
+                        {title}
+                        {isRequired && <span className="text-red-500 ml-1">*</span>}
+                    </label>
+                    <Switch id={name} checked={!!value} onCheckedChange={onChange} disabled={disabled} />
+                    {error && <span className="text-red-500 text-xs absolute -bottom-4 right-0">{error.message}</span>}
+                </div>
+            )}
+        />
+    );
+};
 
 const RewardRate = ({
     title,
@@ -166,15 +208,16 @@ const Reward = ({ control, name }: { control: Control<IFormState>; name: "reward
                                 setCurrency(currency);
                             }}
                         >
-                            <button
-                                className={`flex items-center justify-between gap-2 w-full px-4 py-3 bg-white border border-neutral-200 rounded-lg text-left text-sm hover:bg-neutral-50 transition-colors`}
+                            <Button
+                                variant="outline"
+                                className="flex items-center justify-between gap-2 w-full px-4 py-3 h-auto text-left"
                                 onClick={() => setIsOpen(true)}
                             >
                                 <span className="inline-flex items-center gap-2">
                                     {value && <CurrencyLogo currency={value} size={20} />}
                                     <span>{value ? value.symbol : `Select Token`}</span>
                                     {value && balance && (
-                                        <span className="px-2 py-0.5 bg-neutral-100 rounded text-xs">{`${formatCurrency.format(
+                                        <span className="px-2 bg-bg-200 rounded-xl">{`${formatCurrency.format(
                                             +balance.formatted
                                         )}`}</span>
                                     )}
@@ -182,17 +225,19 @@ const Reward = ({ control, name }: { control: Control<IFormState>; name: "reward
                                 <span>
                                     <ChevronRight size={14} />
                                 </span>
-                            </button>
+                            </Button>
                         </TokenSelectorModal>
                         {value && (
-                            <button
+                            <Button
+                                variant="ghost"
+                                size="icon"
                                 onClick={() => {
                                     onChange(undefined);
                                     setCurrency(undefined);
                                 }}
                             >
                                 <X color={"red"} size={16} />
-                            </button>
+                            </Button>
                         )}
                     </div>
                 </>
@@ -217,29 +262,38 @@ const CreateFarm = () => {
 
     const rewardToken = watch("rewardToken");
     const bonusRewardToken = watch("bonusRewardToken");
-    const pool = watch("pool");
+    const poolAddress = watch("pool");
 
     const rewardAmount = watch("rewardAmount");
     const rewardRate = watch("rewardRate");
     const bonusRewardAmount = watch("bonusRewardAmount");
     const bonusRewardRate = watch("bonusRewardRate");
 
-    const { data: activeFarming, loading: isFarmingLoading } = useActiveFarmingForPoolQuery({
-        skip: Boolean(!pool),
-        client: farmingClient,
+    const minimalPositionWidth = watch("minimalPositionWidth");
+
+    const { data: poolDeployer } = useCustomPoolDeployerQuery({
         variables: {
-            poolId: pool,
+            poolId: poolAddress?.toLowerCase() || "",
         },
     });
 
-    const isPoolAvailable = !isFarmingLoading && activeFarming && activeFarming.eternalFarmings.length === 0;
+    const { data: activeFarming, loading: isFarmingLoading } = useActiveFarmingForPoolQuery({
+        skip: Boolean(!poolAddress),
+        client: farmingClient,
+        variables: {
+            poolId: poolAddress,
+        },
+    });
+
+    const isPoolAvailable =
+        !isFarmingLoading && activeFarming && activeFarming.eternalFarmings.length === 0 && poolDeployer?.pool?.deployer;
 
     const { data: nonce } = useReadAlgebraEternalFarmingNumOfIncentives();
 
     const incentveKey: PartialIncentiveKey = {
         rewardToken: rewardToken ? (rewardToken.wrapped.address as Address) : undefined,
         bonusRewardToken: bonusRewardToken ? (bonusRewardToken.wrapped.address as Address) : undefined,
-        pool: pool ? (pool as Address) : undefined,
+        pool: poolAddress ? (poolAddress as Address) : undefined,
         nonce,
     };
 
@@ -258,10 +312,10 @@ const CreateFarm = () => {
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 md:gap-8 w-full">
-            <div className="flex flex-col gap-4 p-6 bg-white border border-neutral-200 rounded-lg h-fit">
+            <div className="flex flex-col gap-4 p-8 -mx-8 md:mx-0 h-fit md:border border-border md:rounded-xl">
                 <label className="text-lg font-semibold">1. Select a pool</label>
                 <PoolSelector control={control} reset={reset} />
-                {pool ? (
+                {poolAddress ? (
                     isFarmingLoading ? (
                         <Loader size={18} color="currentColor" />
                     ) : isPoolAvailable ? (
@@ -273,8 +327,8 @@ const CreateFarm = () => {
             </div>
 
             {isPoolAvailable && (
-                <div className="p-6 bg-white border border-neutral-200 rounded-lg">
-                    <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
+                <div className="p-8 -mx-8 md:mx-0 md:border rounded-xl">
+                    <form className="flex flex-col gap-4 " onSubmit={handleSubmit(onSubmit)}>
                         <div className="flex flex-col gap-4">
                             <div className="flex flex-col md:flex-row justify-between">
                                 <div className="text-lg font-semibold">2. Add rewards</div>
@@ -307,7 +361,7 @@ const CreateFarm = () => {
 
                         {hasSecondReward && (
                             <>
-                                <div className="text-sm font-semibold">Second Reward</div>
+                                <div className="text-base font-bold">Second Reward</div>
 
                                 <Reward control={control} name={"bonusRewardToken"} />
 
@@ -330,8 +384,27 @@ const CreateFarm = () => {
                                 />
                             </>
                         )}
+                        <div className="flex flex-col gap-4">
+                            <div className="text-lg font-semibold">3. Configure</div>
 
-                        <CreateFarmButton hasSecondReward={hasSecondReward} incentiveKey={incentveKey} rewards={rewards} />
+                            <InputNumber
+                                control={control}
+                                name={"minimalPositionWidth"}
+                                title={`Minimal position width`}
+                                isRequired={false}
+                                maxDecimals={0}
+                            />
+
+                            {/* <InputToggle title="Enable farming for ALM" name={"enableAlmFarming"} control={control} isRequired={false} /> */}
+                        </div>
+
+                        <CreateFarmButton
+                            hasSecondReward={hasSecondReward}
+                            incentiveKey={incentveKey}
+                            rewards={rewards}
+                            minimalPositionWidth={Number(minimalPositionWidth || 0)}
+                            poolDeployer={poolDeployer.pool?.deployer}
+                        />
                     </form>
                 </div>
             )}
@@ -339,7 +412,7 @@ const CreateFarm = () => {
     );
 };
 
-const PoolSelector = ({ control, reset }: { control: Control<IFormState>; reset: () => void }) => {
+export const PoolSelector = ({ control, reset }: { control: Control<IFormState>; reset: () => void }) => {
     const { data: pools } = useAllPoolsQuery();
 
     const formattedPools = useMemo(() => {
@@ -349,6 +422,7 @@ const PoolSelector = ({ control, reset }: { control: Control<IFormState>; reset:
             id: pool.id,
             token0: pool.token0,
             token1: pool.token1,
+            deployer: pool.deployer,
             name: `${pool.token0.symbol} / ${pool.token1.symbol}`,
         }));
     }, [pools]);
@@ -376,10 +450,11 @@ const PoolSelector = ({ control, reset }: { control: Control<IFormState>; reset:
                     <SelectContent>
                         {formattedPools.map((pool) => (
                             <SelectItem key={pool.id} value={pool.id} className="px-2">
-                                <div className="flex w-full gap-1 text-sm">
+                                <div className="flex w-full gap-1">
                                     <CurrencyLogo currency={new Token(DEFAULT_CHAIN_ID, pool.token0.id, +pool.token0.decimals)} size={20} />
                                     <CurrencyLogo currency={new Token(DEFAULT_CHAIN_ID, pool.token1.id, +pool.token1.decimals)} size={20} />
                                     <span className="ml-2">{pool.name}</span>
+                                    <span className="ml-2">{CUSTOM_POOL_DEPLOYER_TITLES[pool.deployer]}</span>
                                 </div>
                             </SelectItem>
                         ))}

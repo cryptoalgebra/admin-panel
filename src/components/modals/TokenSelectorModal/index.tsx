@@ -1,4 +1,5 @@
 import { TokenSelector } from "@/components/common/TokenSelector";
+import { Button } from "@/components/ui/button";
 import {
     Credenza,
     CredenzaBody,
@@ -9,6 +10,7 @@ import {
     CredenzaTrigger,
 } from "@/components/ui/credenza";
 import { Currency } from "@cryptoalgebra/integral-sdk";
+import { X } from "lucide-react";
 
 interface ITokenSelectorModal {
     isOpen: boolean;
@@ -20,7 +22,7 @@ interface ITokenSelectorModal {
 
 const TokenSelectorModal = ({ isOpen, setIsOpen, onSelect, otherCurrency, children }: ITokenSelectorModal) => {
     return (
-        <Credenza open={isOpen}>
+        <Credenza open={isOpen} onOpenChange={setIsOpen}>
             <CredenzaTrigger asChild>{children}</CredenzaTrigger>
             <CredenzaContent
                 className="bg-white rounded-lg"
@@ -34,27 +36,15 @@ const TokenSelectorModal = ({ isOpen, setIsOpen, onSelect, otherCurrency, childr
                     <TokenSelector onSelect={onSelect} otherCurrency={otherCurrency} />
                 </CredenzaBody>
                 <CredenzaClose asChild>
-                    <button
-                        className="absolute right-4 top-4 rounded-sm opacity-70"
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="absolute right-4 top-4 h-8 w-8"
                         onClick={() => setIsOpen(false)}
                         style={{ zIndex: 999 }}
                     >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="h-4 w-4"
-                        >
-                            <path d="M18 6 6 18"></path>
-                            <path d="m6 6 12 12"></path>
-                        </svg>
-                    </button>
+                        <X className="h-4 w-4" />
+                    </Button>
                 </CredenzaClose>
             </CredenzaContent>
         </Credenza>

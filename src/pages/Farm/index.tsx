@@ -37,6 +37,8 @@ const FarmPage = () => {
         nonce,
         rewardRates,
         isDeactivated,
+        minimalPositionWidth,
+        poolDeployer,
     } = useFarmData(singleFarming?.eternalFarming);
 
     const isPoolReady = token0 && token1 && pool;
@@ -50,17 +52,22 @@ const FarmPage = () => {
 
     return (
         <PageContainer>
-            <Link to={"/farms"} className="flex items-center gap-2 mb-4 hover:text-black/70">
+            <Link to={"/farms"} className="flex items-center gap-2 mb-6 text-text/70 hover:text-text transition-colors">
                 <ArrowLeft size={16} />
-                <span>Back</span>
+                <span>Back to Farms</span>
             </Link>
             <div className="mb-8">
                 {token0 && token1 && (
-                    <div className="font-bold text-2xl">
-                        {`Farm for ${token0.symbol} / ${token1.symbol} pool`}
-                        {isDeactivated && <span className="text-red-500 ml-4">Deactivated</span>}
+                    <div className="flex items-center gap-3">
+                        <h1 className="font-semibold text-2xl text-text">{`${token0.symbol} / ${token1.symbol}`}</h1>
+                        {isDeactivated && (
+                            <span className="text-xs font-medium px-2 py-1 bg-red-50 text-red-600 border border-red-200 rounded-full">
+                                Deactivated
+                            </span>
+                        )}
                     </div>
                 )}
+                <p className="text-sm text-text/50 mt-1">Farm Management</p>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
                 {rewardToken && reward ? (
@@ -73,7 +80,9 @@ const FarmPage = () => {
                         isDeactivated={isDeactivated}
                     />
                 ) : (
-                    <div className="flex items-center justify-center w-full border rounded-xl">Farm doesn't have first reward</div>
+                    <div className="flex items-center justify-center w-full p-6 bg-card border border-border rounded-lg">
+                        <p className="text-sm text-text/50">Farm doesn't have first reward</p>
+                    </div>
                 )}
                 {bonusRewardToken && bonusReward ? (
                     <FarmRewardDetails
@@ -86,11 +95,19 @@ const FarmPage = () => {
                         isDeactivated={isDeactivated}
                     />
                 ) : (
-                    <div className="flex items-center justify-center w-full border rounded-xl">Farm doesn't have second reward</div>
+                    <div className="flex items-center justify-center w-full p-6 bg-card border border-border rounded-lg">
+                        <p className="text-sm text-text/50">Farm doesn't have second reward</p>
+                    </div>
                 )}
                 {isPoolReady ? <FarmPoolDetails name={`${token0.symbol} / ${token1.symbol}`} id={pool} /> : <div></div>}
                 {farm && isPoolReady ? (
-                    <FarmDetails id={farm} incentiveKey={incentiveKey as IncentiveKey} isDeactivated={isDeactivated} />
+                    <FarmDetails
+                        id={farm}
+                        incentiveKey={incentiveKey as IncentiveKey}
+                        isDeactivated={isDeactivated}
+                        minimalPositionWidth={minimalPositionWidth}
+                        poolDeployer={poolDeployer}
+                    />
                 ) : null}
             </div>
         </PageContainer>

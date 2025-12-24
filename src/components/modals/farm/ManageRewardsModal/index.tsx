@@ -1,8 +1,8 @@
 import Loader from "@/components/common/Loader";
+import { Button } from "@/components/ui/button";
 import { Credenza, CredenzaBody, CredenzaContent, CredenzaHeader, CredenzaTitle, CredenzaTrigger } from "@/components/ui/credenza";
 import { ALGEBRA_ETERNAL_FARMING } from "config/contract-addresses";
 import { DEFAULT_CHAIN_ID } from "config/default-chain";
-import { eternalFarmingABI } from "config/abis";
 import { useApprove } from "@/hooks/common/useApprove";
 import { useTransactionAwait } from "@/hooks/common/useTransactionAwait";
 import { ApprovalState } from "@/types/approve-state";
@@ -11,6 +11,7 @@ import { Token, tryParseAmount } from "@cryptoalgebra/integral-sdk";
 import { useState } from "react";
 import { parseUnits } from "viem";
 import { useWriteContract } from "wagmi";
+import { algebraEternalFarmingABI } from "config/abis";
 
 type ManageFunctions = "addRewards" | "setRates" | "decreaseRewardsAmount";
 
@@ -53,9 +54,9 @@ const ManageRewardsModal = ({ title, functionName, incentiveKey, rewardRates, is
         (functionName === "addRewards" && approvalStateReward === ApprovalState.NOT_APPROVED) ||
         approvalStateReward === ApprovalState.PENDING;
 
-    const { data, writeContract } = useWriteContract();
+    const { data, writeContract, isPending } = useWriteContract();
 
-    const { isLoading } = useTransactionAwait(data, title);
+    const { isLoading } = useTransactionAwait(data, { title });
 
     return (
         <Credenza>
@@ -69,7 +70,7 @@ const ManageRewardsModal = ({ title, functionName, incentiveKey, rewardRates, is
                         required
                         autoComplete="off"
                         autoCorrect="off"
-                        className="w-full h-[42px] px-4 text-sm border border-neutral-200 outline-none rounded-lg bg-inherit focus:border-neutral-400 transition-colors"
+                        className="w-full h-[42px] px-4 text-sm border border-border outline-none rounded-lg bg-inherit focus:border-text/40 transition-colors"
                         pattern="^[0-9]*[.,]?[0-9]*$"
                         spellCheck="false"
                         inputMode="decimal"
@@ -77,12 +78,6 @@ const ManageRewardsModal = ({ title, functionName, incentiveKey, rewardRates, is
                         maxLength={100}
                         value={value}
                         placeholder="Enter amount"
-                        // onChange={(e) => {
-                        //     const value = e.target.value.replace(/,/g, ".")
-                        //     if (value === "" || RegExp(`^\\d*(?:\\\\[.])?\\d*$`).test(value.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))) {
-                        //         setValue(value === '.' ? '0.' : value)
-                        //     }
-                        // }}
                         onChange={(e) => {
                             let value = e.target.value.replace(/,/g, ".");
                             value =
@@ -98,28 +93,28 @@ const ManageRewardsModal = ({ title, functionName, incentiveKey, rewardRates, is
                         }}
                     />
                     {showApproveReward ? (
-                        <button
+                        <Button
                             disabled={approvalStateReward !== ApprovalState.NOT_APPROVED}
                             onClick={() => approvalCallbackReward && approvalCallbackReward()}
-                            className="flex justify-center w-full py-2 px-4 bg-black text-white text-sm rounded-lg hover:bg-neutral-800 disabled:bg-neutral-400 transition-colors"
+                            className="w-full"
                         >
                             {approvalStateReward === ApprovalState.PENDING ? <Loader /> : `Approve`}
-                        </button>
+                        </Button>
                     ) : (
-                        <button
-                            disabled={!value || isLoading}
+                        <Button
+                            disabled={!value || isLoading || isPending}
                             onClick={() =>
                                 writeContract({
                                     address: ALGEBRA_ETERNAL_FARMING[DEFAULT_CHAIN_ID],
-                                    abi: eternalFarmingABI,
+                                    abi: algebraEternalFarmingABI,
                                     functionName,
                                     args: [incentiveKey, args[0], args[1]],
                                 })
                             }
-                            className="flex justify-center w-full py-2 px-4 bg-black text-white text-sm rounded-lg hover:bg-neutral-800 disabled:bg-neutral-400 transition-colors"
+                            className="w-full"
                         >
-                            {isLoading ? <Loader color="currentColor" /> : "Confirm"}
-                        </button>
+                            {isLoading || isPending ? <Loader color="currentColor" /> : "Confirm"}
+                        </Button>
                     )}
                 </CredenzaBody>
             </CredenzaContent>

@@ -1,4 +1,5 @@
 import Loader from "@/components/common/Loader";
+import { Button } from "@/components/ui/button";
 import { Credenza, CredenzaBody, CredenzaContent, CredenzaHeader, CredenzaTitle, CredenzaTrigger } from "@/components/ui/credenza";
 import { Switch } from "@/components/ui/switch";
 import { PluginFlags } from "@/types/pool-plugin-flags";
@@ -34,17 +35,14 @@ const ManagePluginConfigModal = ({
                 <CredenzaBody className={"flex flex-col gap-4"}>
                     <div className="flex justify-between items-center">
                         <div>
-                            <p className="text-xs text-neutral-500 mb-1">Plugin Config (uint8)</p>
+                            <p className="text-xs text-text/50 mb-1">Plugin Config (uint8)</p>
                             <p className="text-sm">{pluginConfig}</p>
                         </div>
-                        <button
-                            onClick={onReset}
-                            className="flex items-center h-fit justify-center border border-neutral-200 py-1 px-3 text-xs rounded-lg hover:bg-neutral-100 transition-colors"
-                        >
+                        <Button variant="outline" size="sm" onClick={onReset}>
                             reset
-                        </button>
+                        </Button>
                     </div>
-                    <hr className="border-neutral-200" />
+                    <hr className="border-border" />
                     {Object.entries(flags).map(([flag, value]) => (
                         <label className="flex justify-between items-center" key={flag}>
                             <span className="text-sm">
@@ -53,13 +51,9 @@ const ManagePluginConfigModal = ({
                             <Switch onCheckedChange={() => onChange(flag as keyof PluginFlags)} checked={Boolean(value)} />
                         </label>
                     ))}
-                    <button
-                        disabled={isLoading}
-                        onClick={onConfirm}
-                        className="flex items-center justify-center py-2 px-4 w-full mt-auto bg-black text-white text-sm rounded-lg disabled:bg-neutral-400 hover:bg-neutral-800 transition-colors"
-                    >
+                    <Button disabled={isLoading} onClick={onConfirm} className="w-full">
                         {isLoading ? <Loader /> : "Confirm"}
-                    </button>
+                    </Button>
                 </CredenzaBody>
             </CredenzaContent>
         </Credenza>
