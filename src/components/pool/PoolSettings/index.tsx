@@ -1,33 +1,27 @@
 import DataWithCopyButton from "@/components/common/DataWithCopyButton";
 import ManagePoolSettingsModal from "@/components/modals/pool/ManagePoolSettingsModal";
 import ManageFeeModal from "@/components/modals/pool/ManageFeeModal";
+import PoolSecurityModal from "@/components/modals/pool/PoolSecurityModal";
 import { Button } from "@/components/ui/button";
 import { PLUGIN_FACTORY } from "config/contract-addresses";
 import { DEFAULT_CHAIN_ID } from "config/default-chain";
 import { usePool } from "@/hooks/pools/usePool";
 import { Address } from "viem";
 import { useReadContract } from "wagmi";
-import PoolActivationModal from "@/components/modals/pool/PoolActivationModal";
 import { pluginFactoryABI } from "config/abis";
-import { Settings } from "lucide-react";
+import { Lock, Settings } from "lucide-react";
 
 interface IPoolSettings {
     poolId: Address;
 }
 
 const PoolSettings = ({ poolId }: IPoolSettings) => {
-    // const { data: pluginId } = useReadAlgebraPoolPlugin({
-    //     address: poolId,
-    // });
-
     const { data: basePluginId } = useReadContract({
         address: PLUGIN_FACTORY[DEFAULT_CHAIN_ID],
         abi: pluginFactoryABI,
         functionName: "pluginByPool",
         args: [poolId],
     });
-
-    const isToActivate = false;
 
     const [, pool] = usePool(poolId);
 
@@ -76,31 +70,12 @@ const PoolSettings = ({ poolId }: IPoolSettings) => {
                 </div>
             </div>
 
-            {/* Pool Activation */}
             <div className="mt-6 pt-4 border-t border-border">
-                {isToActivate && basePluginId ? (
-                    <PoolActivationModal
-                        isToActivate={isToActivate}
-                        pluginId={basePluginId}
-                        poolId={poolId}
-                        title={`Activate Pool ${pool?.token0.symbol} / ${pool?.token1.symbol}`}
-                    >
-                        <Button variant="success" className="w-full">
-                            Activate Pool
-                        </Button>
-                    </PoolActivationModal>
-                ) : (
-                    <PoolActivationModal
-                        isToActivate={isToActivate}
-                        pluginId={"0x"}
-                        poolId={poolId}
-                        title={`Deactivate Pool ${pool?.token0.symbol} / ${pool?.token1.symbol}`}
-                    >
-                        <Button variant="destructive" className="w-full">
-                            Deactivate Pool
-                        </Button>
-                    </PoolActivationModal>
-                )}
+                <PoolSecurityModal poolId={poolId} title={`Pool Security: ${pool?.token0.symbol} / ${pool?.token1.symbol}`}>
+                    <Button variant="destructive" className="w-full">
+                        <Lock size={12} /> Manage Pool Security
+                    </Button>
+                </PoolSecurityModal>
             </div>
         </div>
     );

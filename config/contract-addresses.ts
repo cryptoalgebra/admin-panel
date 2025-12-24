@@ -6,9 +6,13 @@ export const ALGEBRA_FACTORY: Record<number, Address> = {
     [ChainId.BaseSepolia]: "0x285C74f3d01296F96c5d3858ab482f707e8Bfdfc",
 };
 
-/* Plugin Factory */
+/* Plugins */
 export const PLUGIN_FACTORY: Record<number, Address> = {
     [ChainId.BaseSepolia]: "0x54b589aC373Aad138e3689515ff5206afCe1ad41",
+};
+
+export const SECURITY_REGISTRY: Record<number, Address> = {
+    [ChainId.BaseSepolia]: "0x6aa9481De990bC12F906C5e8DE70D8556ac5ba2e",
 };
 
 /* Farming */

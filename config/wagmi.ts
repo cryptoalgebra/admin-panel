@@ -10,8 +10,9 @@ import {
     pluginFactoryABI,
     voterABI,
     votingRewardABI,
+    securityRegistryAbi,
 } from "./abis";
-import { ALGEBRA_ETERNAL_FARMING, ALGEBRA_FACTORY, FARMING_CENTER, PLUGIN_FACTORY, VOTER } from "./contract-addresses";
+import { ALGEBRA_ETERNAL_FARMING, ALGEBRA_FACTORY, FARMING_CENTER, PLUGIN_FACTORY, SECURITY_REGISTRY, VOTER } from "./contract-addresses";
 import { defineChain } from "viem";
 import { slidingFeePluginAbi } from "./abis/plugins/slidingFeePlugin";
 
@@ -60,6 +61,7 @@ const rawContracts = [
     { name: "Voter", abi: voterABI },
     { name: "VotingReward", abi: votingRewardABI },
     { name: "SlidingFeePlugin", abi: slidingFeePluginAbi },
+    { name: "SecurityRegistry", abi: securityRegistryAbi },
 ];
 
 const contractAddresses = {
@@ -68,6 +70,7 @@ const contractAddresses = {
     FarmingCenter: FARMING_CENTER,
     PluginFactory: PLUGIN_FACTORY,
     Voter: VOTER,
+    SecurityRegistry: SECURITY_REGISTRY,
 };
 
 export const wagmiContracts: ContractConfig[] = rawContracts.map((contract) => ({

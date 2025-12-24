@@ -12,14 +12,10 @@ export const PoolState = {
     INVALID: "INVALID",
 } as const;
 
-export type PoolStateType = (typeof PoolState)[keyof typeof PoolState];
+export type PoolStateType = typeof PoolState[keyof typeof PoolState];
 
 export function usePool(address: Address | undefined): [PoolStateType, Pool | null] {
-    const {
-        data: multicallData,
-        isLoading: isMulticallLoading,
-        isError: isMulticallError,
-    } = useReadContracts({
+    const { data: multicallData, isLoading: isMulticallLoading, isError: isMulticallError } = useReadContracts({
         allowFailure: false,
         contracts: address
             ? [
@@ -33,6 +29,7 @@ export function usePool(address: Address | undefined): [PoolStateType, Pool | nu
     });
 
     const [tickSpacing, globalState, liquidity, token0Address, token1Address] = multicallData || [];
+    const [sqrtRatioX96, tickCurrent, fee] = globalState || [];
 
     const token0 = useCurrency(token0Address);
     const token1 = useCurrency(token1Address);
@@ -43,11 +40,19 @@ export function usePool(address: Address | undefined): [PoolStateType, Pool | nu
     const isTokensLoading = !token0 || !token1;
 
     return useMemo(() => {
+        console.log(tickSpacing, globalState, liquidity, token0, token1);
         if ((isPoolLoading || isTokensLoading) && !isPoolError) return [PoolState.LOADING, null];
 
-        if (!tickSpacing || !globalState || liquidity === undefined) return [PoolState.NOT_EXISTS, null];
+        if (!token0 || !token1) return [PoolState.NOT_EXISTS, null];
 
-        if (globalState[0] === 0n || !token0 || !token1) return [PoolState.NOT_EXISTS, null];
+        if (
+            sqrtRatioX96 === undefined ||
+            fee === undefined ||
+            tickCurrent === undefined ||
+            tickSpacing === undefined ||
+            liquidity === undefined
+        )
+            return [PoolState.NOT_EXISTS, null];
 
         try {
             return [
@@ -55,16 +60,17 @@ export function usePool(address: Address | undefined): [PoolStateType, Pool | nu
                 new Pool(
                     token0.wrapped,
                     token1.wrapped,
-                    globalState[2],
+                    fee,
+                    sqrtRatioX96.toString(),
                     ADDRESS_ZERO,
-                    globalState[0].toString(),
-                    Number(liquidity),
-                    globalState[1],
+                    liquidity.toString(),
+                    tickCurrent,
                     tickSpacing
                 ),
             ];
         } catch (error) {
+            console.error("Failed to create Pool instance:", error);
             return [PoolState.NOT_EXISTS, null];
         }
-    }, [token0, token1, globalState, liquidity, tickSpacing, isPoolError, isPoolLoading, isTokensLoading]);
+    }, [tickSpacing, globalState, liquidity, token0, token1, isPoolLoading, isTokensLoading, isPoolError, sqrtRatioX96, fee, tickCurrent]);
 }
