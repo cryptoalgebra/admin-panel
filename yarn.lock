@@ -569,10 +569,10 @@
     stream-browserify "^3.0.0"
     util "^0.12.4"
 
-"@cryptoalgebra/integral-sdk@npm:@cryptoalgebra/sophon-os-sdk@1.0.0":
+"@cryptoalgebra/integral-sdk@npm:@cryptoalgebra/citrea-sdk@1.0.0":
   version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@cryptoalgebra/sophon-os-sdk/-/sophon-os-sdk-1.0.0.tgz#5e97463d24923022d8fdf8492019a89f53e81edf"
-  integrity sha512-Y+6c0cvnhVihaCqmcbWPwtz6UP1BwSUKB3jCFNcGFDbx4ZBoDJOx3Y5K+HsEfG2x5IOWmeHrp+uX5feqkwEK6Q==
+  resolved "https://registry.yarnpkg.com/@cryptoalgebra/citrea-sdk/-/citrea-sdk-1.0.0.tgz#3053c0b92e564d29e1ba2e1355dc004594352dc9"
+  integrity sha512-ZQU4sriHXSGBacEDW+7CqL3e3xObmq5KZhNPeqbZUOkOZ+LTysNoKTy8zWJcBdX/bkM0WKJOGRv1lN6rzWGgLw==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/address" "^5.7.0"
