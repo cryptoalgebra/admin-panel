@@ -25,7 +25,7 @@ const PoolRow = (pool: FormattedPool) => {
                     <div className="md:hidden text-xs text-text/50 font-medium">Pool</div>
                     <div className="flex items-center gap-2">
                         <span className="font-medium text-sm text-text">{`${pool.pair.token0.symbol} / ${pool.pair.token1.symbol}`}</span>
-                        <span className="bg-bg-200 text-xs text-text/70 rounded px-2 py-0.5 border border-border">{`${pool.fee}%`}</span>
+                        <span className="bg-bg-200 text-xs text-text/70 rounded px-2 py-0.5 border border-border">{`${pool.overrideFee || pool.fee}%`}</span>
                     </div>
                 </div>
             )}
@@ -78,7 +78,7 @@ const PoolsList = () => {
     const formattedPools: FormattedPool[] = useMemo(() => {
         if (!pools?.pools) return [];
 
-        return pools.pools.map(({ id, token0, token1, fee, totalValueLockedUSD, volumeUSD, deployer }) => ({
+        return pools.pools.map(({ id, token0, token1, fee, overrideFee, totalValueLockedUSD, volumeUSD, deployer }) => ({
             id: id as Address,
             pair: {
                 token0,
@@ -86,6 +86,7 @@ const PoolsList = () => {
             },
             deployer,
             fee: Number(fee) / 10_000,
+            overrideFee: Number(overrideFee) / 10_000,
             tvlUSD: Number(totalValueLockedUSD),
             volume24USD: Number(volumeUSD),
             apr: 0,

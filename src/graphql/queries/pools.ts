@@ -4,6 +4,7 @@ export const POOL_FRAGMENT = gql`
     fragment PoolFields on Pool {
         id
         fee
+        overrideFee
         sqrtPrice
         liquidity
         tick

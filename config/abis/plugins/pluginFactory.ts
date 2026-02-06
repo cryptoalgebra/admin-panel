@@ -168,6 +168,56 @@ export const pluginFactoryABI = [
     },
     {
         inputs: [],
+        name: "defaultFeeConfiguration",
+        outputs: [
+            {
+                components: [
+                    {
+                        internalType: "uint16",
+                        name: "alpha1",
+                        type: "uint16",
+                    },
+                    {
+                        internalType: "uint16",
+                        name: "alpha2",
+                        type: "uint16",
+                    },
+                    {
+                        internalType: "uint32",
+                        name: "beta1",
+                        type: "uint32",
+                    },
+                    {
+                        internalType: "uint32",
+                        name: "beta2",
+                        type: "uint32",
+                    },
+                    {
+                        internalType: "uint16",
+                        name: "gamma1",
+                        type: "uint16",
+                    },
+                    {
+                        internalType: "uint16",
+                        name: "gamma2",
+                        type: "uint16",
+                    },
+                    {
+                        internalType: "uint16",
+                        name: "baseFee",
+                        type: "uint16",
+                    },
+                ],
+                internalType: "struct AlgebraFeeConfiguration",
+                name: "",
+                type: "tuple",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [],
         name: "farmingAddress",
         outputs: [
             {
@@ -207,6 +257,56 @@ export const pluginFactoryABI = [
             },
         ],
         name: "setDefaultBaseFee",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                components: [
+                    {
+                        internalType: "uint16",
+                        name: "alpha1",
+                        type: "uint16",
+                    },
+                    {
+                        internalType: "uint16",
+                        name: "alpha2",
+                        type: "uint16",
+                    },
+                    {
+                        internalType: "uint32",
+                        name: "beta1",
+                        type: "uint32",
+                    },
+                    {
+                        internalType: "uint32",
+                        name: "beta2",
+                        type: "uint32",
+                    },
+                    {
+                        internalType: "uint16",
+                        name: "gamma1",
+                        type: "uint16",
+                    },
+                    {
+                        internalType: "uint16",
+                        name: "gamma2",
+                        type: "uint16",
+                    },
+                    {
+                        internalType: "uint16",
+                        name: "baseFee",
+                        type: "uint16",
+                    },
+                ],
+                internalType: "struct AlgebraFeeConfiguration",
+                name: "newConfig",
+                type: "tuple",
+            },
+        ],
+        name: "setDefaultFeeConfiguration",
         outputs: [],
         stateMutability: "nonpayable",
         type: "function",

@@ -11,6 +11,7 @@ export interface FormattedPool {
     pair: Pair;
     deployer: string;
     fee: number;
+    overrideFee: number;
     tvlUSD: number;
     volume24USD: number;
     apr: number;

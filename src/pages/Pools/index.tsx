@@ -9,10 +9,10 @@ const PoolsPage = () => {
         <PageContainer>
             <div className="flex justify-between w-full mb-4">
                 <div className="font-bold text-2xl">Pools</div>
-                <PoolsDefaultSettingsModal title="Default Settings">
+                <PoolsDefaultSettingsModal title="Global Settings">
                     <Button variant="outline">
                         <Settings size={18} />
-                        Default settings
+                        Global Settings
                     </Button>
                 </PoolsDefaultSettingsModal>
             </div>

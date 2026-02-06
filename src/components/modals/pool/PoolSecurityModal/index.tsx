@@ -14,8 +14,8 @@ import { useState } from "react";
 
 export enum PoolSecurityStatus {
     ENABLED = 0,
-    DISABLED = 1,
-    BURN_ONLY = 2,
+    BURN_ONLY = 1,
+    DISABLED = 2,
 }
 
 const STATUS_LABELS: Record<PoolSecurityStatus, string> = {

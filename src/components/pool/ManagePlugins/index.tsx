@@ -13,7 +13,7 @@ import { Address } from "viem";
 import { useWriteContract } from "wagmi";
 import { algebraPoolABI } from "config/abis";
 import { PLUGIN_KEYS, usePoolPlugins } from "@/hooks/pools/usePoolPlugins";
-import { Puzzle, RotateCcw, Check, X } from "lucide-react";
+import { Puzzle, Check, X } from "lucide-react";
 import { cn } from "@/utils/common/cn";
 
 interface IManagePlugins {
@@ -133,18 +133,6 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
                     <div className=" rounded-xl mb-4 space-y-4">
                         <div className="flex items-center justify-between mb-3">
                             <p className="text-xs font-medium text-text/50 uppercase tracking-wider mb-1.5">Plugin Configuration</p>
-
-                            {defaultPluginConfig !== pluginConfig && (
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={handleResetPluginConfig}
-                                    className="flex items-center gap-1.5 h-auto py-1 px-2 text-xs text-text/50 hover:text-text"
-                                >
-                                    <RotateCcw size={12} />
-                                    Reset
-                                </Button>
-                            )}
                         </div>
                         <div className="grid grid-cols-2 gap-3">
                             <div className="p-3 bg-bg-200 rounded-lg border border-neutral-200">
