@@ -37,22 +37,26 @@ export function usePoolPlugins(poolAddress: Address | undefined) {
         functionName: "s_baseFee",
     });
 
-    const poolPlugins: PoolPluginType | undefined = useMemo(() => {
+    const activeModuleNames = useMemo(() => {
         const enabledPlugins = data?.plugin?.activeModules;
-        if (!enabledPlugins || enabledPlugins.length === 0) return undefined;
+        if (!enabledPlugins || enabledPlugins.length === 0) return [];
 
-        const result = enabledPlugins.map((module) => module.trim());
+        return enabledPlugins.map((module) => module.trim());
+    }, [data]);
+
+    const poolPlugins: PoolPluginType | undefined = useMemo(() => {
+        if (activeModuleNames.length === 0) return undefined;
 
         return {
-            DYNAMIC_FEE: result.includes(PLUGIN_KEYS.DYNAMIC_FEE),
-            FARMING_PROXY: result.includes(PLUGIN_KEYS.FARMING_PROXY),
-            VOLATILITY_ORACLE: result.includes(PLUGIN_KEYS.VOLATILITY_ORACLE),
-            ALM: result.includes(PLUGIN_KEYS.ALM),
-            LIMIT_ORDER: result.includes(PLUGIN_KEYS.LIMIT_ORDER),
-            SECURITY: result.includes(PLUGIN_KEYS.SECURITY),
-            FEE_DISCOUNT: result.includes(PLUGIN_KEYS.FEE_DISCOUNT),
+            DYNAMIC_FEE: activeModuleNames.includes(PLUGIN_KEYS.DYNAMIC_FEE),
+            FARMING_PROXY: activeModuleNames.includes(PLUGIN_KEYS.FARMING_PROXY),
+            VOLATILITY_ORACLE: activeModuleNames.includes(PLUGIN_KEYS.VOLATILITY_ORACLE),
+            ALM: activeModuleNames.includes(PLUGIN_KEYS.ALM),
+            LIMIT_ORDER: activeModuleNames.includes(PLUGIN_KEYS.LIMIT_ORDER),
+            SECURITY: activeModuleNames.includes(PLUGIN_KEYS.SECURITY),
+            FEE_DISCOUNT: activeModuleNames.includes(PLUGIN_KEYS.FEE_DISCOUNT),
         };
-    }, [data]);
+    }, [activeModuleNames]);
 
     // Determine fee plugin type based on active modules and contract calls
     const feePluginType: FeePluginType = useMemo(() => {
@@ -72,6 +76,7 @@ export function usePoolPlugins(poolAddress: Address | undefined) {
 
     return {
         data: poolPlugins,
+        activeModuleNames,
         pluginAddress,
         feePluginType,
         isLoading: loading,

@@ -216,73 +216,65 @@ const PoolsDefaultSettingsModal = ({ title, children }: IPoolsDefaultSettingsMod
                         </div>
                     ) : (
                         <div className="flex flex-col gap-4">
-                            {isGlobalLoading ? (
-                                <div className="flex justify-center py-4">
-                                    <Loader size={20} />
-                                </div>
-                            ) : (
-                                <>
-                                    <div>
-                                        <p className="text-xs text-text/50 mb-2">Current Global Status</p>
-                                        {currentGlobalStatus !== undefined && (
-                                            <div
-                                                className={cn(
-                                                    "inline-flex items-center px-3 py-1.5 rounded-full border text-sm font-medium",
-                                                    STATUS_COLORS[currentGlobalStatus]
-                                                )}
-                                            >
-                                                {STATUS_LABELS[currentGlobalStatus]}
-                                            </div>
+                            <div>
+                                <p className="text-xs text-text/50 mb-2">Current Global Status</p>
+                                {currentGlobalStatus !== undefined && (
+                                    <div
+                                        className={cn(
+                                            "inline-flex items-center px-3 py-1.5 rounded-full border text-sm font-medium",
+                                            STATUS_COLORS[currentGlobalStatus]
                                         )}
-                                        {currentGlobalStatus !== undefined && (
-                                            <p className="text-xs text-text/50 mt-2">{STATUS_DESCRIPTIONS[currentGlobalStatus]}</p>
-                                        )}
-                                        {currentGlobalStatus === PoolSecurityStatus.ENABLED && (
-                                            <p className="text-xs text-text/50 mt-1">
-                                                Enabled means no global override; each pool can have its own status.
-                                            </p>
-                                        )}
-                                    </div>
-
-                                    <hr className="border-border" />
-
-                                    <div>
-                                        <p className="text-xs text-text/50 mb-3">Select New Status</p>
-                                        <div className="flex flex-col gap-2">
-                                            {[
-                                                PoolSecurityStatus.ENABLED,
-                                                PoolSecurityStatus.BURN_ONLY,
-                                                PoolSecurityStatus.DISABLED,
-                                            ].map((status) => (
-                                                <button
-                                                    key={status}
-                                                    onClick={() => setSelectedGlobalStatus(status)}
-                                                    className={cn(
-                                                        "flex items-start gap-3 p-3 rounded-lg border transition-all cursor-pointer",
-                                                        selectedGlobalStatus === status
-                                                            ? "border-text bg-bg-200"
-                                                            : "border-border hover:border-text/50 hover:bg-bg-100"
-                                                    )}
-                                                >
-                                                    <div className="flex-1 text-left">
-                                                        <p className="text-sm font-medium text-text">{STATUS_LABELS[status]}</p>
-                                                        <p className="text-xs text-text/50 mt-1">{STATUS_DESCRIPTIONS[status]}</p>
-                                                    </div>
-                                                </button>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    <Button
-                                        variant="destructive"
-                                        onClick={handleGlobalStatusConfirm}
-                                        disabled={selectedGlobalStatus === null || isGlobalStatusTxLoading || isGlobalStatusPending}
-                                        className="w-full"
                                     >
-                                        {isGlobalStatusTxLoading || isGlobalStatusPending ? <Loader color="red" size={16} /> : "Confirm"}
-                                    </Button>
-                                </>
-                            )}
+                                        {STATUS_LABELS[currentGlobalStatus]}
+                                    </div>
+                                )}
+                                {currentGlobalStatus !== undefined && (
+                                    <p className="text-xs text-text/50 mt-2">{STATUS_DESCRIPTIONS[currentGlobalStatus]}</p>
+                                )}
+                                {currentGlobalStatus === PoolSecurityStatus.ENABLED && (
+                                    <p className="text-xs text-text/50 mt-1">
+                                        Enabled means no global override; each pool can have its own status.
+                                    </p>
+                                )}
+                            </div>
+
+                            <hr className="border-border" />
+
+                            <div>
+                                <p className="text-xs text-text/50 mb-3">Select New Status</p>
+                                <div className="flex flex-col gap-2">
+                                    {[
+                                        PoolSecurityStatus.ENABLED,
+                                        PoolSecurityStatus.BURN_ONLY,
+                                        PoolSecurityStatus.DISABLED,
+                                    ].map((status) => (
+                                        <button
+                                            key={status}
+                                            onClick={() => setSelectedGlobalStatus(status)}
+                                            className={cn(
+                                                "flex items-start gap-3 p-3 rounded-lg border transition-all cursor-pointer",
+                                                selectedGlobalStatus === status
+                                                    ? "border-text bg-bg-200"
+                                                    : "border-border hover:border-text/50 hover:bg-bg-100"
+                                            )}
+                                        >
+                                            <div className="flex-1 text-left">
+                                                <p className="text-sm font-medium text-text">{STATUS_LABELS[status]}</p>
+                                                <p className="text-xs text-text/50 mt-1">{STATUS_DESCRIPTIONS[status]}</p>
+                                            </div>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <Button
+                                variant="destructive"
+                                onClick={handleGlobalStatusConfirm}
+                                disabled={selectedGlobalStatus === null || isGlobalStatusTxLoading || isGlobalStatusPending}
+                                className="w-full"
+                            >
+                                {isGlobalLoading || isGlobalStatusTxLoading || isGlobalStatusPending ? <Loader color="red" size={16} /> : "Confirm"}
+                            </Button>
                         </div>
                     )}
                 </CredenzaBody>
