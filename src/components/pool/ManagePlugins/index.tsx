@@ -8,12 +8,12 @@ import { usePluginFlags } from "@/hooks/pools/usePluginFlags";
 import { PluginFlags } from "@/types/pool-plugin-flags";
 import { parsePluginConfig } from "@/utils/pool/parsePluginConfig";
 import { parsePluginFlags } from "@/utils/pool/parsePluginFlags";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Address } from "viem";
 import { useWriteContract } from "wagmi";
 import { algebraPoolABI } from "config/abis";
 import { PLUGIN_KEYS, usePoolPlugins } from "@/hooks/pools/usePoolPlugins";
-import { Puzzle, Check, AlertTriangle } from "lucide-react";
+import { Puzzle, Check, AlertTriangle, X } from "lucide-react";
 import { cn } from "@/utils/common/cn";
 import type { PluginConfigModuleKey } from "@/components/modals/pool/ManagePluginConfigModal";
 
@@ -41,6 +41,12 @@ const MODULE_ORDER: PluginConfigModuleKey[] = [
 
 type ModuleStatus = "ENABLED" | "DISABLED" | "PARTIAL";
 
+const MODULE_STATUS_PRIORITY: Record<ModuleStatus, number> = {
+    ENABLED: 0,
+    PARTIAL: 1,
+    DISABLED: 2,
+};
+
 interface ModuleDefinition {
     key: PluginConfigModuleKey;
     label: string;
@@ -50,7 +56,7 @@ interface ModuleDefinition {
 const MODULE_DEFINITIONS: ModuleDefinition[] = [
     { key: "DYNAMIC_FEE", label: "Dynamic Fee", requiredFlags: ["BEFORE_SWAP_FLAG", "DYNAMIC_FEE_FLAG"] },
     { key: "FARMING_PROXY", label: "Farming", requiredFlags: ["AFTER_SWAP_FLAG"] },
-    { key: "VOLATILITY_ORACLE", label: "Volatility Oracle", requiredFlags: ["BEFORE_SWAP_FLAG"] },
+    { key: "VOLATILITY_ORACLE", label: "Volatility Oracle", requiredFlags: ["BEFORE_SWAP_FLAG", "AFTER_INIT_FLAG"] },
     { key: "ALM", label: "ALM", requiredFlags: ["AFTER_SWAP_FLAG"] },
     { key: "LIMIT_ORDER", label: "Limit Order", requiredFlags: ["AFTER_SWAP_FLAG"] },
     { key: "SECURITY", label: "Security", requiredFlags: ["BEFORE_SWAP_FLAG", "BEFORE_POSITION_MODIFY_FLAG", "BEFORE_FLASH_FLAG"] },
@@ -81,6 +87,8 @@ const FLAG_TO_HOOK_LABEL: Record<keyof PluginFlags, string> = {
 const ManagePlugins = ({ poolId }: IManagePlugins) => {
     const pluginFlags = usePluginFlags(poolId);
     const [flags, setFlags] = useState<PluginFlags>();
+    const modalInitialFlagsRef = useRef<PluginFlags | null>(null);
+    const didSubmitConfigRef = useRef(false);
 
     const pluginConfig = useMemo(() => {
         if (!flags) return;
@@ -122,6 +130,11 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
                         status = "PARTIAL";
                         hoverExplanation = "Enabled hooks: dynamicFee. Missing hooks: beforeSwap";
                     }
+                } else if (moduleDefinition.key === "VOLATILITY_ORACLE") {
+                    const isBeforeSwapEnabled = Boolean(flags.BEFORE_SWAP_FLAG);
+                    const isAfterInitEnabled = Boolean(flags.AFTER_INIT_FLAG);
+
+                    status = isBeforeSwapEnabled && isAfterInitEnabled ? "ENABLED" : "DISABLED";
                 } else if (moduleDefinition.key === "SECURITY") {
                     if (enabledFlags.length === 0) {
                         status = "DISABLED";
@@ -150,7 +163,7 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
                     hoverExplanation,
                 };
             })
-            .filter((moduleDefinition) => moduleDefinition.status !== "DISABLED");
+            .sort((a, b) => MODULE_STATUS_PRIORITY[a.status] - MODULE_STATUS_PRIORITY[b.status]);
     }, [activeModuleKeys, flags]);
 
     const { data: pluginId } = useReadAlgebraPoolPlugin({
@@ -207,12 +220,39 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
             abi: algebraPoolABI,
             functionName: "setPluginConfig",
             args: [pluginConfig],
+        },
+        {
+            onSuccess: () => {
+                didSubmitConfigRef.current = true;
+                modalInitialFlagsRef.current = null;
+            },
+            onError: () => {
+                didSubmitConfigRef.current = false;
+                if (modalInitialFlagsRef.current) {
+                    setFlags(modalInitialFlagsRef.current);
+                }
+            },
         });
     };
 
     const handleResetPluginConfig = () => {
         if (defaultPluginConfig === undefined) return;
         setFlags(parsePluginConfig(defaultPluginConfig));
+    };
+
+    const handlePluginConfigModalOpenChange = (open: boolean) => {
+        if (open) {
+            modalInitialFlagsRef.current = flags ? { ...flags } : null;
+            didSubmitConfigRef.current = false;
+            return;
+        }
+
+        if (!didSubmitConfigRef.current && modalInitialFlagsRef.current) {
+            setFlags(modalInitialFlagsRef.current);
+        }
+
+        modalInitialFlagsRef.current = null;
+        didSubmitConfigRef.current = false;
     };
 
     return (
@@ -236,7 +276,7 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
 
                     {/* Active Modules */}
                     <div>
-                        <p className="text-xs font-medium text-text/50 uppercase tracking-wider mb-3">Active Modules</p>
+                        <p className="text-xs font-medium text-text/50 uppercase tracking-wider mb-3">Modules</p>
                         {currentActiveModules.length > 0 ? (
                             <div className="flex flex-wrap gap-2">
                                 {currentActiveModules.map((moduleItem) => (
@@ -247,10 +287,18 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
                                             "inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full border",
                                             moduleItem.status === "ENABLED"
                                                 ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                                                : "bg-amber-50 text-amber-700 border-amber-200"
+                                                : moduleItem.status === "PARTIAL"
+                                                  ? "bg-amber-50 text-amber-700 border-amber-200"
+                                                  : "bg-red-50 text-red-700 border-red-200"
                                         )}
                                     >
-                                        {moduleItem.status === "ENABLED" ? <Check size={12} /> : <AlertTriangle size={12} />}
+                                        {moduleItem.status === "ENABLED" ? (
+                                            <Check size={12} />
+                                        ) : moduleItem.status === "PARTIAL" ? (
+                                            <AlertTriangle size={12} />
+                                        ) : (
+                                            <X size={12} />
+                                        )}
                                         {moduleItem.label}
                                     </span>
                                 ))}
@@ -293,6 +341,7 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
                         onChange={handleCheckFlag}
                         onReset={handleResetPluginConfig}
                         onConfirm={handleConfirm}
+                        onOpenChange={handlePluginConfigModalOpenChange}
                         isLoading={isLoading || isPending}
                         title="Custom Hooks Settings"
                         flags={flags}

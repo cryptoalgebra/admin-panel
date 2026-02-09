@@ -39,7 +39,7 @@ const HOOKS: { key: HookKey; flag: keyof PluginFlags }[] = [
 const MODULE_DEFINITIONS: { key: PluginConfigModuleKey; label: string; requiredHooks: HookKey[] }[] = [
     { key: "DYNAMIC_FEE", label: "Dynamic Fee", requiredHooks: ["beforeSwap", "dynamicFee"] },
     { key: "FARMING_PROXY", label: "Farming", requiredHooks: ["afterSwap"] },
-    { key: "VOLATILITY_ORACLE", label: "Volatility Oracle", requiredHooks: ["beforeSwap"] },
+    { key: "VOLATILITY_ORACLE", label: "Volatility Oracle", requiredHooks: ["beforeSwap", "afterInit"] },
     { key: "ALM", label: "ALM", requiredHooks: ["afterSwap"] },
     { key: "LIMIT_ORDER", label: "Limit Order", requiredHooks: ["afterSwap"] },
     { key: "SECURITY", label: "Security", requiredHooks: ["beforeSwap", "beforePositionModify", "beforeFlash"] },
@@ -66,6 +66,7 @@ interface IManagePluginConfigModal {
     onConfirm: () => void;
     onReset: () => void;
     activeModuleKeys: PluginConfigModuleKey[];
+    onOpenChange?: (open: boolean) => void;
 }
 
 const ManagePluginConfigModal = ({
@@ -78,6 +79,7 @@ const ManagePluginConfigModal = ({
     onConfirm,
     onReset,
     activeModuleKeys,
+    onOpenChange,
 }: IManagePluginConfigModal) => {
     const isHookEnabled = (hookKey: HookKey): boolean => {
         const hook = HOOKS.find((item) => item.key === hookKey);
@@ -105,6 +107,16 @@ const ManagePluginConfigModal = ({
 
             if (!isBeforeSwapEnabled && isDynamicFeeEnabled) {
                 return { status: "PARTIAL" };
+            }
+
+            return { status: "DISABLED" };
+        }
+        if (moduleKey === "VOLATILITY_ORACLE") {
+            const isBeforeSwapEnabled = isHookEnabled("beforeSwap");
+            const isAfterInitEnabled = isHookEnabled("afterInit");
+
+            if (isBeforeSwapEnabled && isAfterInitEnabled) {
+                return { status: "ENABLED" };
             }
 
             return { status: "DISABLED" };
@@ -152,7 +164,7 @@ const ManagePluginConfigModal = ({
     const activeModules = MODULE_DEFINITIONS.filter((module) => activeModuleKeys.includes(module.key));
 
     return (
-        <Credenza>
+        <Credenza onOpenChange={onOpenChange}>
             <CredenzaTrigger asChild>{children}</CredenzaTrigger>
             <CredenzaContent className="bg-white rounded-lg w-full max-w-4xl max-h-[85vh] overflow-y-auto lg:overflow-hidden">
                 <CredenzaHeader>
