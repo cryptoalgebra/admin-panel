@@ -2,6 +2,7 @@ import { Currency, WNATIVE } from "@cryptoalgebra/integral-sdk";
 import React from "react";
 import { Address } from "viem";
 import USDCLogo from "@/assets/tokens/usdc.svg";
+import USDTLogo from "@/assets/tokens/usdt.png";
 import EthLogo from "@/assets/tokens/ether.svg";
 import { cn } from "@/utils/common/cn";
 import { DEFAULT_CHAIN_ID, DEFAULT_NATIVE_SYMBOL } from "config/default-chain";
@@ -20,9 +21,13 @@ export const specialTokens: {
         symbol: "WETH",
         logo: EthLogo,
     },
-    ["0xabac6f23fdf1313fc2e9c9244f666157ccd32990"]: {
+    ["0xe416c0c29dbdb4fa25870b835ad904c1e8478cdc"]: {
         symbol: "USDC",
         logo: USDCLogo,
+    },
+    ["0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb"]: {
+        symbol: "USDT0",
+        logo: USDTLogo,
     },
 };
 
