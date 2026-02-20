@@ -1453,10 +1453,10 @@
     tsdx "^0.14.1"
     typechain "^8.0.0"
 
-"@cryptoalgebra/integral-sdk@npm:@cryptoalgebra/paradox-sdk@1.0.0":
+"@cryptoalgebra/integral-sdk@npm:@cryptoalgebra/pharos-sdk@1.0.0":
   version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@cryptoalgebra/paradox-sdk/-/paradox-sdk-1.0.0.tgz#7ea06a9efe48ca44a39a297ef61a2386602a6d64"
-  integrity sha512-br6JsiH4LxuLGrwEEohrcTZklXmI+iT3EDCQZGTNm0tL4sQxo1a3QTydFneDWeF0z6Bkp6rAk9bNGL6PMsAWpA==
+  resolved "https://registry.yarnpkg.com/@cryptoalgebra/pharos-sdk/-/pharos-sdk-1.0.0.tgz#7f45afb66514ff2f45b1c6a9d34b5b35507645fa"
+  integrity sha512-TWoD2ifqDFXn1T+1VdX/UKtcQVSkC7flTwdNSiVa+8UesEK+UiOTL1OsY1WPcQyOThHRf3HbWwWsN+ZcBFhT9g==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/address" "^5.7.0"

@@ -1,11 +1,9 @@
 import { ChainId } from "@cryptoalgebra/integral-sdk";
 
 export const INFO_GRAPH_URL = {
-    [ChainId.MegaethMainnet]: "https://api.studio.thegraph.com/query/111290/analytics-mainnet/version/latest",
-    [ChainId.MegaethTestnet]: "https://api.studio.thegraph.com/query/111290/analytics-testnet/version/latest",
+    [ChainId.PharosTestnet]: "https://api.goldsky.com/api/public/project_cm2cd1yfmmrav01u9b02f69vj/subgraphs/pharos-analytics/v1.0.0/gn",
 };
 
 export const FARMING_GRAPH_URL = {
-    [ChainId.MegaethMainnet]: "https://api.studio.thegraph.com/query/111290/farming-mainnet/version/latest",
-    [ChainId.MegaethTestnet]: "https://api.studio.thegraph.com/query/111290/farming-testnet/version/latest",
+    [ChainId.PharosTestnet]: "https://api.goldsky.com/api/public/project_cm2cd1yfmmrav01u9b02f69vj/subgraphs/pharos-farming/v1.0.0/gn",
 };

@@ -5,21 +5,17 @@ export type PoolDeployerType = "BASE" | "LIMIT_ORDERS" | "ALM" | "AI";
 
 export const CUSTOM_POOL_DEPLOYER_ADDRESSES: Record<PoolDeployerType, Record<number, Address>> = {
     BASE: {
-        [ChainId.MegaethMainnet]: ADDRESS_ZERO,
-        [ChainId.MegaethTestnet]: ADDRESS_ZERO,
+        [ChainId.PharosTestnet]: ADDRESS_ZERO,
     },
     /* Replace with `null` to use as a stub */
     LIMIT_ORDERS: {
-        [ChainId.MegaethMainnet]: null,
-        [ChainId.MegaethTestnet]: null,
+        [ChainId.PharosTestnet]: null,
     },
     ALM: {
-        [ChainId.MegaethMainnet]: null,
-        [ChainId.MegaethTestnet]: null,
+        [ChainId.PharosTestnet]: null,
     },
     AI: {
-        [ChainId.MegaethMainnet]: null,
-        [ChainId.MegaethTestnet]: null,
+        [ChainId.PharosTestnet]: null,
     },
 } as const;
 
