@@ -6,33 +6,29 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 
 import { publicProvider } from 'wagmi/providers/public'
 
-export const rayls = defineChain({
-  id: 123123,
-  name: 'Rayls',
-  network: 'rayls',
-  nativeCurrency: {
-    name: 'ETH',
-    symbol: 'ETH',
-    decimals: 18,
-  },
+const raylsTestnet = /*#__PURE__*/ defineChain({
+  id: 7295799,
+  network: "rayls",
+  name: "Rayls",
+  nativeCurrency: { name: "USDR", symbol: "USDR", decimals: 18 },
   rpcUrls: {
-    default: {
-      http: ['https://devnet-rpc.rayls.com'],
-    },
-    public: {
-      http: ['https://devnet-rpc.rayls.com']
-    }
+      default: {
+          http: ["https://testnet-rpc.rayls.com"],
+      },
+      public: {
+          http: ["https://testnet-rpc.rayls.com"],
+      },
   },
   blockExplorers: {
-    default: {
-      name: 'RaylsScan',
-      url: 'https://devnet-rpc.rayls.com',
-    },
+      default: {
+          name: "RaylsScan",
+          url: "https://testnet-explorer.rayls.com/",
+      },
   }
-})
+});
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [rayls],
+  [raylsTestnet],
   [
     publicProvider(),
   ],

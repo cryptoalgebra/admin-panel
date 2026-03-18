@@ -18,21 +18,111 @@ export type Scalars = {
   BigDecimal: { input: any; output: any; }
   BigInt: { input: any; output: any; }
   Bytes: { input: any; output: any; }
-  /**
-   * 8 bytes signed integer
-   *
-   */
+  /** 8 bytes signed integer */
   Int8: { input: any; output: any; }
-  /**
-   * A string representation of microseconds UNIX timestamp (16 digits)
-   *
-   */
+  /** A string representation of microseconds UNIX timestamp (16 digits) */
   Timestamp: { input: any; output: any; }
 };
 
 export enum Aggregation_Interval {
   Day = 'day',
   Hour = 'hour'
+}
+
+export type AlgebraCommunityVault = {
+  __typename?: 'AlgebraCommunityVault';
+  algebraFee: Scalars['BigInt']['output'];
+  algebraFeeReceiver: Scalars['Bytes']['output'];
+  communityFeeReceiver: Scalars['Bytes']['output'];
+  id: Scalars['ID']['output'];
+  pools: Array<Pool>;
+  totalAlgebraWithdrawnUSD: Scalars['BigDecimal']['output'];
+  totalWithdrawnUSD: Scalars['BigDecimal']['output'];
+};
+
+
+export type AlgebraCommunityVaultPoolsArgs = {
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Pool_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<Pool_Filter>;
+};
+
+export type AlgebraCommunityVault_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  algebraFee?: InputMaybe<Scalars['BigInt']['input']>;
+  algebraFeeReceiver?: InputMaybe<Scalars['Bytes']['input']>;
+  algebraFeeReceiver_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  algebraFeeReceiver_gt?: InputMaybe<Scalars['Bytes']['input']>;
+  algebraFeeReceiver_gte?: InputMaybe<Scalars['Bytes']['input']>;
+  algebraFeeReceiver_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  algebraFeeReceiver_lt?: InputMaybe<Scalars['Bytes']['input']>;
+  algebraFeeReceiver_lte?: InputMaybe<Scalars['Bytes']['input']>;
+  algebraFeeReceiver_not?: InputMaybe<Scalars['Bytes']['input']>;
+  algebraFeeReceiver_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  algebraFeeReceiver_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  algebraFee_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  algebraFee_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  algebraFee_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  algebraFee_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  algebraFee_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  algebraFee_not?: InputMaybe<Scalars['BigInt']['input']>;
+  algebraFee_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  and?: InputMaybe<Array<InputMaybe<AlgebraCommunityVault_Filter>>>;
+  communityFeeReceiver?: InputMaybe<Scalars['Bytes']['input']>;
+  communityFeeReceiver_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  communityFeeReceiver_gt?: InputMaybe<Scalars['Bytes']['input']>;
+  communityFeeReceiver_gte?: InputMaybe<Scalars['Bytes']['input']>;
+  communityFeeReceiver_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  communityFeeReceiver_lt?: InputMaybe<Scalars['Bytes']['input']>;
+  communityFeeReceiver_lte?: InputMaybe<Scalars['Bytes']['input']>;
+  communityFeeReceiver_not?: InputMaybe<Scalars['Bytes']['input']>;
+  communityFeeReceiver_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  communityFeeReceiver_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_not?: InputMaybe<Scalars['ID']['input']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  or?: InputMaybe<Array<InputMaybe<AlgebraCommunityVault_Filter>>>;
+  pools?: InputMaybe<Array<Scalars['String']['input']>>;
+  pools_?: InputMaybe<Pool_Filter>;
+  pools_contains?: InputMaybe<Array<Scalars['String']['input']>>;
+  pools_contains_nocase?: InputMaybe<Array<Scalars['String']['input']>>;
+  pools_not?: InputMaybe<Array<Scalars['String']['input']>>;
+  pools_not_contains?: InputMaybe<Array<Scalars['String']['input']>>;
+  pools_not_contains_nocase?: InputMaybe<Array<Scalars['String']['input']>>;
+  totalAlgebraWithdrawnUSD?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalAlgebraWithdrawnUSD_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalAlgebraWithdrawnUSD_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalAlgebraWithdrawnUSD_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  totalAlgebraWithdrawnUSD_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalAlgebraWithdrawnUSD_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalAlgebraWithdrawnUSD_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalAlgebraWithdrawnUSD_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  totalWithdrawnUSD?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalWithdrawnUSD_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalWithdrawnUSD_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalWithdrawnUSD_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  totalWithdrawnUSD_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalWithdrawnUSD_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalWithdrawnUSD_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalWithdrawnUSD_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+};
+
+export enum AlgebraCommunityVault_OrderBy {
+  AlgebraFee = 'algebraFee',
+  AlgebraFeeReceiver = 'algebraFeeReceiver',
+  CommunityFeeReceiver = 'communityFeeReceiver',
+  Id = 'id',
+  Pools = 'pools',
+  TotalAlgebraWithdrawnUsd = 'totalAlgebraWithdrawnUSD',
+  TotalWithdrawnUsd = 'totalWithdrawnUSD'
 }
 
 export type AlgebraDayData = {
@@ -223,217 +313,8 @@ export enum AlgebraHourData_OrderBy {
   VolumeUsdUntracked = 'volumeUSDUntracked'
 }
 
-export type Block = {
-  __typename?: 'Block';
-  author?: Maybe<Scalars['String']['output']>;
-  difficulty?: Maybe<Scalars['BigInt']['output']>;
-  gasLimit?: Maybe<Scalars['BigInt']['output']>;
-  gasUsed?: Maybe<Scalars['BigInt']['output']>;
-  id: Scalars['ID']['output'];
-  number: Scalars['BigInt']['output'];
-  parentHash?: Maybe<Scalars['String']['output']>;
-  receiptsRoot?: Maybe<Scalars['String']['output']>;
-  size?: Maybe<Scalars['BigInt']['output']>;
-  stateRoot?: Maybe<Scalars['String']['output']>;
-  timestamp: Scalars['BigInt']['output'];
-  totalDifficulty?: Maybe<Scalars['BigInt']['output']>;
-  transactionsRoot?: Maybe<Scalars['String']['output']>;
-  unclesHash?: Maybe<Scalars['String']['output']>;
-};
-
 export type BlockChangedFilter = {
   number_gte: Scalars['Int']['input'];
-};
-
-export type Block_Filter = {
-  /** Filter for the block changed event. */
-  _change_block?: InputMaybe<BlockChangedFilter>;
-  and?: InputMaybe<Array<InputMaybe<Block_Filter>>>;
-  author?: InputMaybe<Scalars['String']['input']>;
-  author_contains?: InputMaybe<Scalars['String']['input']>;
-  author_contains_nocase?: InputMaybe<Scalars['String']['input']>;
-  author_ends_with?: InputMaybe<Scalars['String']['input']>;
-  author_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
-  author_gt?: InputMaybe<Scalars['String']['input']>;
-  author_gte?: InputMaybe<Scalars['String']['input']>;
-  author_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  author_lt?: InputMaybe<Scalars['String']['input']>;
-  author_lte?: InputMaybe<Scalars['String']['input']>;
-  author_not?: InputMaybe<Scalars['String']['input']>;
-  author_not_contains?: InputMaybe<Scalars['String']['input']>;
-  author_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
-  author_not_ends_with?: InputMaybe<Scalars['String']['input']>;
-  author_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
-  author_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  author_not_starts_with?: InputMaybe<Scalars['String']['input']>;
-  author_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
-  author_starts_with?: InputMaybe<Scalars['String']['input']>;
-  author_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
-  difficulty?: InputMaybe<Scalars['BigInt']['input']>;
-  difficulty_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  difficulty_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  difficulty_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  difficulty_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  difficulty_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  difficulty_not?: InputMaybe<Scalars['BigInt']['input']>;
-  difficulty_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  gasLimit?: InputMaybe<Scalars['BigInt']['input']>;
-  gasLimit_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  gasLimit_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  gasLimit_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  gasLimit_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  gasLimit_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  gasLimit_not?: InputMaybe<Scalars['BigInt']['input']>;
-  gasLimit_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  gasUsed?: InputMaybe<Scalars['BigInt']['input']>;
-  gasUsed_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  gasUsed_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  gasUsed_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  gasUsed_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  gasUsed_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  gasUsed_not?: InputMaybe<Scalars['BigInt']['input']>;
-  gasUsed_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  id?: InputMaybe<Scalars['ID']['input']>;
-  id_gt?: InputMaybe<Scalars['ID']['input']>;
-  id_gte?: InputMaybe<Scalars['ID']['input']>;
-  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_lt?: InputMaybe<Scalars['ID']['input']>;
-  id_lte?: InputMaybe<Scalars['ID']['input']>;
-  id_not?: InputMaybe<Scalars['ID']['input']>;
-  id_not_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-  number?: InputMaybe<Scalars['BigInt']['input']>;
-  number_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  number_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  number_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  number_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  number_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  number_not?: InputMaybe<Scalars['BigInt']['input']>;
-  number_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  or?: InputMaybe<Array<InputMaybe<Block_Filter>>>;
-  parentHash?: InputMaybe<Scalars['String']['input']>;
-  parentHash_contains?: InputMaybe<Scalars['String']['input']>;
-  parentHash_contains_nocase?: InputMaybe<Scalars['String']['input']>;
-  parentHash_ends_with?: InputMaybe<Scalars['String']['input']>;
-  parentHash_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
-  parentHash_gt?: InputMaybe<Scalars['String']['input']>;
-  parentHash_gte?: InputMaybe<Scalars['String']['input']>;
-  parentHash_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  parentHash_lt?: InputMaybe<Scalars['String']['input']>;
-  parentHash_lte?: InputMaybe<Scalars['String']['input']>;
-  parentHash_not?: InputMaybe<Scalars['String']['input']>;
-  parentHash_not_contains?: InputMaybe<Scalars['String']['input']>;
-  parentHash_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
-  parentHash_not_ends_with?: InputMaybe<Scalars['String']['input']>;
-  parentHash_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
-  parentHash_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  parentHash_not_starts_with?: InputMaybe<Scalars['String']['input']>;
-  parentHash_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
-  parentHash_starts_with?: InputMaybe<Scalars['String']['input']>;
-  parentHash_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
-  receiptsRoot?: InputMaybe<Scalars['String']['input']>;
-  receiptsRoot_contains?: InputMaybe<Scalars['String']['input']>;
-  receiptsRoot_contains_nocase?: InputMaybe<Scalars['String']['input']>;
-  receiptsRoot_ends_with?: InputMaybe<Scalars['String']['input']>;
-  receiptsRoot_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
-  receiptsRoot_gt?: InputMaybe<Scalars['String']['input']>;
-  receiptsRoot_gte?: InputMaybe<Scalars['String']['input']>;
-  receiptsRoot_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  receiptsRoot_lt?: InputMaybe<Scalars['String']['input']>;
-  receiptsRoot_lte?: InputMaybe<Scalars['String']['input']>;
-  receiptsRoot_not?: InputMaybe<Scalars['String']['input']>;
-  receiptsRoot_not_contains?: InputMaybe<Scalars['String']['input']>;
-  receiptsRoot_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
-  receiptsRoot_not_ends_with?: InputMaybe<Scalars['String']['input']>;
-  receiptsRoot_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
-  receiptsRoot_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  receiptsRoot_not_starts_with?: InputMaybe<Scalars['String']['input']>;
-  receiptsRoot_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
-  receiptsRoot_starts_with?: InputMaybe<Scalars['String']['input']>;
-  receiptsRoot_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
-  size?: InputMaybe<Scalars['BigInt']['input']>;
-  size_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  size_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  size_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  size_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  size_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  size_not?: InputMaybe<Scalars['BigInt']['input']>;
-  size_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  stateRoot?: InputMaybe<Scalars['String']['input']>;
-  stateRoot_contains?: InputMaybe<Scalars['String']['input']>;
-  stateRoot_contains_nocase?: InputMaybe<Scalars['String']['input']>;
-  stateRoot_ends_with?: InputMaybe<Scalars['String']['input']>;
-  stateRoot_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
-  stateRoot_gt?: InputMaybe<Scalars['String']['input']>;
-  stateRoot_gte?: InputMaybe<Scalars['String']['input']>;
-  stateRoot_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  stateRoot_lt?: InputMaybe<Scalars['String']['input']>;
-  stateRoot_lte?: InputMaybe<Scalars['String']['input']>;
-  stateRoot_not?: InputMaybe<Scalars['String']['input']>;
-  stateRoot_not_contains?: InputMaybe<Scalars['String']['input']>;
-  stateRoot_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
-  stateRoot_not_ends_with?: InputMaybe<Scalars['String']['input']>;
-  stateRoot_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
-  stateRoot_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  stateRoot_not_starts_with?: InputMaybe<Scalars['String']['input']>;
-  stateRoot_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
-  stateRoot_starts_with?: InputMaybe<Scalars['String']['input']>;
-  stateRoot_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
-  timestamp?: InputMaybe<Scalars['BigInt']['input']>;
-  timestamp_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  timestamp_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  timestamp_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  timestamp_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  timestamp_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  timestamp_not?: InputMaybe<Scalars['BigInt']['input']>;
-  timestamp_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  totalDifficulty?: InputMaybe<Scalars['BigInt']['input']>;
-  totalDifficulty_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  totalDifficulty_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  totalDifficulty_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  totalDifficulty_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  totalDifficulty_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  totalDifficulty_not?: InputMaybe<Scalars['BigInt']['input']>;
-  totalDifficulty_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  transactionsRoot?: InputMaybe<Scalars['String']['input']>;
-  transactionsRoot_contains?: InputMaybe<Scalars['String']['input']>;
-  transactionsRoot_contains_nocase?: InputMaybe<Scalars['String']['input']>;
-  transactionsRoot_ends_with?: InputMaybe<Scalars['String']['input']>;
-  transactionsRoot_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
-  transactionsRoot_gt?: InputMaybe<Scalars['String']['input']>;
-  transactionsRoot_gte?: InputMaybe<Scalars['String']['input']>;
-  transactionsRoot_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  transactionsRoot_lt?: InputMaybe<Scalars['String']['input']>;
-  transactionsRoot_lte?: InputMaybe<Scalars['String']['input']>;
-  transactionsRoot_not?: InputMaybe<Scalars['String']['input']>;
-  transactionsRoot_not_contains?: InputMaybe<Scalars['String']['input']>;
-  transactionsRoot_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
-  transactionsRoot_not_ends_with?: InputMaybe<Scalars['String']['input']>;
-  transactionsRoot_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
-  transactionsRoot_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  transactionsRoot_not_starts_with?: InputMaybe<Scalars['String']['input']>;
-  transactionsRoot_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
-  transactionsRoot_starts_with?: InputMaybe<Scalars['String']['input']>;
-  transactionsRoot_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
-  unclesHash?: InputMaybe<Scalars['String']['input']>;
-  unclesHash_contains?: InputMaybe<Scalars['String']['input']>;
-  unclesHash_contains_nocase?: InputMaybe<Scalars['String']['input']>;
-  unclesHash_ends_with?: InputMaybe<Scalars['String']['input']>;
-  unclesHash_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
-  unclesHash_gt?: InputMaybe<Scalars['String']['input']>;
-  unclesHash_gte?: InputMaybe<Scalars['String']['input']>;
-  unclesHash_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  unclesHash_lt?: InputMaybe<Scalars['String']['input']>;
-  unclesHash_lte?: InputMaybe<Scalars['String']['input']>;
-  unclesHash_not?: InputMaybe<Scalars['String']['input']>;
-  unclesHash_not_contains?: InputMaybe<Scalars['String']['input']>;
-  unclesHash_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
-  unclesHash_not_ends_with?: InputMaybe<Scalars['String']['input']>;
-  unclesHash_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
-  unclesHash_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  unclesHash_not_starts_with?: InputMaybe<Scalars['String']['input']>;
-  unclesHash_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
-  unclesHash_starts_with?: InputMaybe<Scalars['String']['input']>;
-  unclesHash_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Block_Height = {
@@ -441,23 +322,6 @@ export type Block_Height = {
   number?: InputMaybe<Scalars['Int']['input']>;
   number_gte?: InputMaybe<Scalars['Int']['input']>;
 };
-
-export enum Block_OrderBy {
-  Author = 'author',
-  Difficulty = 'difficulty',
-  GasLimit = 'gasLimit',
-  GasUsed = 'gasUsed',
-  Id = 'id',
-  Number = 'number',
-  ParentHash = 'parentHash',
-  ReceiptsRoot = 'receiptsRoot',
-  Size = 'size',
-  StateRoot = 'stateRoot',
-  Timestamp = 'timestamp',
-  TotalDifficulty = 'totalDifficulty',
-  TransactionsRoot = 'transactionsRoot',
-  UnclesHash = 'unclesHash'
-}
 
 export type Bundle = {
   __typename?: 'Bundle';
@@ -757,10 +621,15 @@ export enum Burn_OrderBy {
   Origin = 'origin',
   Owner = 'owner',
   Pool = 'pool',
+  PoolAlgebraFeesUsd = 'pool__algebraFeesUSD',
   PoolCollectedFeesToken0 = 'pool__collectedFeesToken0',
   PoolCollectedFeesToken1 = 'pool__collectedFeesToken1',
   PoolCollectedFeesUsd = 'pool__collectedFeesUSD',
   PoolCommunityFee = 'pool__communityFee',
+  PoolCommunityFeesToken0 = 'pool__communityFeesToken0',
+  PoolCommunityFeesToken1 = 'pool__communityFeesToken1',
+  PoolCommunityFeesUsd = 'pool__communityFeesUSD',
+  PoolCommunityVault = 'pool__communityVault',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
   PoolDeployer = 'pool__deployer',
@@ -773,6 +642,7 @@ export enum Burn_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolOverrideFee = 'pool__overrideFee',
   PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
@@ -983,10 +853,15 @@ export enum Collect_OrderBy {
   LogIndex = 'logIndex',
   Owner = 'owner',
   Pool = 'pool',
+  PoolAlgebraFeesUsd = 'pool__algebraFeesUSD',
   PoolCollectedFeesToken0 = 'pool__collectedFeesToken0',
   PoolCollectedFeesToken1 = 'pool__collectedFeesToken1',
   PoolCollectedFeesUsd = 'pool__collectedFeesUSD',
   PoolCommunityFee = 'pool__communityFee',
+  PoolCommunityFeesToken0 = 'pool__communityFeesToken0',
+  PoolCommunityFeesToken1 = 'pool__communityFeesToken1',
+  PoolCommunityFeesUsd = 'pool__communityFeesUSD',
+  PoolCommunityVault = 'pool__communityVault',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
   PoolDeployer = 'pool__deployer',
@@ -999,6 +874,7 @@ export enum Collect_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolOverrideFee = 'pool__overrideFee',
   PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
@@ -1243,6 +1119,9 @@ export type Factory = {
   id: Scalars['ID']['output'];
   owner: Scalars['ID']['output'];
   poolCount: Scalars['BigInt']['output'];
+  totalAlgebraFeesUSD: Scalars['BigDecimal']['output'];
+  totalCommunityFeesMatic: Scalars['BigDecimal']['output'];
+  totalCommunityFeesUSD: Scalars['BigDecimal']['output'];
   totalFeesMatic: Scalars['BigDecimal']['output'];
   totalFeesUSD: Scalars['BigDecimal']['output'];
   totalValueLockedMatic: Scalars['BigDecimal']['output'];
@@ -1292,6 +1171,30 @@ export type Factory_Filter = {
   poolCount_lte?: InputMaybe<Scalars['BigInt']['input']>;
   poolCount_not?: InputMaybe<Scalars['BigInt']['input']>;
   poolCount_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  totalAlgebraFeesUSD?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalAlgebraFeesUSD_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalAlgebraFeesUSD_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalAlgebraFeesUSD_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  totalAlgebraFeesUSD_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalAlgebraFeesUSD_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalAlgebraFeesUSD_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalAlgebraFeesUSD_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  totalCommunityFeesMatic?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalCommunityFeesMatic_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalCommunityFeesMatic_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalCommunityFeesMatic_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  totalCommunityFeesMatic_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalCommunityFeesMatic_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalCommunityFeesMatic_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalCommunityFeesMatic_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  totalCommunityFeesUSD?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalCommunityFeesUSD_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalCommunityFeesUSD_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalCommunityFeesUSD_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  totalCommunityFeesUSD_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalCommunityFeesUSD_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalCommunityFeesUSD_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  totalCommunityFeesUSD_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
   totalFeesMatic?: InputMaybe<Scalars['BigDecimal']['input']>;
   totalFeesMatic_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
   totalFeesMatic_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
@@ -1379,6 +1282,9 @@ export enum Factory_OrderBy {
   Id = 'id',
   Owner = 'owner',
   PoolCount = 'poolCount',
+  TotalAlgebraFeesUsd = 'totalAlgebraFeesUSD',
+  TotalCommunityFeesMatic = 'totalCommunityFeesMatic',
+  TotalCommunityFeesUsd = 'totalCommunityFeesUSD',
   TotalFeesMatic = 'totalFeesMatic',
   TotalFeesUsd = 'totalFeesUSD',
   TotalValueLockedMatic = 'totalValueLockedMatic',
@@ -1396,9 +1302,12 @@ export type FeeHourData = {
   changesCount: Scalars['BigInt']['output'];
   endFee: Scalars['BigInt']['output'];
   fee: Scalars['BigInt']['output'];
+  hasOverrideFee: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
   maxFee: Scalars['BigInt']['output'];
   minFee: Scalars['BigInt']['output'];
+  overrideFee: Scalars['BigInt']['output'];
+  pluginFee: Scalars['BigInt']['output'];
   pool: Scalars['String']['output'];
   startFee: Scalars['BigInt']['output'];
   timestamp: Scalars['BigInt']['output'];
@@ -1432,6 +1341,10 @@ export type FeeHourData_Filter = {
   fee_lte?: InputMaybe<Scalars['BigInt']['input']>;
   fee_not?: InputMaybe<Scalars['BigInt']['input']>;
   fee_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  hasOverrideFee?: InputMaybe<Scalars['Boolean']['input']>;
+  hasOverrideFee_in?: InputMaybe<Array<Scalars['Boolean']['input']>>;
+  hasOverrideFee_not?: InputMaybe<Scalars['Boolean']['input']>;
+  hasOverrideFee_not_in?: InputMaybe<Array<Scalars['Boolean']['input']>>;
   id?: InputMaybe<Scalars['ID']['input']>;
   id_gt?: InputMaybe<Scalars['ID']['input']>;
   id_gte?: InputMaybe<Scalars['ID']['input']>;
@@ -1457,6 +1370,22 @@ export type FeeHourData_Filter = {
   minFee_not?: InputMaybe<Scalars['BigInt']['input']>;
   minFee_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   or?: InputMaybe<Array<InputMaybe<FeeHourData_Filter>>>;
+  overrideFee?: InputMaybe<Scalars['BigInt']['input']>;
+  overrideFee_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  overrideFee_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  overrideFee_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  overrideFee_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  overrideFee_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  overrideFee_not?: InputMaybe<Scalars['BigInt']['input']>;
+  overrideFee_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  pluginFee?: InputMaybe<Scalars['BigInt']['input']>;
+  pluginFee_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  pluginFee_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  pluginFee_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  pluginFee_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  pluginFee_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  pluginFee_not?: InputMaybe<Scalars['BigInt']['input']>;
+  pluginFee_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   pool?: InputMaybe<Scalars['String']['input']>;
   pool_contains?: InputMaybe<Scalars['String']['input']>;
   pool_contains_nocase?: InputMaybe<Scalars['String']['input']>;
@@ -1499,9 +1428,12 @@ export enum FeeHourData_OrderBy {
   ChangesCount = 'changesCount',
   EndFee = 'endFee',
   Fee = 'fee',
+  HasOverrideFee = 'hasOverrideFee',
   Id = 'id',
   MaxFee = 'maxFee',
   MinFee = 'minFee',
+  OverrideFee = 'overrideFee',
+  PluginFee = 'pluginFee',
   Pool = 'pool',
   StartFee = 'startFee',
   Timestamp = 'timestamp'
@@ -1665,10 +1597,15 @@ export enum Flash_OrderBy {
   Id = 'id',
   LogIndex = 'logIndex',
   Pool = 'pool',
+  PoolAlgebraFeesUsd = 'pool__algebraFeesUSD',
   PoolCollectedFeesToken0 = 'pool__collectedFeesToken0',
   PoolCollectedFeesToken1 = 'pool__collectedFeesToken1',
   PoolCollectedFeesUsd = 'pool__collectedFeesUSD',
   PoolCommunityFee = 'pool__communityFee',
+  PoolCommunityFeesToken0 = 'pool__communityFeesToken0',
+  PoolCommunityFeesToken1 = 'pool__communityFeesToken1',
+  PoolCommunityFeesUsd = 'pool__communityFeesUSD',
+  PoolCommunityVault = 'pool__communityVault',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
   PoolDeployer = 'pool__deployer',
@@ -1681,6 +1618,7 @@ export enum Flash_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolOverrideFee = 'pool__overrideFee',
   PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
@@ -1952,10 +1890,15 @@ export enum Mint_OrderBy {
   Origin = 'origin',
   Owner = 'owner',
   Pool = 'pool',
+  PoolAlgebraFeesUsd = 'pool__algebraFeesUSD',
   PoolCollectedFeesToken0 = 'pool__collectedFeesToken0',
   PoolCollectedFeesToken1 = 'pool__collectedFeesToken1',
   PoolCollectedFeesUsd = 'pool__collectedFeesUSD',
   PoolCommunityFee = 'pool__communityFee',
+  PoolCommunityFeesToken0 = 'pool__communityFeesToken0',
+  PoolCommunityFeesToken1 = 'pool__communityFeesToken1',
+  PoolCommunityFeesUsd = 'pool__communityFeesUSD',
+  PoolCommunityVault = 'pool__communityVault',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
   PoolDeployer = 'pool__deployer',
@@ -1968,6 +1911,7 @@ export enum Mint_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolOverrideFee = 'pool__overrideFee',
   PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
@@ -2041,6 +1985,7 @@ export enum OrderDirection {
 
 export type Plugin = {
   __typename?: 'Plugin';
+  activeModules: Array<Scalars['String']['output']>;
   collectedFeesToken0: Scalars['BigDecimal']['output'];
   collectedFeesToken1: Scalars['BigDecimal']['output'];
   collectedFeesUSD: Scalars['BigDecimal']['output'];
@@ -2051,6 +1996,12 @@ export type Plugin = {
 export type Plugin_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  activeModules?: InputMaybe<Array<Scalars['String']['input']>>;
+  activeModules_contains?: InputMaybe<Array<Scalars['String']['input']>>;
+  activeModules_contains_nocase?: InputMaybe<Array<Scalars['String']['input']>>;
+  activeModules_not?: InputMaybe<Array<Scalars['String']['input']>>;
+  activeModules_not_contains?: InputMaybe<Array<Scalars['String']['input']>>;
+  activeModules_not_contains_nocase?: InputMaybe<Array<Scalars['String']['input']>>;
   and?: InputMaybe<Array<InputMaybe<Plugin_Filter>>>;
   collectedFeesToken0?: InputMaybe<Scalars['BigDecimal']['input']>;
   collectedFeesToken0_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
@@ -2109,15 +2060,21 @@ export type Plugin_Filter = {
 };
 
 export enum Plugin_OrderBy {
+  ActiveModules = 'activeModules',
   CollectedFeesToken0 = 'collectedFeesToken0',
   CollectedFeesToken1 = 'collectedFeesToken1',
   CollectedFeesUsd = 'collectedFeesUSD',
   Id = 'id',
   Pool = 'pool',
+  PoolAlgebraFeesUsd = 'pool__algebraFeesUSD',
   PoolCollectedFeesToken0 = 'pool__collectedFeesToken0',
   PoolCollectedFeesToken1 = 'pool__collectedFeesToken1',
   PoolCollectedFeesUsd = 'pool__collectedFeesUSD',
   PoolCommunityFee = 'pool__communityFee',
+  PoolCommunityFeesToken0 = 'pool__communityFeesToken0',
+  PoolCommunityFeesToken1 = 'pool__communityFeesToken1',
+  PoolCommunityFeesUsd = 'pool__communityFeesUSD',
+  PoolCommunityVault = 'pool__communityVault',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
   PoolDeployer = 'pool__deployer',
@@ -2130,6 +2087,7 @@ export enum Plugin_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolOverrideFee = 'pool__overrideFee',
   PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
@@ -2152,12 +2110,17 @@ export enum Plugin_OrderBy {
 
 export type Pool = {
   __typename?: 'Pool';
+  algebraFeesUSD: Scalars['BigDecimal']['output'];
   burns: Array<Burn>;
   collectedFeesToken0: Scalars['BigDecimal']['output'];
   collectedFeesToken1: Scalars['BigDecimal']['output'];
   collectedFeesUSD: Scalars['BigDecimal']['output'];
   collects: Array<Collect>;
   communityFee: Scalars['BigInt']['output'];
+  communityFeesToken0: Scalars['BigDecimal']['output'];
+  communityFeesToken1: Scalars['BigDecimal']['output'];
+  communityFeesUSD: Scalars['BigDecimal']['output'];
+  communityVault: Scalars['Bytes']['output'];
   createdAtBlockNumber: Scalars['BigInt']['output'];
   createdAtTimestamp: Scalars['BigInt']['output'];
   deployer: Scalars['Bytes']['output'];
@@ -2171,6 +2134,7 @@ export type Pool = {
   liquidityProviderCount: Scalars['BigInt']['output'];
   mints: Array<Mint>;
   observationIndex: Scalars['BigInt']['output'];
+  overrideFee: Scalars['BigInt']['output'];
   plugin: Scalars['Bytes']['output'];
   pluginConfig: Scalars['Int']['output'];
   poolDayData: Array<PoolDayData>;
@@ -2485,10 +2449,15 @@ export enum PoolDayData_OrderBy {
   Low = 'low',
   Open = 'open',
   Pool = 'pool',
+  PoolAlgebraFeesUsd = 'pool__algebraFeesUSD',
   PoolCollectedFeesToken0 = 'pool__collectedFeesToken0',
   PoolCollectedFeesToken1 = 'pool__collectedFeesToken1',
   PoolCollectedFeesUsd = 'pool__collectedFeesUSD',
   PoolCommunityFee = 'pool__communityFee',
+  PoolCommunityFeesToken0 = 'pool__communityFeesToken0',
+  PoolCommunityFeesToken1 = 'pool__communityFeesToken1',
+  PoolCommunityFeesUsd = 'pool__communityFeesUSD',
+  PoolCommunityVault = 'pool__communityVault',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
   PoolDeployer = 'pool__deployer',
@@ -2501,6 +2470,7 @@ export enum PoolDayData_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolOverrideFee = 'pool__overrideFee',
   PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
@@ -2802,10 +2772,15 @@ export enum PoolHourData_OrderBy {
   Open = 'open',
   PeriodStartUnix = 'periodStartUnix',
   Pool = 'pool',
+  PoolAlgebraFeesUsd = 'pool__algebraFeesUSD',
   PoolCollectedFeesToken0 = 'pool__collectedFeesToken0',
   PoolCollectedFeesToken1 = 'pool__collectedFeesToken1',
   PoolCollectedFeesUsd = 'pool__collectedFeesUSD',
   PoolCommunityFee = 'pool__communityFee',
+  PoolCommunityFeesToken0 = 'pool__communityFeesToken0',
+  PoolCommunityFeesToken1 = 'pool__communityFeesToken1',
+  PoolCommunityFeesUsd = 'pool__communityFeesUSD',
+  PoolCommunityVault = 'pool__communityVault',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
   PoolDeployer = 'pool__deployer',
@@ -2818,6 +2793,7 @@ export enum PoolHourData_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolOverrideFee = 'pool__overrideFee',
   PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
@@ -2978,10 +2954,15 @@ export enum PoolPosition_OrderBy {
   LowerTickVolumeUsd = 'lowerTick__volumeUSD',
   Owner = 'owner',
   Pool = 'pool',
+  PoolAlgebraFeesUsd = 'pool__algebraFeesUSD',
   PoolCollectedFeesToken0 = 'pool__collectedFeesToken0',
   PoolCollectedFeesToken1 = 'pool__collectedFeesToken1',
   PoolCollectedFeesUsd = 'pool__collectedFeesUSD',
   PoolCommunityFee = 'pool__communityFee',
+  PoolCommunityFeesToken0 = 'pool__communityFeesToken0',
+  PoolCommunityFeesToken1 = 'pool__communityFeesToken1',
+  PoolCommunityFeesUsd = 'pool__communityFeesUSD',
+  PoolCommunityVault = 'pool__communityVault',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
   PoolDeployer = 'pool__deployer',
@@ -2994,6 +2975,7 @@ export enum PoolPosition_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolOverrideFee = 'pool__overrideFee',
   PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
@@ -3036,6 +3018,14 @@ export enum PoolPosition_OrderBy {
 export type Pool_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  algebraFeesUSD?: InputMaybe<Scalars['BigDecimal']['input']>;
+  algebraFeesUSD_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  algebraFeesUSD_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  algebraFeesUSD_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  algebraFeesUSD_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  algebraFeesUSD_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  algebraFeesUSD_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  algebraFeesUSD_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
   and?: InputMaybe<Array<InputMaybe<Pool_Filter>>>;
   burns_?: InputMaybe<Burn_Filter>;
   collectedFeesToken0?: InputMaybe<Scalars['BigDecimal']['input']>;
@@ -3071,6 +3061,40 @@ export type Pool_Filter = {
   communityFee_lte?: InputMaybe<Scalars['BigInt']['input']>;
   communityFee_not?: InputMaybe<Scalars['BigInt']['input']>;
   communityFee_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  communityFeesToken0?: InputMaybe<Scalars['BigDecimal']['input']>;
+  communityFeesToken0_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  communityFeesToken0_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  communityFeesToken0_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  communityFeesToken0_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  communityFeesToken0_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  communityFeesToken0_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  communityFeesToken0_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  communityFeesToken1?: InputMaybe<Scalars['BigDecimal']['input']>;
+  communityFeesToken1_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  communityFeesToken1_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  communityFeesToken1_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  communityFeesToken1_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  communityFeesToken1_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  communityFeesToken1_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  communityFeesToken1_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  communityFeesUSD?: InputMaybe<Scalars['BigDecimal']['input']>;
+  communityFeesUSD_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  communityFeesUSD_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  communityFeesUSD_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  communityFeesUSD_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  communityFeesUSD_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  communityFeesUSD_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  communityFeesUSD_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  communityVault?: InputMaybe<Scalars['Bytes']['input']>;
+  communityVault_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  communityVault_gt?: InputMaybe<Scalars['Bytes']['input']>;
+  communityVault_gte?: InputMaybe<Scalars['Bytes']['input']>;
+  communityVault_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  communityVault_lt?: InputMaybe<Scalars['Bytes']['input']>;
+  communityVault_lte?: InputMaybe<Scalars['Bytes']['input']>;
+  communityVault_not?: InputMaybe<Scalars['Bytes']['input']>;
+  communityVault_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  communityVault_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
   createdAtBlockNumber?: InputMaybe<Scalars['BigInt']['input']>;
   createdAtBlockNumber_gt?: InputMaybe<Scalars['BigInt']['input']>;
   createdAtBlockNumber_gte?: InputMaybe<Scalars['BigInt']['input']>;
@@ -3171,6 +3195,14 @@ export type Pool_Filter = {
   observationIndex_not?: InputMaybe<Scalars['BigInt']['input']>;
   observationIndex_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   or?: InputMaybe<Array<InputMaybe<Pool_Filter>>>;
+  overrideFee?: InputMaybe<Scalars['BigInt']['input']>;
+  overrideFee_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  overrideFee_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  overrideFee_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  overrideFee_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  overrideFee_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  overrideFee_not?: InputMaybe<Scalars['BigInt']['input']>;
+  overrideFee_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   plugin?: InputMaybe<Scalars['Bytes']['input']>;
   pluginConfig?: InputMaybe<Scalars['Int']['input']>;
   pluginConfig_gt?: InputMaybe<Scalars['Int']['input']>;
@@ -3366,12 +3398,17 @@ export type Pool_Filter = {
 };
 
 export enum Pool_OrderBy {
+  AlgebraFeesUsd = 'algebraFeesUSD',
   Burns = 'burns',
   CollectedFeesToken0 = 'collectedFeesToken0',
   CollectedFeesToken1 = 'collectedFeesToken1',
   CollectedFeesUsd = 'collectedFeesUSD',
   Collects = 'collects',
   CommunityFee = 'communityFee',
+  CommunityFeesToken0 = 'communityFeesToken0',
+  CommunityFeesToken1 = 'communityFeesToken1',
+  CommunityFeesUsd = 'communityFeesUSD',
+  CommunityVault = 'communityVault',
   CreatedAtBlockNumber = 'createdAtBlockNumber',
   CreatedAtTimestamp = 'createdAtTimestamp',
   Deployer = 'deployer',
@@ -3385,6 +3422,7 @@ export enum Pool_OrderBy {
   LiquidityProviderCount = 'liquidityProviderCount',
   Mints = 'mints',
   ObservationIndex = 'observationIndex',
+  OverrideFee = 'overrideFee',
   Plugin = 'plugin',
   PluginConfig = 'pluginConfig',
   PoolDayData = 'poolDayData',
@@ -3650,10 +3688,15 @@ export enum PositionSnapshot_OrderBy {
   Liquidity = 'liquidity',
   Owner = 'owner',
   Pool = 'pool',
+  PoolAlgebraFeesUsd = 'pool__algebraFeesUSD',
   PoolCollectedFeesToken0 = 'pool__collectedFeesToken0',
   PoolCollectedFeesToken1 = 'pool__collectedFeesToken1',
   PoolCollectedFeesUsd = 'pool__collectedFeesUSD',
   PoolCommunityFee = 'pool__communityFee',
+  PoolCommunityFeesToken0 = 'pool__communityFeesToken0',
+  PoolCommunityFeesToken1 = 'pool__communityFeesToken1',
+  PoolCommunityFeesUsd = 'pool__communityFeesUSD',
+  PoolCommunityVault = 'pool__communityVault',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
   PoolDeployer = 'pool__deployer',
@@ -3666,6 +3709,7 @@ export enum PositionSnapshot_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolOverrideFee = 'pool__overrideFee',
   PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
@@ -3978,10 +4022,15 @@ export enum Position_OrderBy {
   Liquidity = 'liquidity',
   Owner = 'owner',
   Pool = 'pool',
+  PoolAlgebraFeesUsd = 'pool__algebraFeesUSD',
   PoolCollectedFeesToken0 = 'pool__collectedFeesToken0',
   PoolCollectedFeesToken1 = 'pool__collectedFeesToken1',
   PoolCollectedFeesUsd = 'pool__collectedFeesUSD',
   PoolCommunityFee = 'pool__communityFee',
+  PoolCommunityFeesToken0 = 'pool__communityFeesToken0',
+  PoolCommunityFeesToken1 = 'pool__communityFeesToken1',
+  PoolCommunityFeesUsd = 'pool__communityFeesUSD',
+  PoolCommunityVault = 'pool__communityVault',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
   PoolDeployer = 'pool__deployer',
@@ -3994,6 +4043,7 @@ export enum Position_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolOverrideFee = 'pool__overrideFee',
   PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
@@ -4097,12 +4147,12 @@ export type Query = {
   __typename?: 'Query';
   /** Access to subgraph metadata */
   _meta?: Maybe<_Meta_>;
+  algebraCommunityVault?: Maybe<AlgebraCommunityVault>;
+  algebraCommunityVaults: Array<AlgebraCommunityVault>;
   algebraDayData?: Maybe<AlgebraDayData>;
   algebraDayDatas: Array<AlgebraDayData>;
   algebraHourData?: Maybe<AlgebraHourData>;
   algebraHourDatas: Array<AlgebraHourData>;
-  block?: Maybe<Block>;
-  blocks: Array<Block>;
   bundle?: Maybe<Bundle>;
   bundles: Array<Bundle>;
   burn?: Maybe<Burn>;
@@ -4159,11 +4209,31 @@ export type Query = {
   tokens: Array<Token>;
   transaction?: Maybe<Transaction>;
   transactions: Array<Transaction>;
+  vaultWithdrawal?: Maybe<VaultWithdrawal>;
+  vaultWithdrawals: Array<VaultWithdrawal>;
 };
 
 
 export type Query_MetaArgs = {
   block?: InputMaybe<Block_Height>;
+};
+
+
+export type QueryAlgebraCommunityVaultArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID']['input'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryAlgebraCommunityVaultsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<AlgebraCommunityVault_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<AlgebraCommunityVault_Filter>;
 };
 
 
@@ -4200,24 +4270,6 @@ export type QueryAlgebraHourDatasArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   subgraphError?: _SubgraphErrorPolicy_;
   where?: InputMaybe<AlgebraHourData_Filter>;
-};
-
-
-export type QueryBlockArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID']['input'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QueryBlocksArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Block_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<Block_Filter>;
 };
 
 
@@ -4724,6 +4776,24 @@ export type QueryTransactionsArgs = {
   where?: InputMaybe<Transaction_Filter>;
 };
 
+
+export type QueryVaultWithdrawalArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID']['input'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryVaultWithdrawalsArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<VaultWithdrawal_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<VaultWithdrawal_Filter>;
+};
+
 export type Reward = {
   __typename?: 'Reward';
   amount: Scalars['BigInt']['output'];
@@ -4782,646 +4852,18 @@ export enum Reward_OrderBy {
   RewardAddress = 'rewardAddress'
 }
 
-export type Subscription = {
-  __typename?: 'Subscription';
-  /** Access to subgraph metadata */
-  _meta?: Maybe<_Meta_>;
-  algebraDayData?: Maybe<AlgebraDayData>;
-  algebraDayDatas: Array<AlgebraDayData>;
-  algebraHourData?: Maybe<AlgebraHourData>;
-  algebraHourDatas: Array<AlgebraHourData>;
-  block?: Maybe<Block>;
-  blocks: Array<Block>;
-  bundle?: Maybe<Bundle>;
-  bundles: Array<Bundle>;
-  burn?: Maybe<Burn>;
-  burnFeeCache?: Maybe<BurnFeeCache>;
-  burnFeeCaches: Array<BurnFeeCache>;
-  burns: Array<Burn>;
-  collect?: Maybe<Collect>;
-  collects: Array<Collect>;
-  deposit?: Maybe<Deposit>;
-  deposits: Array<Deposit>;
-  eternalFarming?: Maybe<EternalFarming>;
-  eternalFarmings: Array<EternalFarming>;
-  factories: Array<Factory>;
-  factory?: Maybe<Factory>;
-  feeHourData?: Maybe<FeeHourData>;
-  feeHourDatas: Array<FeeHourData>;
-  flash?: Maybe<Flash>;
-  flashes: Array<Flash>;
-  mint?: Maybe<Mint>;
-  mints: Array<Mint>;
-  plugin?: Maybe<Plugin>;
-  plugins: Array<Plugin>;
-  pool?: Maybe<Pool>;
-  poolDayData?: Maybe<PoolDayData>;
-  poolDayDatas: Array<PoolDayData>;
-  poolFeeData?: Maybe<PoolFeeData>;
-  poolFeeDatas: Array<PoolFeeData>;
-  poolHourData?: Maybe<PoolHourData>;
-  poolHourDatas: Array<PoolHourData>;
-  poolPosition?: Maybe<PoolPosition>;
-  poolPositions: Array<PoolPosition>;
-  pools: Array<Pool>;
-  position?: Maybe<Position>;
-  positionSnapshot?: Maybe<PositionSnapshot>;
-  positionSnapshots: Array<PositionSnapshot>;
-  positionTransferCache?: Maybe<PositionTransferCache>;
-  positionTransferCaches: Array<PositionTransferCache>;
-  positions: Array<Position>;
-  reward?: Maybe<Reward>;
-  rewards: Array<Reward>;
-  swap?: Maybe<Swap>;
-  swapFeeCache?: Maybe<SwapFeeCache>;
-  swapFeeCaches: Array<SwapFeeCache>;
-  swaps: Array<Swap>;
-  tick?: Maybe<Tick>;
-  tickHourData?: Maybe<TickHourData>;
-  tickHourDatas: Array<TickHourData>;
-  ticks: Array<Tick>;
-  token?: Maybe<Token>;
-  tokenDayData?: Maybe<TokenDayData>;
-  tokenDayDatas: Array<TokenDayData>;
-  tokenHourData?: Maybe<TokenHourData>;
-  tokenHourDatas: Array<TokenHourData>;
-  tokens: Array<Token>;
-  transaction?: Maybe<Transaction>;
-  transactions: Array<Transaction>;
-};
-
-
-export type Subscription_MetaArgs = {
-  block?: InputMaybe<Block_Height>;
-};
-
-
-export type SubscriptionAlgebraDayDataArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID']['input'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionAlgebraDayDatasArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<AlgebraDayData_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<AlgebraDayData_Filter>;
-};
-
-
-export type SubscriptionAlgebraHourDataArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID']['input'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionAlgebraHourDatasArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<AlgebraHourData_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<AlgebraHourData_Filter>;
-};
-
-
-export type SubscriptionBlockArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID']['input'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionBlocksArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Block_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<Block_Filter>;
-};
-
-
-export type SubscriptionBundleArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID']['input'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionBundlesArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Bundle_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<Bundle_Filter>;
-};
-
-
-export type SubscriptionBurnArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID']['input'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionBurnFeeCacheArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID']['input'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionBurnFeeCachesArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<BurnFeeCache_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<BurnFeeCache_Filter>;
-};
-
-
-export type SubscriptionBurnsArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Burn_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<Burn_Filter>;
-};
-
-
-export type SubscriptionCollectArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID']['input'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionCollectsArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Collect_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<Collect_Filter>;
-};
-
-
-export type SubscriptionDepositArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID']['input'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionDepositsArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Deposit_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<Deposit_Filter>;
-};
-
-
-export type SubscriptionEternalFarmingArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID']['input'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionEternalFarmingsArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<EternalFarming_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<EternalFarming_Filter>;
-};
-
-
-export type SubscriptionFactoriesArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Factory_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<Factory_Filter>;
-};
-
-
-export type SubscriptionFactoryArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID']['input'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionFeeHourDataArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID']['input'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionFeeHourDatasArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<FeeHourData_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<FeeHourData_Filter>;
-};
-
-
-export type SubscriptionFlashArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID']['input'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionFlashesArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Flash_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<Flash_Filter>;
-};
-
-
-export type SubscriptionMintArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID']['input'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionMintsArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Mint_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<Mint_Filter>;
-};
-
-
-export type SubscriptionPluginArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID']['input'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionPluginsArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Plugin_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<Plugin_Filter>;
-};
-
-
-export type SubscriptionPoolArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID']['input'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionPoolDayDataArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID']['input'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionPoolDayDatasArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<PoolDayData_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<PoolDayData_Filter>;
-};
-
-
-export type SubscriptionPoolFeeDataArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID']['input'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionPoolFeeDatasArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<PoolFeeData_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<PoolFeeData_Filter>;
-};
-
-
-export type SubscriptionPoolHourDataArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID']['input'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionPoolHourDatasArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<PoolHourData_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<PoolHourData_Filter>;
-};
-
-
-export type SubscriptionPoolPositionArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID']['input'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionPoolPositionsArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<PoolPosition_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<PoolPosition_Filter>;
-};
-
-
-export type SubscriptionPoolsArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Pool_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<Pool_Filter>;
-};
-
-
-export type SubscriptionPositionArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID']['input'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionPositionSnapshotArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID']['input'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionPositionSnapshotsArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<PositionSnapshot_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<PositionSnapshot_Filter>;
-};
-
-
-export type SubscriptionPositionTransferCacheArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID']['input'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionPositionTransferCachesArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<PositionTransferCache_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<PositionTransferCache_Filter>;
-};
-
-
-export type SubscriptionPositionsArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Position_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<Position_Filter>;
-};
-
-
-export type SubscriptionRewardArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID']['input'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionRewardsArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Reward_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<Reward_Filter>;
-};
-
-
-export type SubscriptionSwapArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID']['input'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionSwapFeeCacheArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID']['input'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionSwapFeeCachesArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<SwapFeeCache_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<SwapFeeCache_Filter>;
-};
-
-
-export type SubscriptionSwapsArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Swap_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<Swap_Filter>;
-};
-
-
-export type SubscriptionTickArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID']['input'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionTickHourDataArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID']['input'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionTickHourDatasArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<TickHourData_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<TickHourData_Filter>;
-};
-
-
-export type SubscriptionTicksArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Tick_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<Tick_Filter>;
-};
-
-
-export type SubscriptionTokenArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID']['input'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionTokenDayDataArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID']['input'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionTokenDayDatasArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<TokenDayData_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<TokenDayData_Filter>;
-};
-
-
-export type SubscriptionTokenHourDataArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID']['input'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionTokenHourDatasArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<TokenHourData_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<TokenHourData_Filter>;
-};
-
-
-export type SubscriptionTokensArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Token_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<Token_Filter>;
-};
-
-
-export type SubscriptionTransactionArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars['ID']['input'];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionTransactionsArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Transaction_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<Transaction_Filter>;
-};
-
 export type Swap = {
   __typename?: 'Swap';
   amount0: Scalars['BigDecimal']['output'];
   amount1: Scalars['BigDecimal']['output'];
   amountUSD: Scalars['BigDecimal']['output'];
+  fee: Scalars['BigInt']['output'];
   id: Scalars['ID']['output'];
   liquidity: Scalars['BigInt']['output'];
   logIndex?: Maybe<Scalars['BigInt']['output']>;
   origin: Scalars['Bytes']['output'];
+  overrideFee: Scalars['BigInt']['output'];
+  pluginFee: Scalars['BigInt']['output'];
   pool: Pool;
   price: Scalars['BigInt']['output'];
   recipient: Scalars['Bytes']['output'];
@@ -5507,6 +4949,14 @@ export type Swap_Filter = {
   amountUSD_not?: InputMaybe<Scalars['BigDecimal']['input']>;
   amountUSD_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
   and?: InputMaybe<Array<InputMaybe<Swap_Filter>>>;
+  fee?: InputMaybe<Scalars['BigInt']['input']>;
+  fee_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  fee_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  fee_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  fee_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  fee_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  fee_not?: InputMaybe<Scalars['BigInt']['input']>;
+  fee_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   id?: InputMaybe<Scalars['ID']['input']>;
   id_gt?: InputMaybe<Scalars['ID']['input']>;
   id_gte?: InputMaybe<Scalars['ID']['input']>;
@@ -5542,6 +4992,22 @@ export type Swap_Filter = {
   origin_not?: InputMaybe<Scalars['Bytes']['input']>;
   origin_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
   origin_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  overrideFee?: InputMaybe<Scalars['BigInt']['input']>;
+  overrideFee_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  overrideFee_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  overrideFee_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  overrideFee_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  overrideFee_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  overrideFee_not?: InputMaybe<Scalars['BigInt']['input']>;
+  overrideFee_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  pluginFee?: InputMaybe<Scalars['BigInt']['input']>;
+  pluginFee_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  pluginFee_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  pluginFee_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  pluginFee_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  pluginFee_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  pluginFee_not?: InputMaybe<Scalars['BigInt']['input']>;
+  pluginFee_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   pool?: InputMaybe<Scalars['String']['input']>;
   pool_?: InputMaybe<Pool_Filter>;
   pool_contains?: InputMaybe<Scalars['String']['input']>;
@@ -5692,15 +5158,23 @@ export enum Swap_OrderBy {
   Amount0 = 'amount0',
   Amount1 = 'amount1',
   AmountUsd = 'amountUSD',
+  Fee = 'fee',
   Id = 'id',
   Liquidity = 'liquidity',
   LogIndex = 'logIndex',
   Origin = 'origin',
+  OverrideFee = 'overrideFee',
+  PluginFee = 'pluginFee',
   Pool = 'pool',
+  PoolAlgebraFeesUsd = 'pool__algebraFeesUSD',
   PoolCollectedFeesToken0 = 'pool__collectedFeesToken0',
   PoolCollectedFeesToken1 = 'pool__collectedFeesToken1',
   PoolCollectedFeesUsd = 'pool__collectedFeesUSD',
   PoolCommunityFee = 'pool__communityFee',
+  PoolCommunityFeesToken0 = 'pool__communityFeesToken0',
+  PoolCommunityFeesToken1 = 'pool__communityFeesToken1',
+  PoolCommunityFeesUsd = 'pool__communityFeesUSD',
+  PoolCommunityVault = 'pool__communityVault',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
   PoolDeployer = 'pool__deployer',
@@ -5713,6 +5187,7 @@ export enum Swap_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolOverrideFee = 'pool__overrideFee',
   PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
@@ -5936,10 +5411,15 @@ export enum TickHourData_OrderBy {
   LiquidityNet = 'liquidityNet',
   PeriodStartUnix = 'periodStartUnix',
   Pool = 'pool',
+  PoolAlgebraFeesUsd = 'pool__algebraFeesUSD',
   PoolCollectedFeesToken0 = 'pool__collectedFeesToken0',
   PoolCollectedFeesToken1 = 'pool__collectedFeesToken1',
   PoolCollectedFeesUsd = 'pool__collectedFeesUSD',
   PoolCommunityFee = 'pool__communityFee',
+  PoolCommunityFeesToken0 = 'pool__communityFeesToken0',
+  PoolCommunityFeesToken1 = 'pool__communityFeesToken1',
+  PoolCommunityFeesUsd = 'pool__communityFeesUSD',
+  PoolCommunityVault = 'pool__communityVault',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
   PoolDeployer = 'pool__deployer',
@@ -5952,6 +5432,7 @@ export enum TickHourData_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolOverrideFee = 'pool__overrideFee',
   PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
@@ -6191,10 +5672,15 @@ export enum Tick_OrderBy {
   LiquidityProviderCount = 'liquidityProviderCount',
   Pool = 'pool',
   PoolAddress = 'poolAddress',
+  PoolAlgebraFeesUsd = 'pool__algebraFeesUSD',
   PoolCollectedFeesToken0 = 'pool__collectedFeesToken0',
   PoolCollectedFeesToken1 = 'pool__collectedFeesToken1',
   PoolCollectedFeesUsd = 'pool__collectedFeesUSD',
   PoolCommunityFee = 'pool__communityFee',
+  PoolCommunityFeesToken0 = 'pool__communityFeesToken0',
+  PoolCommunityFeesToken1 = 'pool__communityFeesToken1',
+  PoolCommunityFeesUsd = 'pool__communityFeesUSD',
+  PoolCommunityVault = 'pool__communityVault',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
   PoolDeployer = 'pool__deployer',
@@ -6207,6 +5693,7 @@ export enum Tick_OrderBy {
   PoolLiquidity = 'pool__liquidity',
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
+  PoolOverrideFee = 'pool__overrideFee',
   PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
@@ -6950,6 +6437,155 @@ export enum Transaction_OrderBy {
   Timestamp = 'timestamp'
 }
 
+export type VaultWithdrawal = {
+  __typename?: 'VaultWithdrawal';
+  amount: Scalars['BigDecimal']['output'];
+  amountUSD: Scalars['BigDecimal']['output'];
+  blockNumber: Scalars['BigInt']['output'];
+  id: Scalars['ID']['output'];
+  isAlgebra: Scalars['Boolean']['output'];
+  timestamp: Scalars['BigInt']['output'];
+  to: Scalars['Bytes']['output'];
+  token: Token;
+  vault: AlgebraCommunityVault;
+};
+
+export type VaultWithdrawal_Filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  amount?: InputMaybe<Scalars['BigDecimal']['input']>;
+  amountUSD?: InputMaybe<Scalars['BigDecimal']['input']>;
+  amountUSD_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  amountUSD_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  amountUSD_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  amountUSD_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  amountUSD_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  amountUSD_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  amountUSD_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  amount_gt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  amount_gte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  amount_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  amount_lt?: InputMaybe<Scalars['BigDecimal']['input']>;
+  amount_lte?: InputMaybe<Scalars['BigDecimal']['input']>;
+  amount_not?: InputMaybe<Scalars['BigDecimal']['input']>;
+  amount_not_in?: InputMaybe<Array<Scalars['BigDecimal']['input']>>;
+  and?: InputMaybe<Array<InputMaybe<VaultWithdrawal_Filter>>>;
+  blockNumber?: InputMaybe<Scalars['BigInt']['input']>;
+  blockNumber_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  blockNumber_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  blockNumber_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  blockNumber_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  blockNumber_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  blockNumber_not?: InputMaybe<Scalars['BigInt']['input']>;
+  blockNumber_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_not?: InputMaybe<Scalars['ID']['input']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  isAlgebra?: InputMaybe<Scalars['Boolean']['input']>;
+  isAlgebra_in?: InputMaybe<Array<Scalars['Boolean']['input']>>;
+  isAlgebra_not?: InputMaybe<Scalars['Boolean']['input']>;
+  isAlgebra_not_in?: InputMaybe<Array<Scalars['Boolean']['input']>>;
+  or?: InputMaybe<Array<InputMaybe<VaultWithdrawal_Filter>>>;
+  timestamp?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  timestamp_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_not?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  to?: InputMaybe<Scalars['Bytes']['input']>;
+  to_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  to_gt?: InputMaybe<Scalars['Bytes']['input']>;
+  to_gte?: InputMaybe<Scalars['Bytes']['input']>;
+  to_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  to_lt?: InputMaybe<Scalars['Bytes']['input']>;
+  to_lte?: InputMaybe<Scalars['Bytes']['input']>;
+  to_not?: InputMaybe<Scalars['Bytes']['input']>;
+  to_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  to_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  token?: InputMaybe<Scalars['String']['input']>;
+  token_?: InputMaybe<Token_Filter>;
+  token_contains?: InputMaybe<Scalars['String']['input']>;
+  token_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  token_ends_with?: InputMaybe<Scalars['String']['input']>;
+  token_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  token_gt?: InputMaybe<Scalars['String']['input']>;
+  token_gte?: InputMaybe<Scalars['String']['input']>;
+  token_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  token_lt?: InputMaybe<Scalars['String']['input']>;
+  token_lte?: InputMaybe<Scalars['String']['input']>;
+  token_not?: InputMaybe<Scalars['String']['input']>;
+  token_not_contains?: InputMaybe<Scalars['String']['input']>;
+  token_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  token_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  token_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  token_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  token_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  token_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  token_starts_with?: InputMaybe<Scalars['String']['input']>;
+  token_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  vault?: InputMaybe<Scalars['String']['input']>;
+  vault_?: InputMaybe<AlgebraCommunityVault_Filter>;
+  vault_contains?: InputMaybe<Scalars['String']['input']>;
+  vault_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  vault_ends_with?: InputMaybe<Scalars['String']['input']>;
+  vault_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  vault_gt?: InputMaybe<Scalars['String']['input']>;
+  vault_gte?: InputMaybe<Scalars['String']['input']>;
+  vault_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  vault_lt?: InputMaybe<Scalars['String']['input']>;
+  vault_lte?: InputMaybe<Scalars['String']['input']>;
+  vault_not?: InputMaybe<Scalars['String']['input']>;
+  vault_not_contains?: InputMaybe<Scalars['String']['input']>;
+  vault_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  vault_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  vault_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  vault_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  vault_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  vault_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  vault_starts_with?: InputMaybe<Scalars['String']['input']>;
+  vault_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+};
+
+export enum VaultWithdrawal_OrderBy {
+  Amount = 'amount',
+  AmountUsd = 'amountUSD',
+  BlockNumber = 'blockNumber',
+  Id = 'id',
+  IsAlgebra = 'isAlgebra',
+  Timestamp = 'timestamp',
+  To = 'to',
+  Token = 'token',
+  TokenDecimals = 'token__decimals',
+  TokenDerivedMatic = 'token__derivedMatic',
+  TokenFeesUsd = 'token__feesUSD',
+  TokenId = 'token__id',
+  TokenName = 'token__name',
+  TokenPoolCount = 'token__poolCount',
+  TokenSymbol = 'token__symbol',
+  TokenTotalSupply = 'token__totalSupply',
+  TokenTotalValueLocked = 'token__totalValueLocked',
+  TokenTotalValueLockedUsd = 'token__totalValueLockedUSD',
+  TokenTotalValueLockedUsdUntracked = 'token__totalValueLockedUSDUntracked',
+  TokenTxCount = 'token__txCount',
+  TokenUntrackedVolumeUsd = 'token__untrackedVolumeUSD',
+  TokenVolume = 'token__volume',
+  TokenVolumeUsd = 'token__volumeUSD',
+  Vault = 'vault',
+  VaultAlgebraFee = 'vault__algebraFee',
+  VaultAlgebraFeeReceiver = 'vault__algebraFeeReceiver',
+  VaultCommunityFeeReceiver = 'vault__communityFeeReceiver',
+  VaultId = 'vault__id',
+  VaultTotalAlgebraWithdrawnUsd = 'vault__totalAlgebraWithdrawnUSD',
+  VaultTotalWithdrawnUsd = 'vault__totalWithdrawnUSD'
+}
+
 export type _Block_ = {
   __typename?: '_Block_';
   /** The hash of the block */
@@ -6970,7 +6606,6 @@ export type _Meta_ = {
    * will be null if the _meta field has a block constraint that asks for
    * a block number. It will be filled if the _meta field has no block constraint
    * and therefore asks for the latest  block
-   *
    */
   block: _Block_;
   /** The deployment ID */
