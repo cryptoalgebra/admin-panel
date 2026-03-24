@@ -1,19 +1,19 @@
 :root {
     /* BRAND */
-    --primary-100: #0a0a0a;
-    --primary-200: #171717;
-    --primary-300: #ffffff1a;
+    --primary-100: #855300;
+    --primary-200: #b97f33;
+    --primary-300: #ffe090;
 
     /* ACCENT */
-    --accent-100: #ff6467;
-    --accent-200: #ffb1b3;
+    --accent-100: #c0c0c0;
+    --accent-200: #5a3800;
 
     /* TEXT */
-    --text-100: #0a0a0a; /* text color */
-    --text-200: #ffffff1a; /* muted text color */
+    --text-100: #333333; /* text color */
+    --text-200: #5c5c5c; /* muted text color */
 
     /* BACKGROUND */
-    --bg-100: #ffffff; /* app background */
-    --bg-200: #fafafa; /* card background */
-    --bg-300: #dedede; /* border color */
+    --bg-100: white; /* app background */
+    --bg-200: #f7f7f7; /* card background */
+    --bg-300: #ededed; /* border color */
 }

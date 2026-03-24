@@ -1,6 +1,23 @@
 @theme {
-    --color-app-background: var(--bg-100);
+    --screen-xs: 380px;
+    --screen-sm: 640px;
+    --screen-md: 768px;
+    --screen-lg: 1024px;
+    --screen-xl: 1280px;
+    --screen-2xl: 1400px;
 
+    /* Integral CSS variables */
+
+    --background-image-primary-gradient: linear-gradient(90deg, #485c11 0%, #5a7015 50%, #485c11 100%);
+    --background-image-destructive-gradient: linear-gradient(180deg, rgb(255, 108, 152) 0%, rgb(157, 40, 73) 100%);
+
+    --color-bg-100: var(--bg-100);
+    --color-bg-200: var(--bg-200);
+    --color-bg-300: var(--bg-300);
+
+    --color-background: var(--bg-100);
+
+    --color-primary-50: var(--primary-50);
     --color-primary-100: var(--primary-100);
     --color-primary-200: var(--primary-200);
     --color-primary-300: var(--primary-300);
@@ -17,13 +34,12 @@
 
     --color-text: var(--text-100);
     --color-border: var(--bg-300);
-    --color-input: var(--bg-300);
-    --color-ring: color-mix(in srgb, var(--text-200) 40%, transparent);
-    --color-background: var(--bg-100);
+    --color-input: var(--bg-200);
+    --color-ring: var(--primary-100);
     --color-foreground: var(--text-100);
 
     --color-primary: var(--primary-100);
-    --color-primary-foreground: white;
+    --color-primary-foreground: var(--text-100);
     --color-primary-button: var(--primary-100);
     --color-primary-text: var(--primary-300);
 
@@ -33,23 +49,23 @@
     --color-destructive: var(--accent-100);
     --color-destructive-foreground: var(--text-100);
 
-    --color-muted: var(--bg-300);
+    --color-muted: var(--text-200);
     --color-muted-foreground: var(--text-200);
     --color-muted-primary: var(--primary-100);
 
-    --color-accent: var(--accent-100);
+    --color-accent: var(--accent-200);
     --color-accent-foreground: var(--accent-200);
 
     --color-popover: var(--bg-200);
     --color-popover-foreground: var(--text-100);
 
-    --color-card: white;
+    --color-card: var(--color-white);
     --color-card-foreground: var(--text-100);
-    --color-card-hover: color-mix(in srgb, var(--bg-200) 50%, transparent);
+    --color-card-hover: var(--bg-200);
+    --color-hover: var(--bg-200);
     --color-card-dark: var(--bg-100);
     --color-card-light: var(--bg-300);
-    --color-card-border: var(--bg-300);
-    --color-card-border-focus: color-mix(in srgb, var(--text-200) 60%, transparent);
+    --color-card-border: var(--bg-200);
 
     --color-farm: #f8d81c;
     --color-alm: #74f7df;

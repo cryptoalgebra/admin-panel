@@ -26,7 +26,7 @@ const Account = () => {
     return (
         <div className="flex h-full justify-end max-h-[64px] gap-4 whitespace-nowrap items-center">
             <div className="flex gap-2 h-full items-center">
-                <Button variant={"secondary"} size={"sm"} onClick={() => open({ view: "Networks" })}>
+                <Button variant={"outline"} size={"sm"} onClick={() => open({ view: "Networks" })}>
                     <img src={currentNetwork?.assets?.imageUrl} width={20} height={20} /> <ChevronDown size={20} />
                 </Button>
                 <Button onClick={() => open()} variant={account ? "secondary" : "primary"} size={"sm"}>
@@ -79,11 +79,11 @@ const Header = () => {
         paths.some((path) => matchPath(path, pathname)) ? "text-primary" : "text-black/50 hover:text-black/70";
 
     return (
-        <header className="fixed flex flex-col left-0 w-full top-0 bg-card z-10">
+        <header className="fixed flex flex-col left-0 w-full top-0 z-10">
             <AdminAccount />
-            <div className="flex gap-4 py-4 w-full max-w-[1280px] mx-auto">
+            <div className="flex gap-4 p-4 w-full max-w-[1280px] mx-auto">
                 <Link to={"/"} className="font-bold flex gap-2 items-center">
-                    <img src={IntegralLogo} alt="Integral Logo" className="inline-block mr-2 w-8 h-8" />
+                    <img src={IntegralLogo} alt="Integral Logo" className="inline-block mr-2 w-10 h-10" />
                     <span className="max-md:hidden">Admin Panel</span>
                 </Link>
                 <nav className="mr-auto">

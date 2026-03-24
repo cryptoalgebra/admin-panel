@@ -1,30 +1,30 @@
-import { ChainId } from "@cryptoalgebra/integral-sdk";
+import { ADDRESS_ZERO, ChainId } from "@cryptoalgebra/integral-sdk";
 import { Address } from "viem";
 
 /* Algebra Core */
 export const ALGEBRA_FACTORY: Record<number, Address> = {
-    [ChainId.BaseSepolia]: "0x285C74f3d01296F96c5d3858ab482f707e8Bfdfc",
+    [ChainId.Kite]: "0x10253594A832f967994b44f33411940533302ACb",
 };
 
 /* Plugins */
 export const PLUGIN_FACTORY: Record<number, Address> = {
-    [ChainId.BaseSepolia]: "0x54b589aC373Aad138e3689515ff5206afCe1ad41",
+    [ChainId.Kite]: "0x149B786700d47b3007F757F76BEf01c064ed6E94",
 };
 
 export const SECURITY_REGISTRY: Record<number, Address> = {
-    [ChainId.BaseSepolia]: "0x6aa9481De990bC12F906C5e8DE70D8556ac5ba2e",
+    [ChainId.Kite]: "0x888B035e6f64b1C1Aebcd6DDf0C9fd7aEBeA39ED",
 };
 
 /* Farming */
 export const ALGEBRA_ETERNAL_FARMING: Record<number, Address> = {
-    [ChainId.BaseSepolia]: "0xB50E639E23C954546C75d9C15363FC0375E5E95E",
+    [ChainId.Kite]: "0x69D57B9D705eaD73a5d2f2476C30c55bD755cc2F",
 };
 
 export const FARMING_CENTER: Record<number, Address> = {
-    [ChainId.BaseSepolia]: "0x92E4eaCD3b49fa85D13E4B6E8d6bfd0CFafaeD75",
+    [ChainId.Kite]: "0xB4F9b6b019E75CBe51af4425b2Fc12797e2Ee2a1",
 };
 
 /* Ve 3.3 */
 export const VOTER: Record<number, Address> = {
-    [ChainId.BaseSepolia]: "0x1B79491D453FFb4eFf2B75b106052B1670AC8b27",
+    [ChainId.Kite]: ADDRESS_ZERO,
 };

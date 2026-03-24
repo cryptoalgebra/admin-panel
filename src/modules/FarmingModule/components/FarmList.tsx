@@ -62,7 +62,7 @@ const FarmRow = (farm: FarmingFieldsFragment) => {
                 <Link
                     to={`/farms/${farm.id}`}
                     state={farm}
-                    className="inline-block px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:opacity-90 transition-opacity"
+                    className="inline-block px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:opacity-90 transition-opacity"
                 >
                     Manage →
                 </Link>
@@ -104,7 +104,7 @@ const FarmList = () => {
             {
                 activeFarms: [],
                 deactivatedFarms: [],
-            }
+            },
         );
     }, [farms]);
 

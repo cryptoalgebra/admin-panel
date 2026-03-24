@@ -25,7 +25,8 @@ const PoolRow = (pool: FormattedPool) => {
                     <div className="md:hidden text-xs text-text/50 font-medium">Pool</div>
                     <div className="flex items-center gap-2">
                         <span className="font-medium text-sm text-text">{`${pool.pair.token0.symbol} / ${pool.pair.token1.symbol}`}</span>
-                        <span className="bg-bg-200 text-xs text-text/70 rounded px-2 py-0.5 border border-border">{`${pool.overrideFee || pool.fee}%`}</span>
+                        <span className="bg-bg-200 text-xs text-text/70 rounded px-2 py-0.5 border border-border">{`${pool.overrideFee ||
+                            pool.fee}%`}</span>
                     </div>
                 </div>
             )}
@@ -63,7 +64,7 @@ const PoolRow = (pool: FormattedPool) => {
             <div className="text-right">
                 <Link
                     to={`/pools/${pool.id}`}
-                    className="inline-block px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:opacity-90 transition-opacity"
+                    className="inline-block px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:opacity-90 transition-opacity"
                 >
                     Manage →
                 </Link>

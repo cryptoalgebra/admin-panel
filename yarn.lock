@@ -1453,10 +1453,10 @@
     tsdx "^0.14.1"
     typechain "^8.0.0"
 
-"@cryptoalgebra/integral-sdk@^1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@cryptoalgebra/integral-sdk/-/integral-sdk-1.0.3.tgz#401934a6e222d820815985e2bd303a29ac2ac178"
-  integrity sha512-2/DEb0k4eW0xkH6dObPQT3FkWiDZVn2y8xrpyF2v+HPbAeAzGxv7U9DhE/iyVJ9vqx6gF3e/lMFz3E8ofRWOew==
+"@cryptoalgebra/integral-sdk@npm:@cryptoalgebra/kiteswap-sdk@1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@cryptoalgebra/kiteswap-sdk/-/kiteswap-sdk-1.0.1.tgz#7f6cadba5d22621f32c75fdf289aebb022e7a99f"
+  integrity sha512-AuYmIdmkxyJSVPGSqPbCE019PrBZY5dRv91pwMJJj0idNopnNdJr4twZTny2+LCXT4zVffyGi7xsA5k/sLX83g==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/address" "^5.7.0"
