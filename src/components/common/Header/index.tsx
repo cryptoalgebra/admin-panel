@@ -52,6 +52,8 @@ const PATHS = {
     FARM: "/farms/:id",
     GAUGES: "/gauges",
     GAUGE: "/gauges/:id",
+    PREDICTION: "/prediction",
+    PREDICTION_MARKET: "/prediction/:market"
 };
 
 const menuItems = [
@@ -69,6 +71,11 @@ const menuItems = [
         title: "Gauges",
         link: "/gauges",
         active: [PATHS.GAUGES, PATHS.GAUGE],
+    },
+    enabledModules.PredictionModule && {
+        title: "Prediction",
+        link: "/prediction",
+        active: [PATHS.PREDICTION, PATHS.PREDICTION_MARKET],
     },
 ].filter(Boolean) as { title: string; link: string; active: string[] }[];
 

@@ -1,4 +1,4 @@
-import { infoClient, farmingClient } from "@/graphql/clients";
+import { infoClient, farmingClient, predictionClient } from "@/graphql/clients";
 import { useChainId } from "wagmi";
 
 export function useClients() {
@@ -7,5 +7,6 @@ export function useClients() {
     return {
         infoClient: infoClient[chainId],
         farmingClient: farmingClient[chainId],
+        predictionClient: predictionClient[chainId]
     };
 }
