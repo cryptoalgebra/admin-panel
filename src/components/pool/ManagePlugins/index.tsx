@@ -1,10 +1,13 @@
-import DataWithCopyButton from "@/components/common/DataWithCopyButton";
+import { DataRow } from "@/components/common/DataRow";
+import { SectionCard } from "@/components/common/SectionCard";
+import { StatBox } from "@/components/common/StatBox";
 import { Button } from "@/components/ui/button";
 import SetPluginAddressModal from "@/components/modals/pool/ChangePluginAddressModal";
 import ManagePluginConfigModal from "@/components/modals/pool/ManagePluginConfigModal";
 import { useReadAlgebraBasePluginDefaultPluginConfig, useReadAlgebraPoolPlugin } from "@/generated";
 import { useTransactionAwait } from "@/hooks/common/useTransactionAwait";
 import { usePluginFlags } from "@/hooks/pools/usePluginFlags";
+import { useBlockExplorerUrl } from "@/hooks/common/useBlockExplorerUrl";
 import { PluginFlags } from "@/types/pool-plugin-flags";
 import { parsePluginConfig } from "@/utils/pool/parsePluginConfig";
 import { parsePluginFlags } from "@/utils/pool/parsePluginFlags";
@@ -85,6 +88,7 @@ const FLAG_TO_HOOK_LABEL: Record<keyof PluginFlags, string> = {
 };
 
 const ManagePlugins = ({ poolId }: IManagePlugins) => {
+    const explorerBaseUrl = useBlockExplorerUrl();
     const pluginFlags = usePluginFlags(poolId);
     const [flags, setFlags] = useState<PluginFlags>();
     const modalInitialFlagsRef = useRef<PluginFlags | null>(null);
@@ -256,26 +260,15 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
     };
 
     return (
-        <div className="flex flex-col text-left p-6 bg-white border border-border rounded-lg transition-colors">
-            <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-bg-200 rounded-xl">
-                    <Puzzle size={18} className="text-text" />
-                </div>
-                <h3 className="font-semibold text-lg text-text">Plugin Management</h3>
-            </div>
-
+        <SectionCard title="Plugin Management" icon={Puzzle}>
             {pluginId && flags ? (
-                <div className="flex flex-col gap-5 flex-1">
-                    {/* Plugin Address */}
-                    <div>
-                        <p className="text-xs font-medium text-text/50 uppercase tracking-wider mb-1.5">Plugin Address</p>
-                        <DataWithCopyButton data={pluginId} />
+                <>
+                    <div className="border-b border-border mb-4">
+                        <DataRow label="Plugin Address" copyable={pluginId} link={`${explorerBaseUrl}/address/${pluginId}`} />
                     </div>
 
-                    <div className="h-px bg-border" />
-
                     {/* Active Modules */}
-                    <div>
+                    <div className="pb-4">
                         <p className="text-xs font-medium text-text/50 uppercase tracking-wider mb-3">Modules</p>
                         {currentActiveModules.length > 0 ? (
                             <div className="flex flex-wrap gap-2">
@@ -307,60 +300,47 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
                             <p className="text-sm text-text/50">No active modules</p>
                         )}
                     </div>
-                    <div className="h-px bg-border" />
 
-                    {/* Plugin Config */}
-                    <div className=" rounded-xl mb-4 space-y-4">
-                        <div className="flex items-center justify-between mb-3">
-                            <p className="text-xs font-medium text-text/50 uppercase tracking-wider mb-1.5">Plugin Configuration</p>
-                        </div>
-                        <div className="grid grid-cols-2 gap-3">
-                            <div className="p-3 bg-bg-200 rounded-lg border border-neutral-200">
-                                <p className="text-xs text-text/50 mb-0.5">Current</p>
-                                <p className="text-lg font-semibold text-text">{pluginConfig}</p>
-                            </div>
-                            {defaultPluginConfig !== undefined && (
-                                <div className="p-3 bg-bg-200 rounded-lg border border-neutral-200">
-                                    <p className="text-xs text-text/50 mb-0.5">Default</p>
-                                    <p className="text-lg font-semibold text-text">{defaultPluginConfig}</p>
-                                </div>
-                            )}
-                        </div>
+                    {/* Plugin Config Stats */}
+                    <div className="grid grid-cols-2 gap-3 pb-4">
+                        <StatBox label="Current Config" value={pluginConfig ?? "-"} />
+                        {defaultPluginConfig !== undefined && <StatBox label="Default Config" value={defaultPluginConfig} />}
                     </div>
-                </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex flex-col gap-3 pt-4 ">
+                        {flags && pluginId && pluginConfig !== undefined && (
+                            <ManagePluginConfigModal
+                                pluginConfig={pluginConfig}
+                                onChange={handleCheckFlag}
+                                onReset={handleResetPluginConfig}
+                                onConfirm={handleConfirm}
+                                onOpenChange={handlePluginConfigModalOpenChange}
+                                isLoading={isLoading || isPending}
+                                title="Custom Hooks Settings"
+                                flags={flags}
+                                activeModuleKeys={activeModuleKeys}
+                            >
+                                <Button variant="outline" className="w-full">
+                                    Manage Plugin Config
+                                </Button>
+                            </ManagePluginConfigModal>
+                        )}
+                        {pluginId && (
+                            <SetPluginAddressModal poolId={poolId} title="Set Plugin Address">
+                                <Button variant="outline" className="w-full">
+                                    Change Plugin Address
+                                </Button>
+                            </SetPluginAddressModal>
+                        )}
+                    </div>
+                </>
             ) : (
                 <div className="flex items-center justify-center py-8">
                     <div className="w-5 h-5 border-2 border-neutral-300 border-t-neutral-900 rounded-full animate-spin" />
                 </div>
             )}
-
-            <div className="flex flex-col gap-4 mt-auto">
-                {flags && pluginId && pluginConfig !== undefined && (
-                    <ManagePluginConfigModal
-                        pluginConfig={pluginConfig}
-                        onChange={handleCheckFlag}
-                        onReset={handleResetPluginConfig}
-                        onConfirm={handleConfirm}
-                        onOpenChange={handlePluginConfigModalOpenChange}
-                        isLoading={isLoading || isPending}
-                        title="Custom Hooks Settings"
-                        flags={flags}
-                        activeModuleKeys={activeModuleKeys}
-                    >
-                        <Button variant="outline" className="w-full">
-                            Manage Plugin Config
-                        </Button>
-                    </ManagePluginConfigModal>
-                )}
-                {pluginId && (
-                    <SetPluginAddressModal poolId={poolId} title="Set Plugin Address">
-                        <Button variant="outline" className="w-full">
-                            Change Plugin Address
-                        </Button>
-                    </SetPluginAddressModal>
-                )}
-            </div>
-        </div>
+        </SectionCard>
     );
 };
 

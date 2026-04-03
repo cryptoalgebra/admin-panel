@@ -1,4 +1,7 @@
+import { DataRow } from "@/components/common/DataRow";
 import Loader from "@/components/common/Loader";
+import { SectionCard } from "@/components/common/SectionCard";
+import { StatBox } from "@/components/common/StatBox";
 import { Button } from "@/components/ui/button";
 import ManageRewardsModal from "./ManageRewardsModal";
 import { useEthersSigner } from "@/hooks/common/useEthersProvider";
@@ -92,7 +95,7 @@ const FarmRewardDetails = ({ token, rate, reward, incentiveKey, isBonus, rewardR
             const tokenRewardAddresses = await getTokenRewardAddresses(vaultAddresses[0], ethersProvider);
 
             return tokenRewardAddresses.includes(token.address);
-        }
+        },
     );
 
     const [almTxHash, setAlmTxHash] = useState<Address>();
@@ -109,102 +112,100 @@ const FarmRewardDetails = ({ token, rate, reward, incentiveKey, isBonus, rewardR
 
     const { isLoading: isLoadingAlm } = useTransactionAwait(almTxHash, { title: "Add reward to ALM Farming Distributor" });
 
-    return (
-        <div className="flex flex-col text-left p-6 bg-card border border-border rounded-lg transition-colors">
-            <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-3">
-                    <div className="p-2 bg-bg-200 rounded-xl">
-                        <Gift size={18} className="text-text" />
-                    </div>
-                    <h3 className="font-semibold text-lg text-text">{token.symbol} Reward</h3>
-                </div>
-                <span className="text-xs font-medium text-text/50 bg-bg-200 px-2 py-1 rounded-full">
-                    {isBonus ? "Reward 2" : "Reward 1"}
-                </span>
-            </div>
+    const sectionTitle = `${token.symbol} Reward`;
+    const badgeLabel = isBonus ? "Reward 2" : "Reward 1";
 
-            {/* Reward Amount */}
-            <div className="p-4 bg-bg-200 rounded-lg border border-border mb-6">
-                <p className="text-xs text-text/50 mb-1">Total Reward</p>
-                <p className="text-2xl font-semibold text-text">
-                    {reward} {token.symbol}
-                </p>
-            </div>
+    return (
+        <SectionCard title={sectionTitle} icon={Gift} className="relative">
+            <span className="absolute top-6 right-6 text-xs font-medium text-text/50 bg-card-hover px-2 py-1 rounded-full">
+                {badgeLabel}
+            </span>
+
+            {/* Total Reward */}
+            <StatBox label="Total Reward" value={`${reward} ${token.symbol}`} />
 
             {!isDeactivated && (
-                <>
+                <div className="mt-4 space-y-4">
                     {/* Distribution Rate */}
-                    <div className="mb-5">
-                        <p className="text-xs font-medium text-text/50 uppercase tracking-wider mb-2">Distribution Rate</p>
-                        <div className="flex items-center justify-between">
-                            <p className="text-sm text-text">{rewardRate}</p>
-                            <div className="flex items-center gap-2">
-                                <Button
-                                    size="sm"
-                                    variant={rewardRateSpan === RewardRateSpan.SECOND ? "primary" : "outline"}
-                                    onClick={() => setRewardRateSpan(RewardRateSpan.SECOND)}
-                                    className="h-7 px-2 text-xs"
-                                >
-                                    Sec
-                                </Button>
-                                <Button
-                                    size="sm"
-                                    variant={rewardRateSpan === RewardRateSpan.DAY ? "primary" : "outline"}
-                                    onClick={() => setRewardRateSpan(RewardRateSpan.DAY)}
-                                    className="h-7 px-2 text-xs"
-                                >
-                                    Day
-                                </Button>
-                                <Button
-                                    size="sm"
-                                    variant={rewardRateSpan === RewardRateSpan.MONTH ? "primary" : "outline"}
-                                    onClick={() => setRewardRateSpan(RewardRateSpan.MONTH)}
-                                    className="h-7 px-2 text-xs"
-                                >
-                                    Month
-                                </Button>
-                            </div>
-                        </div>
+                    <div>
+                        <DataRow
+                            label="Distribution Rate"
+                            value={
+                                <div className="flex items-center gap-2">
+                                    <span className="text-sm">{rewardRate}</span>
+                                    <div className="flex items-center gap-1">
+                                        <Button
+                                            size="sm"
+                                            variant={rewardRateSpan === RewardRateSpan.SECOND ? "primary" : "outline"}
+                                            onClick={() => setRewardRateSpan(RewardRateSpan.SECOND)}
+                                            className="h-6 px-2 text-xs"
+                                        >
+                                            Sec
+                                        </Button>
+                                        <Button
+                                            size="sm"
+                                            variant={rewardRateSpan === RewardRateSpan.DAY ? "primary" : "outline"}
+                                            onClick={() => setRewardRateSpan(RewardRateSpan.DAY)}
+                                            className="h-6 px-2 text-xs"
+                                        >
+                                            Day
+                                        </Button>
+                                        <Button
+                                            size="sm"
+                                            variant={rewardRateSpan === RewardRateSpan.MONTH ? "primary" : "outline"}
+                                            onClick={() => setRewardRateSpan(RewardRateSpan.MONTH)}
+                                            className="h-6 px-2 text-xs"
+                                        >
+                                            Month
+                                        </Button>
+                                    </div>
+                                </div>
+                            }
+                        />
                     </div>
 
-                    {/* Rewards Left */}
+                    {/* Rewards Left For */}
                     <div>
-                        <p className="text-xs font-medium text-text/50 uppercase tracking-wider mb-2">Rewards Left For</p>
-                        <div className="flex items-center justify-between">
-                            <p className="text-sm text-text">{rewardLeftFor}</p>
-                            <div className="flex items-center gap-2">
-                                <Button
-                                    size="sm"
-                                    variant={rewardLeftForSpan === RewardLeftForSpan.MINUTES ? "primary" : "outline"}
-                                    onClick={() => setRewardLeftForSpan(RewardLeftForSpan.MINUTES)}
-                                    className="h-7 px-2 text-xs"
-                                >
-                                    Min
-                                </Button>
-                                <Button
-                                    size="sm"
-                                    variant={rewardLeftForSpan === RewardLeftForSpan.HOURS ? "primary" : "outline"}
-                                    onClick={() => setRewardLeftForSpan(RewardLeftForSpan.HOURS)}
-                                    className="h-7 px-2 text-xs"
-                                >
-                                    Hour
-                                </Button>
-                                <Button
-                                    size="sm"
-                                    variant={rewardLeftForSpan === RewardLeftForSpan.DAYS ? "primary" : "outline"}
-                                    onClick={() => setRewardLeftForSpan(RewardLeftForSpan.DAYS)}
-                                    className="h-7 px-2 text-xs"
-                                >
-                                    Day
-                                </Button>
-                            </div>
-                        </div>
+                        <DataRow
+                            label="Rewards Left For"
+                            value={
+                                <div className="flex items-center gap-2">
+                                    <span className="text-sm">{rewardLeftFor}</span>
+                                    <div className="flex items-center gap-1">
+                                        <Button
+                                            size="sm"
+                                            variant={rewardLeftForSpan === RewardLeftForSpan.MINUTES ? "primary" : "outline"}
+                                            onClick={() => setRewardLeftForSpan(RewardLeftForSpan.MINUTES)}
+                                            className="h-6 px-2 text-xs"
+                                        >
+                                            Min
+                                        </Button>
+                                        <Button
+                                            size="sm"
+                                            variant={rewardLeftForSpan === RewardLeftForSpan.HOURS ? "primary" : "outline"}
+                                            onClick={() => setRewardLeftForSpan(RewardLeftForSpan.HOURS)}
+                                            className="h-6 px-2 text-xs"
+                                        >
+                                            Hour
+                                        </Button>
+                                        <Button
+                                            size="sm"
+                                            variant={rewardLeftForSpan === RewardLeftForSpan.DAYS ? "primary" : "outline"}
+                                            onClick={() => setRewardLeftForSpan(RewardLeftForSpan.DAYS)}
+                                            className="h-6 px-2 text-xs"
+                                        >
+                                            Day
+                                        </Button>
+                                    </div>
+                                </div>
+                            }
+                        />
                     </div>
-                </>
+                </div>
             )}
 
             {/* Action Buttons */}
-            <div className="flex gap-2 w-full mt-6 pt-4 border-t border-border">
+            <div className="flex gap-2 w-full mt-4 pt-4 border-t border-border">
                 {!isDeactivated && (
                     <ManageRewardsModal
                         title={"Refill"}
@@ -248,10 +249,10 @@ const FarmRewardDetails = ({ token, rate, reward, incentiveKey, isBonus, rewardR
                     onClick={onEnableAlmFarming}
                     disabled={isRewardEnabledForALM || isLoadingAlm || isRewardEnabledForALMLoading}
                     variant="outline"
-                    className="w-full mt-4"
+                    className="w-full mt-3"
                 >
                     {isLoadingAlm || isRewardEnabledForALMLoading ? (
-                        <Loader color="currentColor" />
+                        <Loader size={18} />
                     ) : isRewardEnabledForALM ? (
                         "Enabled for ALM"
                     ) : (
@@ -259,7 +260,7 @@ const FarmRewardDetails = ({ token, rate, reward, incentiveKey, isBonus, rewardR
                     )}
                 </Button>
             )}
-        </div>
+        </SectionCard>
     );
 };
 

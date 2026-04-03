@@ -31,53 +31,50 @@ const router = createBrowserRouter([
 
             ...(enabledModules.FarmingModule
                 ? [
-                    {
-                        path: "farms",
-                        element: <FarmsPage />,
-                    },
-                    {
-                        path: "farms/:farm",
-                        element: <FarmPage />,
-                    },
-                    {
-                        path: "new-farm",
-                        element: <NewFarmPage />,
-                    },
-                ]
+                      {
+                          path: "farms",
+                          element: <FarmsPage />,
+                      },
+                      {
+                          path: "farms/:farm",
+                          element: <FarmPage />,
+                      },
+                      {
+                          path: "new-farm",
+                          element: <NewFarmPage />,
+                      },
+                  ]
                 : []),
 
             ...(enabledModules.Ve33Module
                 ? [
-                    {
-                        path: "gauges",
-                        element: <GaugesPage />,
-                    },
-                    {
-                        path: "gauges/:gauge",
-                        element: <GaugePage />,
-                    },
-                    {
-                        path: "new-gauge",
-                        element: <NewGaugePage />,
-                    },
-                ]
+                      {
+                          path: "gauges",
+                          element: <GaugesPage />,
+                      },
+                      {
+                          path: "gauges/:gauge",
+                          element: <GaugePage />,
+                      },
+                      {
+                          path: "new-gauge",
+                          element: <NewGaugePage />,
+                      },
+                  ]
                 : []),
-
 
             ...(enabledModules.PredictionModule
                 ? [
-                    {
-                        path: "prediction",
-                        element: <PredictionPage />,
-                    },
-                    {
-                        path: "prediction/:market",
-                        element: <PredictionMarketPage />,
-                    },
-                ]
+                      {
+                          path: "prediction",
+                          element: <PredictionPage />,
+                      },
+                      {
+                          path: "prediction/:market",
+                          element: <PredictionMarketPage />,
+                      },
+                  ]
                 : []),
-
-
         ].filter(Boolean) as RouteObject[],
     },
 ]);

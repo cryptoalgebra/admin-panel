@@ -22,6 +22,7 @@ export const MARKET_FRAGMENT = gql`
         totalTrades
         activeUsers
         createdAt
+        question
     }
 `;
 
@@ -45,7 +46,7 @@ export const USER_POSITION_FRAGMENT = gql`
         totalFeesPaid
         redeemed
         redeemedAmount
-    } 
+    }
 `;
 
 export const TRADE_FRAGMENT = gql`
@@ -96,6 +97,22 @@ export const MARKET_FIVE_MINUTE_FRAGMENT = gql`
 export const ALL_OPEN_MARKETS_LIST = gql`
     query AllOpenMarketsList {
         markets(where: { seeded: true, outcome: 0 }) {
+            ...MarketFields
+        }
+    }
+`;
+
+export const ALL_MARKETS_LIST = gql`
+    query AllMarketsList {
+        markets(first: 1000, orderBy: createdAt, orderDirection: desc) {
+            ...MarketFields
+        }
+    }
+`;
+
+export const SINGLE_MARKET = gql`
+    query SingleMarket($marketId: ID!) {
+        market(id: $marketId) {
             ...MarketFields
         }
     }

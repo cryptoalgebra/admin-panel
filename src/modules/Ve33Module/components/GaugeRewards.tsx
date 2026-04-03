@@ -1,6 +1,7 @@
 import CurrencyLogo from "@/components/common/CurrencyLogo";
 import EnterAmountCard from "@/components/common/EnterAmountCard";
 import Loader from "@/components/common/Loader";
+import { SectionCard } from "@/components/common/SectionCard";
 import TokenSelectorModal from "@/components/modals/TokenSelectorModal";
 import { Button } from "@/components/ui/button";
 import { useWriteVotingRewardIncentivize } from "@/generated";
@@ -17,33 +18,25 @@ import { Address, formatUnits, parseUnits } from "viem";
 
 export function GaugeRewards({ votingPool, refetch }: { votingPool: VotingPool; refetch: () => void }) {
     const filteredRewards = votingPool.rewardTokenList.filter((rewardToken) => rewardToken.amount > 0n);
-    return (
-        <div className="flex flex-col p-6 bg-card border border-border rounded-lg transition-colors">
-            <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-bg-200 rounded-xl">
-                    <Gift size={18} className="text-text" />
-                </div>
-                <h3 className="font-semibold text-lg text-text">Current Incentives</h3>
-            </div>
 
+    return (
+        <SectionCard title="Current Incentives" icon={Gift}>
             {filteredRewards.length > 0 ? (
-                <div className="flex flex-col gap-3 mb-6">
+                <div className="flex flex-col gap-3 mb-4">
                     {filteredRewards.map((rewardToken) => (
-                        <div key={rewardToken.address}>
-                            <GaugeRewardToken rewardToken={rewardToken} />
-                        </div>
+                        <GaugeRewardToken key={rewardToken.address} rewardToken={rewardToken} />
                     ))}
                 </div>
             ) : (
-                <div className="flex items-center justify-center w-full min-h-32 bg-bg-200 border border-border rounded-lg mb-6">
+                <div className="flex items-center justify-center w-full min-h-32 bg-card-hover border border-border rounded-lg mb-4">
                     <p className="text-sm text-text/50">No active incentives</p>
                 </div>
             )}
 
-            <div className="h-px bg-border mb-6" />
-
-            <NewIncentive votingReward={votingPool.votingReward} refetch={refetch} />
-        </div>
+            <div className="pt-4 border-t border-border">
+                <NewIncentive votingReward={votingPool.votingReward} refetch={refetch} />
+            </div>
+        </SectionCard>
     );
 }
 
@@ -56,11 +49,11 @@ const NewIncentive = ({ votingReward, refetch }: { votingReward: Address; refetc
 
     const { approvalCallback, approvalState } = useApprove(
         selectedToken && parsedValue ? CurrencyAmount.fromRawAmount(selectedToken, parsedValue.toString()) : undefined,
-        votingReward
+        votingReward,
     );
 
     const { approvalCallback: whitelistCallback, approvalState: whitelistState } = useWhitelistForGauge(
-        selectedToken?.wrapped.address as Address
+        selectedToken?.wrapped.address as Address,
     );
 
     const { writeContract, data: hash, isPending } = useWriteVotingRewardIncentivize();

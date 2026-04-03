@@ -1,6 +1,9 @@
-import DataWithCopyButton from "@/components/common/DataWithCopyButton";
+import { DataRow } from "@/components/common/DataRow";
+import { SectionCard } from "@/components/common/SectionCard";
+import { StatBox } from "@/components/common/StatBox";
 import { PoolFieldsFragment } from "@/graphql/generated/graphql";
 import { formatAmount } from "@/utils/common/formatAmount";
+import { useBlockExplorerUrl } from "@/hooks/common/useBlockExplorerUrl";
 import { Info } from "lucide-react";
 import { Address } from "viem";
 
@@ -10,63 +13,24 @@ interface IPoolDetails {
 }
 
 const PoolDetails = ({ pool, poolId }: IPoolDetails) => {
+    const explorerBaseUrl = useBlockExplorerUrl();
+    const fee = Number(pool.overrideFee !== "0" ? pool.overrideFee : pool.fee) / 10_000;
+
     return (
-        <div className="flex flex-col text-left p-6 bg-card border border-border rounded-lg transition-colors">
-            <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-bg-200 rounded-xl">
-                    <Info size={18} className="text-text" />
-                </div>
-                <h3 className="font-semibold text-lg text-text">Pool Details</h3>
+        <SectionCard title="Pool Details" icon={Info}>
+            <div className="grid grid-cols-2 gap-3 pb-4">
+                <StatBox label="TVL USD" value={`$${formatAmount(pool.totalValueLockedUSD)}`} />
+                <StatBox label="Volume USD" value={`$${formatAmount(pool.volumeUSD)}`} />
+                <StatBox label="Fee" value={`${fee}%`} />
+                <StatBox label="Fees USD" value={`$${formatAmount(pool.feesUSD)}`} />
             </div>
-
-            <div className="flex flex-col gap-5">
-                {/* Addresses */}
-                <div>
-                    <p className="text-xs font-medium text-text/50 uppercase tracking-wider mb-1.5">Pool Address</p>
-                    <DataWithCopyButton data={poolId} />
-                </div>
-                <div>
-                    <p className="text-xs font-medium text-text/50 uppercase tracking-wider mb-1.5">Deployer</p>
-                    <DataWithCopyButton data={pool.deployer} />
-                </div>
-
-                <div className="h-px bg-border" />
-
-                {/* Tick Info */}
-                <div className="grid grid-cols-2 gap-4">
-                    <div>
-                        <p className="text-xs font-medium text-text/50 uppercase tracking-wider mb-1.5">Current Tick</p>
-                        <p className="text-base text-text">{pool.tick}</p>
-                    </div>
-                    <div>
-                        <p className="text-xs font-medium text-text/50 uppercase tracking-wider mb-1.5">Tick Spacing</p>
-                        <p className="text-base text-text">{pool.tickSpacing}</p>
-                    </div>
-                </div>
-
-                <div className="h-px bg-border" />
-
-                {/* Stats */}
-                <div className="grid grid-cols-2 gap-4">
-                    <div className="p-3 bg-bg-200 rounded-lg border border-border">
-                        <p className="text-xs text-text/50 mb-0.5">TVL USD</p>
-                        <p className="text-lg font-semibold text-text">${formatAmount(pool.totalValueLockedUSD)}</p>
-                    </div>
-                    <div className="p-3 bg-bg-200 rounded-lg border border-border">
-                        <p className="text-xs text-text/50 mb-0.5">Volume USD</p>
-                        <p className="text-lg font-semibold text-text">${formatAmount(pool.volumeUSD)}</p>
-                    </div>
-                    <div className="p-3 bg-bg-200 rounded-lg border border-border">
-                        <p className="text-xs text-text/50 mb-0.5">Fee</p>
-                        <p className="text-lg font-semibold text-text">{(pool.overrideFee !== "0" ? pool.overrideFee : pool.fee) / 10_000}%</p>
-                    </div>
-                    <div className="p-3 bg-bg-200 rounded-lg border border-border">
-                        <p className="text-xs text-text/50 mb-0.5">Fees USD</p>
-                        <p className="text-lg font-semibold text-text">${formatAmount(pool.feesUSD)}</p>
-                    </div>
-                </div>
+            <div className="divide-y divide-border">
+                <DataRow label="Pool Address" copyable={poolId} link={`${explorerBaseUrl}/address/${poolId}`} />
+                <DataRow label="Deployer" copyable={pool.deployer} link={`${explorerBaseUrl}/address/${pool.deployer}`} />
+                <DataRow label="Current Tick" value={pool.tick} />
+                <DataRow label="Tick Spacing" value={pool.tickSpacing} />
             </div>
-        </div>
+        </SectionCard>
     );
 };
 

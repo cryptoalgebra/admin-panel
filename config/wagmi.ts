@@ -12,7 +12,15 @@ import {
     votingRewardABI,
     securityRegistryAbi,
 } from "./abis";
-import { ALGEBRA_ETERNAL_FARMING, ALGEBRA_FACTORY, FARMING_CENTER, PLUGIN_FACTORY, SECURITY_REGISTRY, VOTER } from "./contract-addresses";
+import {
+    ALGEBRA_ETERNAL_FARMING,
+    ALGEBRA_FACTORY,
+    FARMING_CENTER,
+    MULTICALL3,
+    PLUGIN_FACTORY,
+    SECURITY_REGISTRY,
+    VOTER,
+} from "./contract-addresses";
 import { defineChain } from "viem";
 import { slidingFeePluginAbi } from "./abis/plugins/slidingFeePlugin";
 import { predictionMarketABI } from "./abis/prediction";
@@ -42,8 +50,7 @@ const baseSepoliaChain = /*#__PURE__*/ defineChain({
     },
     contracts: {
         multicall3: {
-            address: "0xca11bde05977b3631167028862be2a173976ca11",
-            blockCreated: 1059647,
+            address: MULTICALL3[84532],
         },
     },
 });
@@ -63,7 +70,7 @@ const rawContracts = [
     { name: "VotingReward", abi: votingRewardABI },
     { name: "SlidingFeePlugin", abi: slidingFeePluginAbi },
     { name: "SecurityRegistry", abi: securityRegistryAbi },
-    { name: "PredictionMarket", abi: predictionMarketABI }
+    { name: "PredictionMarket", abi: predictionMarketABI },
 ];
 
 const contractAddresses = {
