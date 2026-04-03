@@ -53,7 +53,7 @@ const PATHS = {
     GAUGES: "/gauges",
     GAUGE: "/gauges/:id",
     PREDICTION: "/prediction",
-    PREDICTION_MARKET: "/prediction/:market"
+    PREDICTION_MARKET: "/prediction/:market",
 };
 
 const menuItems = [
@@ -88,7 +88,7 @@ const Header = () => {
     return (
         <header className="fixed flex flex-col left-0 w-full top-0 bg-card z-10">
             <AdminAccount />
-            <div className="flex gap-4 py-4 w-full max-w-[1280px] mx-auto">
+            <div className="flex gap-4 p-4 w-full max-w-[1280px] mx-auto">
                 <Link to={"/"} className="font-bold flex gap-2 items-center">
                     <img src={IntegralLogo} alt="Integral Logo" className="inline-block mr-2 w-8 h-8" />
                     <span className="max-md:hidden">Admin Panel</span>

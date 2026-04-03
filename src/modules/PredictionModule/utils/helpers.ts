@@ -29,8 +29,7 @@ export function isDeadlinePassed(ts: string | number): boolean {
 export function formatQuestionText(market: PredictionMarket, collateralToken: Token, token0Symbol: string, token1Symbol: string): string {
     const markNum = Number(formatUnits(BigInt(market.mark || 0), collateralToken.decimals));
     const markFormatted = formatAmount(markNum);
-    const condition = market.condition === "gt" ? "greater" : "less";
-    return `Will ${token0Symbol} be ${condition} than ${markFormatted} ${token1Symbol}?`;
+    return `Will ${token0Symbol} be ${market.condition} than ${markFormatted} ${token1Symbol}?`;
 }
 
 export function getMarketStatus(market: PredictionMarket): MarketStatus {
