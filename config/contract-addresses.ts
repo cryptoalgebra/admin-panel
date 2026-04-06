@@ -29,6 +29,11 @@ export const VOTER: Record<number, Address> = {
     [ChainId.BaseSepolia]: "0x1B79491D453FFb4eFf2B75b106052B1670AC8b27",
 };
 
+/* Prediction */
+export const BINARY_LMSR_MARKET_FACTORY: Record<number, Address> = {
+    [ChainId.BaseSepolia]: "0x26A1602908F286a668cbf7Ce23249C9835808aD7",
+};
+
 export const MULTICALL3: Record<number, Address> = {
     [ChainId.BaseSepolia]: "0xca11bde05977b3631167028862be2a173976ca11",
 };

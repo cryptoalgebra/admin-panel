@@ -11,16 +11,21 @@ import {
 } from "@/components/ui/credenza";
 import { Currency } from "@cryptoalgebra/integral-sdk";
 import { X } from "lucide-react";
+import { useState } from "react";
 
 interface ITokenSelectorModal {
-    isOpen: boolean;
-    setIsOpen: (state: boolean) => void;
     onSelect: (currency: Currency) => void;
     otherCurrency?: Currency | null | undefined;
     children: React.ReactNode;
 }
 
-const TokenSelectorModal = ({ isOpen, setIsOpen, onSelect, otherCurrency, children }: ITokenSelectorModal) => {
+const TokenSelectorModal = ({ onSelect, otherCurrency, children }: ITokenSelectorModal) => {
+    const [isOpen, setIsOpen] = useState(false);
+
+    const handleSelect = (currency: Currency) => {
+        onSelect(currency);
+        setIsOpen(false);
+    };
     return (
         <Credenza open={isOpen} onOpenChange={setIsOpen}>
             <CredenzaTrigger asChild>{children}</CredenzaTrigger>
@@ -33,7 +38,7 @@ const TokenSelectorModal = ({ isOpen, setIsOpen, onSelect, otherCurrency, childr
                     <CredenzaTitle>Select a token</CredenzaTitle>
                 </CredenzaHeader>
                 <CredenzaBody>
-                    <TokenSelector onSelect={onSelect} otherCurrency={otherCurrency} />
+                    <TokenSelector onSelect={handleSelect} otherCurrency={otherCurrency} />
                 </CredenzaBody>
                 <CredenzaClose asChild>
                     <Button

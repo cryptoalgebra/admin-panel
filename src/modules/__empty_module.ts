@@ -9,6 +9,7 @@ export default {
     useMarketCollateralBalance: () => ({}),
     usePredictionMarket: () => ({}),
     usePredictionMarketState: () => ({}),
+    usePredictionProtocolAddress: () => ({}),
     useTreasuryBalances: () => ({}),
     useWithdrawPredictionFees: () => ({}),
     useAllGauges: () => ({}),

@@ -4,13 +4,14 @@ import { truncateHash } from "@/utils/common/truncateHash";
 import { Address, formatUnits } from "viem";
 import { useAllPredictionMarkets } from "../../hooks/useAllPredictionMarkets";
 import { useTreasuryBalances } from "../../hooks/useTreasuryBalances";
-import { usePredictionMarketState } from "../../hooks/usePredictionMarketState";
 import { MarketStatus } from "../../types";
 import { Copy, Check, AlertTriangle, Wallet, DollarSign, TrendingUp, Users, Coins, Plus } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useBlockExplorerUrl } from "@/hooks/common/useBlockExplorerUrl";
 import { TopUpModal } from "../modals/TopUpModal";
 import { getMarketStatus, hasClaimableFees } from "../../utils";
+import { usePredictionProtocolAddress } from "../../hooks";
+import { useAccount } from "wagmi";
 
 const StatCard = ({
     icon: Icon,
@@ -36,14 +37,14 @@ const StatCard = ({
 );
 
 export const PredictionSummary = () => {
+    const { address: userAddress } = useAccount();
     const { markets } = useAllPredictionMarkets();
     const [topUpOpen, setTopUpOpen] = useState(false);
     const [copied, setCopied] = useState(false);
     const explorerBaseUrl = useBlockExplorerUrl();
 
-    const firstMarket = markets[0];
-    const { data: marketState } = usePredictionMarketState(firstMarket?.id);
-    const protocolAddress = marketState?.protocol;
+    const { data: protocolAddress } = usePredictionProtocolAddress();
+    const isOwner = userAddress && protocolAddress && protocolAddress.toLowerCase() === userAddress.toLowerCase();
 
     const { nativeBalance, tokenBalances, claimableFeesByToken } = useTreasuryBalances(protocolAddress, markets);
 
@@ -125,17 +126,20 @@ export const PredictionSummary = () => {
                             {tokenBalances.slice(0, 2).map((token) => (
                                 <div key={token.address} className="flex items-center gap-2 bg-bg-200 rounded-lg px-3 py-2">
                                     <span className="text-xs text-text/50">{token.symbol}</span>
+
                                     <span className="text-sm font-medium text-text">
                                         {formatAmount(formatUnits(token.balance, token.decimals))}
                                     </span>
                                 </div>
                             ))}
 
-                            <TopUpModal open={topUpOpen} onOpenChange={setTopUpOpen} protocolAddress={protocolAddress}>
-                                <Button variant="outline" size="sm" onClick={() => setTopUpOpen(true)} className="gap-1.5">
-                                    <Plus size={16} /> Top Up
-                                </Button>
-                            </TopUpModal>
+                            {!isOwner && (
+                                <TopUpModal open={topUpOpen} onOpenChange={setTopUpOpen} protocolAddress={protocolAddress}>
+                                    <Button variant="outline" size="sm" onClick={() => setTopUpOpen(true)} className="gap-1.5 text-xs">
+                                        <Plus size={16} /> Top Up
+                                    </Button>
+                                </TopUpModal>
+                            )}
                         </div>
                     </div>
                 </div>

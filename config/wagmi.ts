@@ -15,6 +15,7 @@ import {
 import {
     ALGEBRA_ETERNAL_FARMING,
     ALGEBRA_FACTORY,
+    BINARY_LMSR_MARKET_FACTORY,
     FARMING_CENTER,
     MULTICALL3,
     PLUGIN_FACTORY,
@@ -24,6 +25,7 @@ import {
 import { defineChain } from "viem";
 import { slidingFeePluginAbi } from "./abis/plugins/slidingFeePlugin";
 import { predictionMarketABI } from "./abis/prediction";
+import { binaryLMSRMarketFactoryABI } from "./abis/prediction/binaryLMSRMarketFactory";
 
 const baseSepoliaChain = /*#__PURE__*/ defineChain({
     id: 84532,
@@ -71,6 +73,7 @@ const rawContracts = [
     { name: "SlidingFeePlugin", abi: slidingFeePluginAbi },
     { name: "SecurityRegistry", abi: securityRegistryAbi },
     { name: "PredictionMarket", abi: predictionMarketABI },
+    { name: "BinaryLMSRMarketFactory", abi: binaryLMSRMarketFactoryABI },
 ];
 
 const contractAddresses = {
@@ -80,6 +83,7 @@ const contractAddresses = {
     PluginFactory: PLUGIN_FACTORY,
     Voter: VOTER,
     SecurityRegistry: SECURITY_REGISTRY,
+    BinaryLMSRMarketFactory: BINARY_LMSR_MARKET_FACTORY,
 };
 
 export const wagmiContracts: ContractConfig[] = rawContracts.map((contract) => ({

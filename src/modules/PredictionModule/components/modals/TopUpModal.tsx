@@ -8,14 +8,16 @@ import {
     CredenzaTrigger,
 } from "@/components/ui/credenza";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { truncateHash } from "@/utils/common/truncateHash";
-import { Address, parseEther } from "viem";
+import { Address, erc20Abi, parseUnits } from "viem";
 import { useState } from "react";
-import { useSendTransaction } from "wagmi";
+import { useSendTransaction, useWriteContract } from "wagmi";
 import { useTransactionAwait } from "@/hooks/common/useTransactionAwait";
 import { Copy, Check, ExternalLink } from "lucide-react";
 import { useBlockExplorerUrl } from "@/hooks/common/useBlockExplorerUrl";
+import { Currency, Native } from "@cryptoalgebra/integral-sdk";
+import EnterAmountCard from "@/components/common/EnterAmountCard";
+import { DEFAULT_CHAIN_ID } from "config/default-chain";
 
 interface TopUpModalProps {
     open: boolean;
@@ -26,16 +28,22 @@ interface TopUpModalProps {
 
 export const TopUpModal = ({ open, onOpenChange, protocolAddress, children }: TopUpModalProps) => {
     const blockExplorerUrl = useBlockExplorerUrl();
-    const [amount, setAmount] = useState("");
     const [copied, setCopied] = useState(false);
 
-    const { sendTransaction, data: hash, isPending } = useSendTransaction();
+    const [selectedToken, setSelectedToken] = useState<Currency>(Native.onChain(DEFAULT_CHAIN_ID, "ETH", "ETH"));
+    const [tokenValue, setTokenValue] = useState<string>("");
 
-    const { isLoading: isConfirming } = useTransactionAwait(hash, {
+    const { sendTransaction, data: nativeHash, isPending: isNativePending } = useSendTransaction();
+    const { writeContract, data: erc20Hash, isPending: isErc20Pending } = useWriteContract();
+
+    const txHash = selectedToken.isNative ? nativeHash : erc20Hash;
+    const isPending = isNativePending || isErc20Pending;
+
+    const { isLoading: isConfirming } = useTransactionAwait(txHash, {
         title: "Top Up Treasury",
-        description: "Sending ETH to protocol treasury",
+        description: `Sending ${selectedToken?.symbol || "tokens"} to the protocol`,
         callback: () => {
-            setAmount("");
+            setTokenValue("");
         },
     });
 
@@ -47,20 +55,26 @@ export const TopUpModal = ({ open, onOpenChange, protocolAddress, children }: To
     };
 
     const handleSend = () => {
-        if (!protocolAddress || !amount) return;
+        if (!protocolAddress || !tokenValue || !selectedToken) return;
         try {
-            const value = parseEther(amount);
-            sendTransaction({
-                to: protocolAddress,
-                value,
-            });
+            const value = parseUnits(tokenValue, selectedToken.decimals);
+            if (selectedToken.isNative) {
+                sendTransaction({ to: protocolAddress, value });
+            } else {
+                writeContract({
+                    abi: erc20Abi,
+                    address: selectedToken.wrapped.address as Address,
+                    functionName: "transfer",
+                    args: [protocolAddress, value],
+                });
+            }
         } catch (e) {
             console.error("Invalid amount", e);
         }
     };
 
     const isLoading = isPending || isConfirming;
-    const isValid = !!amount && Number(amount) > 0 && !!protocolAddress;
+    const isValid = !!tokenValue && Number(tokenValue) > 0 && !!protocolAddress && !!selectedToken;
 
     return (
         <Credenza open={open} onOpenChange={onOpenChange}>
@@ -83,7 +97,7 @@ export const TopUpModal = ({ open, onOpenChange, protocolAddress, children }: To
                                     {truncateHash(protocolAddress as Address, 8, 6)}
                                     <ExternalLink size={12} />
                                 </a>
-                                <button onClick={handleCopy} className="p-1 rounded hover:bg-bg-200">
+                                <button onClick={handleCopy} className="p-1 rounded hover:bg-bg-300">
                                     {copied ? <Check size={14} className="text-green-500" /> : <Copy size={14} className="text-text/50" />}
                                 </button>
                             </div>
@@ -92,18 +106,21 @@ export const TopUpModal = ({ open, onOpenChange, protocolAddress, children }: To
                         )}
                     </div>
 
-                    <div>
-                        <label className="text-sm font-medium text-text/60 mb-1.5 block">Amount (ETH)</label>
-                        <Input type="text" placeholder="0.0" value={amount} onChange={(e) => setAmount(e.target.value)} />
-                        <p className="text-xs text-text/40 mt-1.5">Send ETH to the protocol treasury for gas costs</p>
-                    </div>
+                    <EnterAmountCard
+                        currency={selectedToken}
+                        value={tokenValue}
+                        handleChange={setTokenValue}
+                        onCurrencySelect={setSelectedToken}
+                        showTokenSelector={true}
+                        label="Send Amount"
+                    />
                 </CredenzaBody>
                 <CredenzaFooter>
                     <Button variant="outline" onClick={() => onOpenChange(false)} disabled={isLoading}>
                         Cancel
                     </Button>
                     <Button variant="primary" onClick={handleSend} disabled={!isValid || isLoading}>
-                        {isLoading ? "Sending..." : "Send ETH"}
+                        {isLoading ? "Sending..." : `Send${selectedToken ? ` ${selectedToken.symbol}` : ""}`}
                     </Button>
                 </CredenzaFooter>
             </CredenzaContent>

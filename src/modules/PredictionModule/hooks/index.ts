@@ -5,3 +5,4 @@ export * from "./useWithdrawPredictionFees";
 export * from "./useMarketAuthorization";
 export * from "./useMarketCollateralBalance";
 export * from "./usePredictionMarket";
+export * from "./usePredictionProtocolAddress";
