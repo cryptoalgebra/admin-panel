@@ -1,16 +1,6 @@
 import { TokenSelector } from "@/components/common/TokenSelector";
-import { Button } from "@/components/ui/button";
-import {
-    Credenza,
-    CredenzaBody,
-    CredenzaClose,
-    CredenzaContent,
-    CredenzaHeader,
-    CredenzaTitle,
-    CredenzaTrigger,
-} from "@/components/ui/credenza";
+import { Credenza, CredenzaBody, CredenzaContent, CredenzaHeader, CredenzaTitle, CredenzaTrigger } from "@/components/ui/credenza";
 import { Currency } from "@cryptoalgebra/integral-sdk";
-import { X } from "lucide-react";
 import { useState } from "react";
 
 interface ITokenSelectorModal {
@@ -40,17 +30,6 @@ const TokenSelectorModal = ({ onSelect, otherCurrency, children }: ITokenSelecto
                 <CredenzaBody>
                     <TokenSelector onSelect={handleSelect} otherCurrency={otherCurrency} />
                 </CredenzaBody>
-                <CredenzaClose asChild>
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        className="absolute right-4 top-4 h-8 w-8"
-                        onClick={() => setIsOpen(false)}
-                        style={{ zIndex: 999 }}
-                    >
-                        <X className="h-4 w-4" />
-                    </Button>
-                </CredenzaClose>
             </CredenzaContent>
         </Credenza>
     );
