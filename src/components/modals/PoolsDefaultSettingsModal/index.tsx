@@ -10,7 +10,6 @@ import { useReadContracts, useWriteContract } from "wagmi";
 import { algebraFactoryABI } from "config/abis";
 import { cn } from "@/utils/common/cn";
 import { useReadSecurityRegistryGlobalStatus, useWriteSecurityRegistrySetGlobalStatus } from "@/generated";
-import PoolsDefaultFeeConfigurationModal from "@/components/modals/PoolsDefaultFeeConfigurationModal";
 
 interface IPoolsDefaultSettingsModal {
     title: string;
@@ -187,14 +186,14 @@ const PoolsDefaultSettingsModal = ({ title, children }: IPoolsDefaultSettingsMod
 
                     {activeTab === "new" ? (
                         <div className="flex flex-col gap-4 items-center">
-                            <label className="gap-2 mb-2 w-full flex flex-col">
+                            {/* <label className="gap-2 mb-2 w-full flex flex-col">
                                 <h4 className="w-full text-sm font-medium col-span-2">Fee</h4>
                                 <PoolsDefaultFeeConfigurationModal>
                                     <Button className="w-full" variant="outline">
                                         Manage Fee Settings
                                     </Button>
                                 </PoolsDefaultFeeConfigurationModal>
-                            </label>
+                            </label> */}
                             {Object.entries(settingsData as Settings).map(([key, value]) => (
                                 <label className="gap-2 mb-2 w-full flex flex-col" key={key}>
                                     <h4 className="w-full text-sm font-medium col-span-2">{key}</h4>

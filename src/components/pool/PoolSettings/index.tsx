@@ -1,6 +1,5 @@
 import DataWithCopyButton from "@/components/common/DataWithCopyButton";
 import ManagePoolSettingsModal from "@/components/modals/pool/ManagePoolSettingsModal";
-import ManageFeeModal from "@/components/modals/pool/ManageFeeModal";
 import PoolSecurityModal from "@/components/modals/pool/PoolSecurityModal";
 import { Button } from "@/components/ui/button";
 import { PLUGIN_FACTORY } from "config/contract-addresses";
@@ -56,11 +55,11 @@ const PoolSettings = ({ poolId }: IPoolSettings) => {
                                 Community Fee
                             </Button>
                         </ManagePoolSettingsModal>
-                        <ManageFeeModal poolId={poolId}>
+                        {/* <ManageFeeModal poolId={poolId}>
                             <Button variant="outline" className="flex-1">
                                 Fee
                             </Button>
-                        </ManageFeeModal>
+                        </ManageFeeModal> */}
                         <ManagePoolSettingsModal poolId={poolId} functionName="setTickSpacing" title="Tick Spacing">
                             <Button variant="outline" className="flex-1">
                                 Tick Spacing

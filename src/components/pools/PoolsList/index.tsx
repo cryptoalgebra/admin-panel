@@ -25,8 +25,7 @@ const PoolRow = (pool: FormattedPool) => {
                     <div className="md:hidden text-xs text-text/50 font-medium">Pool</div>
                     <div className="flex items-center gap-2">
                         <span className="font-medium text-sm text-text">{`${pool.pair.token0.symbol} / ${pool.pair.token1.symbol}`}</span>
-                        <span className="bg-bg-200 text-xs text-text/70 rounded px-2 py-0.5 border border-border">{`${pool.overrideFee ||
-                            pool.fee}%`}</span>
+                        <span className="bg-bg-200 text-xs text-text/70 rounded px-2 py-0.5 border border-border">AI Fee</span>
                     </div>
                 </div>
             )}
