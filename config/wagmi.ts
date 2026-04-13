@@ -1,5 +1,5 @@
 import { ContractConfig } from "@wagmi/cli";
-import { AppKitNetwork } from "@reown/appkit/networks";
+import { AppKitNetwork, bsc } from "@reown/appkit/networks";
 import {
     algebraBasePluginV1ABI,
     algebraFactoryABI,
@@ -13,42 +13,10 @@ import {
     securityRegistryAbi,
 } from "./abis";
 import { ALGEBRA_ETERNAL_FARMING, ALGEBRA_FACTORY, FARMING_CENTER, PLUGIN_FACTORY, SECURITY_REGISTRY, VOTER } from "./contract-addresses";
-import { defineChain } from "viem";
 import { slidingFeePluginAbi } from "./abis/plugins/slidingFeePlugin";
 
-const baseSepoliaChain = /*#__PURE__*/ defineChain({
-    id: 84532,
-    network: "baseSepolia",
-    name: "Base Sepolia",
-    nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
-    rpcUrls: {
-        default: {
-            http: ["https://base-sepolia-rpc.publicnode.com"],
-        },
-        public: {
-            http: ["https://base-sepolia-rpc.publicnode.com"],
-        },
-    },
-    blockExplorers: {
-        default: {
-            name: "Basescan",
-            url: "https://sepolia.basescan.org",
-        },
-        etherscan: {
-            name: "Basescan",
-            url: "https://sepolia.basescan.org",
-        },
-    },
-    contracts: {
-        multicall3: {
-            address: "0xca11bde05977b3631167028862be2a173976ca11",
-            blockCreated: 1059647,
-        },
-    },
-});
-
 /* configure supported networks here */
-export const wagmiNetworks: [AppKitNetwork, ...AppKitNetwork[]] = [baseSepoliaChain];
+export const wagmiNetworks: [AppKitNetwork, ...AppKitNetwork[]] = [bsc];
 
 const rawContracts = [
     { name: "AlgebraFactory", abi: algebraFactoryABI },

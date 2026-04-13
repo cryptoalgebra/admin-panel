@@ -6,5 +6,5 @@ export enum AppFeatureModule {
 /* configure enabled modules here */
 export const enabledModules: Record<AppFeatureModule, boolean> = {
     [AppFeatureModule.FarmingModule]: true,
-    [AppFeatureModule.Ve33Module]: true,
+    [AppFeatureModule.Ve33Module]: false,
 };

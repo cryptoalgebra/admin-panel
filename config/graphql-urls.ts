@@ -1,9 +1,9 @@
 import { ChainId } from "@cryptoalgebra/integral-sdk";
 
 export const INFO_GRAPH_URL = {
-    [ChainId.BaseSepolia]: "https://api.goldsky.com/api/public/project_cm2cd1yfmmrav01u9b02f69vj/subgraphs/integral-ve-analytics/v1.0.0/gn",
+    [ChainId.BSC]: "https://api.studio.thegraph.com/query/50593/dna-analytics/version/latest",
 };
 
 export const FARMING_GRAPH_URL = {
-    [ChainId.BaseSepolia]: "https://api.goldsky.com/api/public/project_cm2cd1yfmmrav01u9b02f69vj/subgraphs/integral-ve-farming/v1.0.0/gn",
+    [ChainId.BSC]: "https://api.studio.thegraph.com/query/50593/dna-farmings/version/latest",
 };

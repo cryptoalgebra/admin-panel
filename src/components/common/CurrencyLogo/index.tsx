@@ -1,10 +1,11 @@
-import { Currency, WNATIVE } from "@cryptoalgebra/integral-sdk";
+import { ChainId, Currency, WNATIVE } from "@cryptoalgebra/integral-sdk";
 import React from "react";
 import { Address } from "viem";
 import USDCLogo from "@/assets/tokens/usdc.svg";
-import EthLogo from "@/assets/tokens/ether.svg";
+import USDTLogo from "@/assets/tokens/usdt.png";
+import BNBLogo from "@/assets/tokens/bnb.svg";
 import { cn } from "@/utils/common/cn";
-import { DEFAULT_CHAIN_ID, DEFAULT_NATIVE_SYMBOL } from "config/default-chain";
+import { DEFAULT_NATIVE_SYMBOL } from "config/default-chain";
 
 interface CurrencyLogoProps {
     currency: Currency | undefined | null;
@@ -13,16 +14,18 @@ interface CurrencyLogoProps {
     style?: React.CSSProperties;
 }
 
-export const specialTokens: {
-    [key: Address]: { symbol: string; logo: string };
-} = {
-    [WNATIVE[DEFAULT_CHAIN_ID].address.toLowerCase()]: {
-        symbol: "WETH",
-        logo: EthLogo,
+export const specialTokens: { [key: Address]: { symbol: string; logo: string } } = {
+    [WNATIVE[ChainId.BSC].address.toLowerCase()]: {
+        symbol: "BNB",
+        logo: BNBLogo,
     },
-    ["0xabac6f23fdf1313fc2e9c9244f666157ccd32990"]: {
+    ["0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d"]: {
         symbol: "USDC",
         logo: USDCLogo,
+    },
+    ["0x55d398326f99059fF775485246999027B3197955"]: {
+        symbol: "USDT",
+        logo: USDTLogo,
     },
 };
 
@@ -56,7 +59,7 @@ const CurrencyLogo = ({ currency, size, className, style = {} }: CurrencyLogoPro
     if (currency.isNative) {
         return (
             <img
-                src={EthLogo}
+                src={BNBLogo}
                 alt={DEFAULT_NATIVE_SYMBOL}
                 className={classString}
                 style={{
