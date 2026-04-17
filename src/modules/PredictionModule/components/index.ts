@@ -1,4 +1,4 @@
 export * from "./common";
 export * from "./modals";
-export * from "./prediction";
+export * from "./predictions";
 export * from "./prediction-market";

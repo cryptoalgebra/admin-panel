@@ -1,7 +1,8 @@
-import { predictionMarketABI } from "config/abis/prediction/market";
+import { binaryLmsrMarketManagerAbi } from "@/generated";
+import { BINARY_LMSR_MARKET_MANAGER } from "config/contract-addresses";
 import { useMemo } from "react";
 import { Address } from "viem";
-import { useReadContracts } from "wagmi";
+import { useChainId, useReadContracts } from "wagmi";
 
 export interface MarketState {
     protocol: Address | undefined;
@@ -18,59 +19,102 @@ export interface MarketState {
     feeBps: bigint | undefined;
     tradingDeadline: bigint | undefined;
     maxLoss: bigint | undefined;
+    accountedCollateral: bigint | undefined;
 }
 
-export function usePredictionMarketState(marketAddress: Address | undefined) {
+function parseMarketIndex(marketId: string | undefined) {
+    if (!marketId) return undefined;
+
+    const [, rawIndex] = marketId.split("-");
+    const normalizedIndex = rawIndex ?? marketId;
+
+    try {
+        return BigInt(normalizedIndex);
+    } catch {
+        return undefined;
+    }
+}
+
+export function usePredictionMarketState(marketId: string | undefined) {
+    const chainId = useChainId();
+
     const contracts = useMemo(() => {
-        if (!marketAddress) return [];
+        const marketIndex = parseMarketIndex(marketId);
+        const managerAddress = BINARY_LMSR_MARKET_MANAGER[chainId];
 
-        const functionNames = [
-            "protocol",
-            "collateralToken",
-            "seeded",
-            "outcome",
-            "priceYes",
-            "priceNo",
-            "qYes",
-            "qNo",
-            "accruedFees",
-            "question",
-            "b",
-            "feeBps",
-            "tradingDeadline",
-            "maxLoss",
+        if (marketIndex === undefined || !managerAddress) return [];
+
+        return [
+            {
+                address: managerAddress,
+                abi: binaryLmsrMarketManagerAbi,
+                functionName: "getMarket" as const,
+                args: [marketIndex],
+            },
+            {
+                address: managerAddress,
+                abi: binaryLmsrMarketManagerAbi,
+                functionName: "priceYes" as const,
+                args: [marketIndex],
+            },
+            {
+                address: managerAddress,
+                abi: binaryLmsrMarketManagerAbi,
+                functionName: "priceNo" as const,
+                args: [marketIndex],
+            },
+            {
+                address: managerAddress,
+                abi: binaryLmsrMarketManagerAbi,
+                functionName: "maxLoss" as const,
+                args: [marketIndex],
+            },
         ];
-
-        return functionNames.map((functionName) => ({
-            address: marketAddress,
-            abi: predictionMarketABI,
-            functionName,
-        }));
-    }, [marketAddress]);
+    }, [marketId, chainId]);
 
     const { data, refetch, isLoading } = useReadContracts({
         contracts,
-        query: { enabled: !!marketAddress },
+        query: { enabled: contracts.length > 0 },
     });
 
     const result: MarketState | undefined = useMemo(() => {
         if (!data) return;
 
+        const marketData = data[0]?.result as
+            | {
+                  collateralToken: Address;
+                  protocol: Address;
+                  question: string;
+                  tradingDeadline: bigint;
+                  b: bigint;
+                  feeBps: bigint;
+                  seeded: boolean;
+                  outcome: number;
+                  qYes: bigint;
+                  qNo: bigint;
+                  accruedFees: bigint;
+                  accountedCollateral: bigint;
+              }
+            | undefined;
+
+        if (!marketData) return;
+
         return {
-            protocol: data[0]?.result as Address | undefined,
-            collateralToken: data[1]?.result as Address | undefined,
-            seeded: data[2]?.result as boolean | undefined,
-            outcome: data[3]?.result as number | undefined,
-            priceYes: data[4]?.result as bigint | undefined,
-            priceNo: data[5]?.result as bigint | undefined,
-            qYes: data[6]?.result as bigint | undefined,
-            qNo: data[7]?.result as bigint | undefined,
-            accruedFees: data[8]?.result as bigint | undefined,
-            question: data[9]?.result as string | undefined,
-            b: data[10]?.result as bigint | undefined,
-            feeBps: data[11]?.result as bigint | undefined,
-            tradingDeadline: data[12]?.result as bigint | undefined,
-            maxLoss: data[13]?.result as bigint | undefined,
+            protocol: marketData.protocol,
+            collateralToken: marketData.collateralToken,
+            seeded: marketData.seeded,
+            outcome: marketData.outcome,
+            priceYes: data[1]?.result as bigint | undefined,
+            priceNo: data[2]?.result as bigint | undefined,
+            qYes: marketData.qYes,
+            qNo: marketData.qNo,
+            accruedFees: marketData.accruedFees,
+            question: marketData.question,
+            b: marketData.b,
+            feeBps: marketData.feeBps,
+            tradingDeadline: marketData.tradingDeadline,
+            maxLoss: data[3]?.result as bigint | undefined,
+            accountedCollateral: marketData.accountedCollateral,
         };
     }, [data]);
 

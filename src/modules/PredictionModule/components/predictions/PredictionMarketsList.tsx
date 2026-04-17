@@ -17,8 +17,8 @@ type FilterType = "all" | "active" | "resolved" | "trading-closed" | "fees-avail
 const ITEMS_PER_PAGE = 10;
 
 const MarketPoolLabel = ({ market }: { market: PredictionMarket }) => {
-    const token0 = useCurrency(market.token0);
-    const token1 = useCurrency(market.token1);
+    const token0 = useCurrency(market.marketToken);
+    const token1 = useCurrency(market.quoteToken);
 
     if (!token0 || !token1) return <span className="text-sm text-text/50">Loading...</span>;
 
@@ -34,8 +34,8 @@ const MarketPoolLabel = ({ market }: { market: PredictionMarket }) => {
 };
 
 const MarketQuestion = ({ market }: { market: PredictionMarket }) => {
-    const token0 = useCurrency(market.token0);
-    const token1 = useCurrency(market.token1);
+    const token0 = useCurrency(market.marketToken);
+    const token1 = useCurrency(market.quoteToken);
     const collateralToken = useCurrency(market.collateralToken);
 
     if (!token0 || !token1 || !collateralToken) return <span className="text-sm text-text/50">Loading...</span>;
@@ -168,7 +168,7 @@ export const PredictionMarketsList = () => {
     }, [filter]);
 
     const handleMarketClick = (market: PredictionMarket) => {
-        navigate(`/prediction/${market.id}`);
+        navigate(`/predictions/${market.id}`);
     };
 
     const filters: { key: FilterType; label: string }[] = [

@@ -3,7 +3,7 @@ import PredictionModule from "@/modules/PredictionModule";
 
 const { PredictionMarketsList, PredictionSummary } = PredictionModule.components;
 
-const PredictionPage = () => {
+const PredictionsPage = () => {
     return (
         <PageContainer>
             <div className="flex justify-between w-full mb-6">
@@ -16,4 +16,4 @@ const PredictionPage = () => {
     );
 };
 
-export default PredictionPage;
+export default PredictionsPage;

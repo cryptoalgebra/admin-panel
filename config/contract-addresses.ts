@@ -30,8 +30,8 @@ export const VOTER: Record<number, Address> = {
 };
 
 /* Prediction */
-export const BINARY_LMSR_MARKET_FACTORY: Record<number, Address> = {
-    [ChainId.BaseSepolia]: "0x26A1602908F286a668cbf7Ce23249C9835808aD7",
+export const BINARY_LMSR_MARKET_MANAGER: Record<number, Address> = {
+    [ChainId.BaseSepolia]: "0xf04604de76eb31004F2331bd0701b6eBF8ffdCB1",
 };
 
 export const MULTICALL3: Record<number, Address> = {

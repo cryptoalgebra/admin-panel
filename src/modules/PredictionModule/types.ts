@@ -2,12 +2,12 @@ import { Address } from "viem";
 import { MarketFieldsFragment } from "@/graphql/generated/graphql";
 
 export type PredictionMarket = MarketFieldsFragment & {
+    index: bigint;
     id: Address;
     pool: Address;
-    token0: Address;
-    token1: Address;
     collateralToken: Address;
     marketToken: Address;
+    quoteToken: Address;
 };
 
 export enum MarketStatus {

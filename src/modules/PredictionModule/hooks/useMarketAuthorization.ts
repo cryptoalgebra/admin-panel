@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { Address } from "viem";
 import { useAccount } from "wagmi";
+import { usePredictionProtocolAddress } from "./usePredictionProtocolAddress";
 import { MarketState } from "./usePredictionMarketState";
 
 export interface AuthorizationState {
@@ -14,18 +15,20 @@ export interface AuthorizationState {
 export function useMarketAuthorization(marketState: MarketState | undefined): AuthorizationState {
     const { address, isConnected } = useAccount();
 
+    const { data: protocolAddress } = usePredictionProtocolAddress();
+
     return useMemo(() => {
         if (!isConnected || !address) {
             return {
                 isConnected: false,
                 isAuthorized: false,
                 canWithdraw: false,
-                protocolAddress: marketState?.protocol,
+                protocolAddress: protocolAddress,
                 reason: "Connect wallet to perform actions",
             };
         }
 
-        const protocol = marketState?.protocol;
+        const protocol = protocolAddress;
         if (!protocol) {
             return {
                 isConnected: true,
@@ -66,5 +69,5 @@ export function useMarketAuthorization(marketState: MarketState | undefined): Au
             protocolAddress: protocol,
             reason: undefined,
         };
-    }, [address, isConnected, marketState]);
+    }, [address, isConnected, marketState, protocolAddress]);
 }

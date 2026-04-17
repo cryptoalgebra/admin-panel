@@ -14,9 +14,10 @@ import { Address, formatUnits, parseUnits } from "viem";
 import { useState } from "react";
 import { useWithdrawPredictionFees } from "../../hooks/useWithdrawPredictionFees";
 import { Token } from "@cryptoalgebra/integral-sdk";
+import { PredictionMarket } from "../../types";
 
 interface WithdrawFeesModalProps {
-    marketAddress: Address;
+    market: PredictionMarket | undefined;
     collateralToken: Token | null | undefined;
     accruedFees: bigint;
     recipient: Address | undefined;
@@ -24,19 +25,12 @@ interface WithdrawFeesModalProps {
     children?: React.ReactNode;
 }
 
-export const WithdrawFeesModal = ({
-    marketAddress,
-    collateralToken,
-    accruedFees,
-    recipient,
-    onSuccess,
-    children,
-}: WithdrawFeesModalProps) => {
+export const WithdrawFeesModal = ({ market, collateralToken, accruedFees, recipient, onSuccess, children }: WithdrawFeesModalProps) => {
     const [open, onOpenChange] = useState(false);
     const [amount, setAmount] = useState("");
     const maxFeesFormatted = formatUnits(accruedFees, collateralToken?.decimals || 6);
 
-    const { withdrawFees, isLoading } = useWithdrawPredictionFees(marketAddress, () => {
+    const { withdrawFees, isLoading } = useWithdrawPredictionFees(market, () => {
         setAmount("");
         onSuccess();
         onOpenChange(false);

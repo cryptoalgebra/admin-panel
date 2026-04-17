@@ -11,5 +11,12 @@ export function usePredictionMarket(marketAddress: string | undefined) {
         skip: !marketAddress,
     });
 
-    return { market: gqlData?.market as PredictionMarket | null | undefined, loading, error, refetch };
+    const market = gqlData?.market
+        ? ({
+              index: BigInt(gqlData.market.id.split("-")[1]),
+              ...gqlData.market,
+          } as PredictionMarket)
+        : undefined;
+
+    return { market, loading, error, refetch };
 }

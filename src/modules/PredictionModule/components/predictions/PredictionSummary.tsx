@@ -1,17 +1,19 @@
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 import { formatAmount } from "@/utils/common/formatAmount";
 import { truncateHash } from "@/utils/common/truncateHash";
 import { Address, formatUnits } from "viem";
 import { useAllPredictionMarkets } from "../../hooks/useAllPredictionMarkets";
 import { useTreasuryBalances } from "../../hooks/useTreasuryBalances";
-import { MarketStatus } from "../../types";
 import { Copy, Check, AlertTriangle, Wallet, DollarSign, TrendingUp, Users, Coins, Plus } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useBlockExplorerUrl } from "@/hooks/common/useBlockExplorerUrl";
 import { TopUpModal } from "../modals/TopUpModal";
-import { getMarketStatus, hasClaimableFees } from "../../utils";
-import { usePredictionProtocolAddress } from "../../hooks";
-import { useAccount } from "wagmi";
+import { useBatchWithdrawPredictionFees, usePredictionProtocolAddress } from "../../hooks";
+import { useAccount, useChainId } from "wagmi";
+import { useMarketManagerDataQuery } from "@/graphql/generated/graphql";
+import { BINARY_LMSR_MARKET_MANAGER } from "config/contract-addresses";
+import { useClients } from "@/hooks/graphql/useClients";
 
 const StatCard = ({
     icon: Icon,
@@ -36,40 +38,99 @@ const StatCard = ({
     </div>
 );
 
+const formatTokenTotals = (items: { total: bigint; decimals: number; symbol: string }[]) => {
+    if (items.length === 0) return { primary: "0", secondary: undefined as string | undefined };
+    if (items.length === 1) {
+        const [item] = items;
+        return {
+            primary: `${formatAmount(formatUnits(item.total, item.decimals))} ${item.symbol}`,
+            secondary: undefined,
+        };
+    }
+
+    return {
+        primary: `${items.length} assets`,
+        secondary: items
+            .slice(0, 2)
+            .map((item) => `${formatAmount(formatUnits(item.total, item.decimals))} ${item.symbol}`)
+            .join(" · "),
+    };
+};
+
 export const PredictionSummary = () => {
     const { address: userAddress } = useAccount();
-    const { markets } = useAllPredictionMarkets();
+    const chainId = useChainId();
+    const { markets, refetch: refetchMarkets } = useAllPredictionMarkets();
     const [topUpOpen, setTopUpOpen] = useState(false);
     const [copied, setCopied] = useState(false);
     const explorerBaseUrl = useBlockExplorerUrl();
+    const { toast } = useToast();
 
     const { data: protocolAddress } = usePredictionProtocolAddress();
     const isOwner = userAddress && protocolAddress && protocolAddress.toLowerCase() === userAddress.toLowerCase();
 
+    const { predictionClient } = useClients();
+
+    const { data: marketManagerData, refetch: refetchMarketManager } = useMarketManagerDataQuery({
+        variables: {
+            address: BINARY_LMSR_MARKET_MANAGER[chainId].toLowerCase(),
+        },
+        skip: !protocolAddress,
+        client: predictionClient,
+    });
+
     const { nativeBalance, tokenBalances, claimableFeesByToken } = useTreasuryBalances(protocolAddress, markets);
+    const { withdrawFees: claimAllFees, isLoading: isClaimingAll } = useBatchWithdrawPredictionFees(() => {
+        refetchMarkets();
+        refetchMarketManager();
+    });
 
     const stats = useMemo(() => {
-        const activeMarkets = markets.filter((m) => getMarketStatus(m) === MarketStatus.Active);
-        const resolvedMarkets = markets.filter((m) => getMarketStatus(m) === MarketStatus.Resolved);
-        const closedMarkets = markets.filter((m) => getMarketStatus(m) === MarketStatus.TradingClosed);
-        const marketsWithFees = markets.filter((m) => hasClaimableFees(m));
-        const totalVolume = markets.reduce((acc, m) => acc + Number(formatUnits(BigInt(m.totalVolume || 0), 6)), 0);
-        const totalUsers = new Set(markets.flatMap((m) => m.activeUsers || 0)).size;
-        const totalTrades = markets.reduce((acc, m) => acc + Number(m.totalTrades || 0), 0);
-        const totalFees = claimableFeesByToken.reduce((acc, f) => acc + Number(formatUnits(f.total, f.decimals)), 0);
+        const marketManager = marketManagerData?.marketManager;
+        if (!marketManager) {
+            return {
+                total: 0,
+                active: 0,
+                resolved: 0,
+                closed: 0,
+                totalVolume: 0,
+                totalUsers: 0,
+                totalTrades: 0,
+                totalFees: 0,
+                totalSeededMarkets: 0,
+            };
+        }
+
+        const totalMarkets = Number(marketManager.marketCount);
+        const activeMarkets = Number(marketManager.openMarketCount);
+        const resolvedMarkets = Number(marketManager.resolvedMarketCount);
+        const closedMarkets = totalMarkets - activeMarkets - resolvedMarkets;
+        // const marketsWithFees = markets.filter((m) => hasClaimableFees(m));
+        const tvl = formatUnits(BigInt(marketManager.tvl), 6);
+        const totalVolume = formatUnits(BigInt(marketManager.totalVolume), 6);
+        const totalFees = formatUnits(BigInt(marketManager.accruedFees), 6);
+        const totalUsers = marketManager.activeUserCount;
+        const totalTrades = marketManager.totalTrades;
+        const totalSeededMarkets = Number(marketManager.seededMarketCount);
 
         return {
-            total: markets.length,
-            active: activeMarkets.length,
-            resolved: resolvedMarkets.length,
-            closed: closedMarkets.length,
-            withFees: marketsWithFees.length,
+            total: totalMarkets,
+            active: activeMarkets,
+            resolved: resolvedMarkets,
+            closed: closedMarkets,
+            tvl,
             totalVolume,
             totalUsers,
             totalTrades,
             totalFees,
+            totalSeededMarkets,
         };
-    }, [markets, claimableFeesByToken]);
+    }, [marketManagerData]);
+
+    const claimAllEligibleMarkets = useMemo(() => markets.filter((market) => BigInt(market.accruedFees || 0) > 0n), [markets]);
+
+    const claimableFeesDisplay = useMemo(() => formatTokenTotals(claimableFeesByToken), [claimableFeesByToken]);
+    // const seededDisplay = useMemo(() => formatTokenTotals(seededAmountsByToken), [seededAmountsByToken]);
 
     const nativeFormatted = nativeBalance ? formatAmount(formatUnits(nativeBalance.value, nativeBalance.decimals), 4) : "—";
     const isLowGas = nativeBalance ? Number(formatUnits(nativeBalance.value, nativeBalance.decimals)) < 0.01 : false;
@@ -79,6 +140,20 @@ export const PredictionSummary = () => {
         navigator.clipboard.writeText(protocolAddress);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
+    };
+
+    const handleClaimAll = () => {
+        if (!protocolAddress) return;
+
+        if (claimAllEligibleMarkets.length === 0) {
+            toast({
+                title: "No fees to claim",
+                description: "There are no accrued protocol fees available right now.",
+            });
+            return;
+        }
+
+        claimAllFees(claimAllEligibleMarkets, protocolAddress);
     };
 
     return (
@@ -133,6 +208,19 @@ export const PredictionSummary = () => {
                                 </div>
                             ))}
 
+                            {isOwner && (
+                                <Button
+                                    variant="primary"
+                                    size="sm"
+                                    onClick={handleClaimAll}
+                                    disabled={claimAllEligibleMarkets.length === 0 || isClaimingAll}
+                                    className="gap-1.5 text-xs"
+                                >
+                                    <Coins size={16} />
+                                    {isClaimingAll ? "Claiming..." : "Claim All Fees"}
+                                </Button>
+                            )}
+
                             {!isOwner && (
                                 <TopUpModal open={topUpOpen} onOpenChange={setTopUpOpen} protocolAddress={protocolAddress}>
                                     <Button variant="outline" size="sm" onClick={() => setTopUpOpen(true)} className="gap-1.5 text-xs">
@@ -153,11 +241,17 @@ export const PredictionSummary = () => {
                     />
                     <StatCard icon={Users} label="Total Trades" value={formatAmount(stats.totalTrades)} />
                     <StatCard icon={DollarSign} label="Total Volume" value={`${formatAmount(stats.totalVolume)} USDC`} />
+                    {/* <StatCard
+                        icon={Droplets}
+                        label="Seeded Capital"
+                        value={seededDisplay.primary}
+                        subValue={seededDisplay.secondary || `${stats.totalSeededMarkets} seeded markets`}
+                    /> */}
                     <StatCard
                         icon={Coins}
                         label="Claimable Fees"
-                        value={`${formatAmount(stats.totalFees)} USDC`}
-                        subValue={` across ${stats.withFees} markets`}
+                        value={claimableFeesDisplay.primary}
+                        subValue={claimableFeesDisplay.secondary || `across ${claimAllEligibleMarkets.length} markets`}
                     />
                 </div>
             </div>

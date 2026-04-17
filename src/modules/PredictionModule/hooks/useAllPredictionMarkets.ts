@@ -1,6 +1,6 @@
-import { useAllMarketsListQuery } from "@/graphql/generated/graphql";
 import { useClients } from "@/hooks/graphql/useClients";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
+import { useAllOpenMarketsListQuery, useMarketsWithFeesListQuery } from "@/graphql/generated/graphql";
 import { MarketStatus, PredictionMarket } from "../types";
 import { getMarketStatus } from "../utils";
 
@@ -12,23 +12,59 @@ const STATUS_ORDER: Record<MarketStatus, number> = {
 
 export function useAllPredictionMarkets() {
     const { predictionClient } = useClients();
-
-    const { data, loading, error, refetch } = useAllMarketsListQuery({
+    const {
+        data: openMarketsData,
+        loading: openMarketsLoading,
+        error: openMarketsError,
+        refetch: refetchOpenMarkets,
+    } = useAllOpenMarketsListQuery({
         client: predictionClient,
         pollInterval: 60_000,
     });
 
+    const {
+        data: marketsWithFeesData,
+        loading: marketsWithFeesLoading,
+        error: marketsWithFeesError,
+        refetch: refetchMarketsWithFees,
+    } = useMarketsWithFeesListQuery({
+        client: predictionClient,
+        pollInterval: 60_000,
+    });
+
+    const refetch = useCallback(async () => {
+        await Promise.all([refetchOpenMarkets(), refetchMarketsWithFees()]);
+    }, [refetchOpenMarkets, refetchMarketsWithFees]);
+
     const markets: PredictionMarket[] = useMemo(() => {
-        if (!data?.markets) return [];
-        return (data.markets as PredictionMarket[])
+        const mergedMarkets = new Map<string, PredictionMarket>();
+
+        for (const market of openMarketsData?.markets ?? []) {
+            mergedMarkets.set(market.id, market as PredictionMarket);
+        }
+
+        for (const market of marketsWithFeesData?.markets ?? []) {
+            mergedMarkets.set(market.id, market as PredictionMarket);
+        }
+
+        return Array.from(mergedMarkets.values())
             .slice()
             .sort((a, b) => Number(a.tradingDeadline) - Number(b.tradingDeadline))
             .sort((a, b) => {
                 const sa = STATUS_ORDER[getMarketStatus(a)] ?? 99;
                 const sb = STATUS_ORDER[getMarketStatus(b)] ?? 99;
                 return sa - sb;
-            });
-    }, [data]);
+            })
+            .map((market) => ({
+                ...market,
+                index: BigInt(market.id.split("-")[1]),
+            }));
+    }, [openMarketsData, marketsWithFeesData]);
 
-    return { markets, loading, error, refetch };
+    return {
+        markets,
+        loading: openMarketsLoading || marketsWithFeesLoading,
+        error: openMarketsError || marketsWithFeesError,
+        refetch,
+    };
 }

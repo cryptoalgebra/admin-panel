@@ -6,22 +6,21 @@ import { StatBox } from "@/components/common/StatBox";
 import { MarketOutcome } from "@/modules/PredictionModule/types";
 import { PredictionMarket } from "@/modules/PredictionModule/types";
 import { formatAmount } from "@/utils/common/formatAmount";
-import { MarketState } from "../../hooks";
 import { Currency } from "@cryptoalgebra/integral-sdk";
 import { OutcomeBadge } from "../common/Badge";
 
 interface MarketOverviewProps {
     market: PredictionMarket;
-    marketState: MarketState | undefined;
     collateralToken: Currency | null | undefined;
     outcome: MarketOutcome;
     marketId: Address;
     explorerBaseUrl: string;
+    protocolAddress?: Address;
 }
 
-export const MarketOverview = ({ market, marketState, collateralToken, outcome, marketId, explorerBaseUrl }: MarketOverviewProps) => (
+export const MarketOverview = ({ market, protocolAddress, collateralToken, outcome, marketId, explorerBaseUrl }: MarketOverviewProps) => (
     <SectionCard title="Overview" icon={Info}>
-        <div className="grid grid-cols-3 gap-3 pb-4">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 pb-4">
             <StatBox
                 label="Volume"
                 value={`${formatAmount(formatUnits(BigInt(market.totalVolume || 0), collateralToken?.decimals || 0))} ${
@@ -36,10 +35,17 @@ export const MarketOverview = ({ market, marketState, collateralToken, outcome, 
             <DataRow label="Pool Address" copyable={market.pool} link={`${explorerBaseUrl}/address/${market.pool}`} />
             <DataRow
                 label="Protocol Address"
-                copyable={marketState?.protocol}
-                link={marketState?.protocol ? `${explorerBaseUrl}/address/${marketState.protocol}` : undefined}
+                copyable={protocolAddress}
+                link={protocolAddress ? `${explorerBaseUrl}/address/${protocolAddress}` : undefined}
             />
             <DataRow label="Collateral Token" value={collateralToken?.symbol} />
+            <DataRow
+                label="Seed Amount"
+                value={`${formatAmount(formatUnits(BigInt(market.seedAmount || 0), collateralToken?.decimals || 0))} ${
+                    collateralToken?.symbol
+                }`}
+            />
+            {/* <DataRow label="Seed Withdrawal" value="Handled through resolve leftover flow" /> */}
             <DataRow label="Outcome" value={outcome === MarketOutcome.Unresolved ? "Unresolved" : <OutcomeBadge outcome={outcome} />} />
         </div>
     </SectionCard>

@@ -9,7 +9,7 @@ import GaugesPage from "@/pages/Gauges";
 import NewGaugePage from "@/pages/NewGauge";
 import GaugePage from "@/pages/Gauge";
 import { enabledModules } from "config/app-modules";
-import PredictionPage from "@/pages/Prediction";
+import PredictionsPage from "@/pages/Predictions";
 import PredictionMarketPage from "@/pages/PredictionMarket";
 
 const router = createBrowserRouter([
@@ -66,11 +66,11 @@ const router = createBrowserRouter([
             ...(enabledModules.PredictionModule
                 ? [
                       {
-                          path: "prediction",
-                          element: <PredictionPage />,
+                          path: "predictions",
+                          element: <PredictionsPage />,
                       },
                       {
-                          path: "prediction/:market",
+                          path: "predictions/:market",
                           element: <PredictionMarketPage />,
                       },
                   ]

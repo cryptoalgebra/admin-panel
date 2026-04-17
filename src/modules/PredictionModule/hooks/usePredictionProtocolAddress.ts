@@ -1,5 +1,5 @@
-import { useReadBinaryLmsrMarketFactoryOwner } from "@/generated";
+import { useReadBinaryLmsrMarketManagerOwner } from "@/generated";
 
 export function usePredictionProtocolAddress() {
-    return useReadBinaryLmsrMarketFactoryOwner();
+    return useReadBinaryLmsrMarketManagerOwner();
 }

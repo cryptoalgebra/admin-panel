@@ -1,9 +1,10 @@
-import { useWritePredictionMarketWithdrawFees } from "@/generated";
+import { useWriteBinaryLmsrMarketManagerWithdrawFees } from "@/generated";
 import { useTransactionAwait } from "@/hooks/common/useTransactionAwait";
 import { Address } from "viem";
+import { PredictionMarket } from "../types";
 
-export function useWithdrawPredictionFees(marketAddress: Address | undefined, onSuccess?: () => void) {
-    const { writeContract: withdraw, data: hash, isPending } = useWritePredictionMarketWithdrawFees();
+export function useWithdrawPredictionFees(market: PredictionMarket | undefined, onSuccess?: () => void) {
+    const { writeContract: withdraw, data: hash, isPending } = useWriteBinaryLmsrMarketManagerWithdrawFees();
 
     const { isLoading: isConfirming } = useTransactionAwait(hash, {
         title: "Withdraw Fees",
@@ -12,10 +13,9 @@ export function useWithdrawPredictionFees(marketAddress: Address | undefined, on
     });
 
     function withdrawFees(recipient: Address, amount: bigint) {
-        if (!marketAddress) return;
+        if (!market) return;
         withdraw({
-            address: marketAddress,
-            args: [recipient, amount],
+            args: [market.index, recipient, amount],
         });
     }
 

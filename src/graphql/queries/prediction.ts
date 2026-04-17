@@ -1,16 +1,36 @@
 import { gql } from "@apollo/client";
 
+export const MARKET_MANAGER_FRAGMENT = gql`
+    fragment MarketManagerFields on MarketManager {
+        accruedFees
+        activeUserCount
+        marketCount
+        id
+        maxLoss
+        openInterest
+        openMarketCount
+        seededMarketCount
+        resolvedMarketCount
+        totalFeesWithdrawn
+        totalFeesCollected
+        totalRedeemed
+        totalLeftoverWithdrawn
+        totalVolume
+        totalTrades
+        tvl
+    }
+`;
+
 export const MARKET_FRAGMENT = gql`
     fragment MarketFields on Market {
         id
         pool
-        token0
-        token1
+        marketToken
+        quoteToken
         collateralToken
         tradingDeadline
         plannedResolutionTimestamp
         mark
-        marketToken
         condition
         seeded
         seedAmount
@@ -23,6 +43,7 @@ export const MARKET_FRAGMENT = gql`
         activeUsers
         createdAt
         question
+        accountedCollateral
     }
 `;
 
@@ -102,9 +123,17 @@ export const ALL_OPEN_MARKETS_LIST = gql`
     }
 `;
 
+export const MARKETS_WITH_FEES_LIST = gql`
+    query MarketsWithFeesList {
+        markets(where: { accruedFees_gt: "0" }) {
+            ...MarketFields
+        }
+    }
+`;
+
 export const ALL_MARKETS_LIST = gql`
-    query AllMarketsList {
-        markets(first: 1000, orderBy: createdAt, orderDirection: desc) {
+    query AllMarketsList($where: Market_filter, $first: Int, $skip: Int, $orderBy: Market_orderBy, $orderDirection: OrderDirection) {
+        markets(where: $where, first: $first, skip: $skip, orderBy: $orderBy, orderDirection: $orderDirection) {
             ...MarketFields
         }
     }
@@ -114,6 +143,14 @@ export const SINGLE_MARKET = gql`
     query SingleMarket($marketId: ID!) {
         market(id: $marketId) {
             ...MarketFields
+        }
+    }
+`;
+
+export const MARKET_MANAGER_DATA = gql`
+    query MarketManagerData($address: ID!) {
+        marketManager(id: $address) {
+            ...MarketManagerFields
         }
     }
 `;

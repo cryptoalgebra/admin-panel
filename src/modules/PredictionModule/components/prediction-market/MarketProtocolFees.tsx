@@ -6,9 +6,10 @@ import { DataRow } from "@/components/common/DataRow";
 import { AuthorizationState, MarketState } from "../../hooks";
 import { Currency } from "@cryptoalgebra/integral-sdk";
 import { WithdrawFeesModal } from "../modals";
+import { PredictionMarket } from "../../types";
 
 interface MarketProtocolFeesProps {
-    marketId: Address;
+    market: PredictionMarket | undefined;
     marketState: MarketState | undefined;
     collateralToken: Currency | null | undefined;
     accruedFeesFormatted: string;
@@ -18,7 +19,7 @@ interface MarketProtocolFeesProps {
 }
 
 export const MarketProtocolFees = ({
-    marketId,
+    market,
     marketState,
     collateralToken,
     accruedFeesFormatted,
@@ -48,7 +49,7 @@ export const MarketProtocolFees = ({
             <div className="flex items-end">
                 {authorization.canWithdraw ? (
                     <WithdrawFeesModal
-                        marketAddress={marketId}
+                        market={market}
                         accruedFees={marketState?.accruedFees ?? 0n}
                         recipient={userAddress}
                         collateralToken={collateralToken?.wrapped}
