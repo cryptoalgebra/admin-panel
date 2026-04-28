@@ -8,10 +8,10 @@ export const ALGEBRA_FACTORY: Record<number, Address> = {
 
 /* Plugins */
 export const PLUGIN_FACTORY: Record<number, Address> = {
-    [ChainId.BSC]: "0x54b589aC373Aad138e3689515ff5206afCe1ad41",
+    [ChainId.BSC]: "0x7CBc6Ce5476Cb54f700681f054A80851BCBF5108",
 };
 export const SECURITY_REGISTRY: Record<number, Address> = {
-    [ChainId.BSC]: "0xc9574dE8f6DB27B3E83d5aF0fB9D513213baD068",
+    [ChainId.BSC]: "0xce17699E8d694239Cb2Fa61980DAc1551EA9673F",
 };
 
 /* Farming */
