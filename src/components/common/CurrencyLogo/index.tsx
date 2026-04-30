@@ -19,6 +19,10 @@ export const specialTokens: {
         symbol: "USDr",
         logo: USDRLogo,
     },
+    ["0x07e17E17e17E17e17e17e17E17E17E17E17e17EA".toLowerCase()]: {
+        symbol: "RLS",
+        logo: USDRLogo,
+    },
     ["0x7fb2491d015f6c0271fdfcbb7712feeb43ebe50e"]: {
         symbol: "USDC",
         logo: USDCLogo,
