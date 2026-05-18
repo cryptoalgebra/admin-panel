@@ -569,10 +569,10 @@
     stream-browserify "^3.0.0"
     util "^0.12.4"
 
-"@cryptoalgebra/integral-sdk@npm:@cryptoalgebra/rayls-mainnet-sdk@1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@cryptoalgebra/rayls-mainnet-sdk/-/rayls-mainnet-sdk-1.0.1.tgz#6dd27c81da407b6d5dfc8fd1b0aeffa7e1913788"
-  integrity sha512-BpA9l7myC5hFyM1rqCVyJksmVlq+Mrk3MxJBiMUSuR4EGYw+Ivs/3NOqxaAqDHmIKy52pgNSNzYvnXdlP2lGPg==
+"@cryptoalgebra/integral-sdk@npm:@cryptoalgebra/rayls-mainnet-sdk@1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@cryptoalgebra/rayls-mainnet-sdk/-/rayls-mainnet-sdk-1.0.3.tgz#5855c1408eaff2490f9ca46e204b079c1411aa1e"
+  integrity sha512-D+egIPSxpAw8CgYvrDWIWLgVVf8B2mzitfMwmjhV1HOqG6fCEsmPyE1AsY8t+WkHiw66fO5PThjjDC5QNVUQ2Q==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/address" "^5.7.0"

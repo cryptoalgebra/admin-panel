@@ -651,7 +651,6 @@ export enum Burn_OrderBy {
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
   PoolOverrideFee = 'pool__overrideFee',
-  PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
   PoolTick = 'pool__tick',
@@ -883,7 +882,6 @@ export enum Collect_OrderBy {
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
   PoolOverrideFee = 'pool__overrideFee',
-  PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
   PoolTick = 'pool__tick',
@@ -1627,7 +1625,6 @@ export enum Flash_OrderBy {
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
   PoolOverrideFee = 'pool__overrideFee',
-  PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
   PoolTick = 'pool__tick',
@@ -1920,7 +1917,6 @@ export enum Mint_OrderBy {
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
   PoolOverrideFee = 'pool__overrideFee',
-  PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
   PoolTick = 'pool__tick',
@@ -2096,7 +2092,6 @@ export enum Plugin_OrderBy {
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
   PoolOverrideFee = 'pool__overrideFee',
-  PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
   PoolTick = 'pool__tick',
@@ -2143,7 +2138,7 @@ export type Pool = {
   mints: Array<Mint>;
   observationIndex: Scalars['BigInt']['output'];
   overrideFee: Scalars['BigInt']['output'];
-  plugin: Scalars['Bytes']['output'];
+  plugin?: Maybe<Plugin>;
   pluginConfig: Scalars['Int']['output'];
   poolDayData: Array<PoolDayData>;
   poolHourData: Array<PoolHourData>;
@@ -2479,7 +2474,6 @@ export enum PoolDayData_OrderBy {
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
   PoolOverrideFee = 'pool__overrideFee',
-  PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
   PoolTick = 'pool__tick',
@@ -2802,7 +2796,6 @@ export enum PoolHourData_OrderBy {
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
   PoolOverrideFee = 'pool__overrideFee',
-  PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
   PoolTick = 'pool__tick',
@@ -2984,7 +2977,6 @@ export enum PoolPosition_OrderBy {
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
   PoolOverrideFee = 'pool__overrideFee',
-  PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
   PoolTick = 'pool__tick',
@@ -3211,7 +3203,7 @@ export type Pool_Filter = {
   overrideFee_lte?: InputMaybe<Scalars['BigInt']['input']>;
   overrideFee_not?: InputMaybe<Scalars['BigInt']['input']>;
   overrideFee_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  plugin?: InputMaybe<Scalars['Bytes']['input']>;
+  plugin?: InputMaybe<Scalars['String']['input']>;
   pluginConfig?: InputMaybe<Scalars['Int']['input']>;
   pluginConfig_gt?: InputMaybe<Scalars['Int']['input']>;
   pluginConfig_gte?: InputMaybe<Scalars['Int']['input']>;
@@ -3220,15 +3212,26 @@ export type Pool_Filter = {
   pluginConfig_lte?: InputMaybe<Scalars['Int']['input']>;
   pluginConfig_not?: InputMaybe<Scalars['Int']['input']>;
   pluginConfig_not_in?: InputMaybe<Array<Scalars['Int']['input']>>;
-  plugin_contains?: InputMaybe<Scalars['Bytes']['input']>;
-  plugin_gt?: InputMaybe<Scalars['Bytes']['input']>;
-  plugin_gte?: InputMaybe<Scalars['Bytes']['input']>;
-  plugin_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
-  plugin_lt?: InputMaybe<Scalars['Bytes']['input']>;
-  plugin_lte?: InputMaybe<Scalars['Bytes']['input']>;
-  plugin_not?: InputMaybe<Scalars['Bytes']['input']>;
-  plugin_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
-  plugin_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  plugin_?: InputMaybe<Plugin_Filter>;
+  plugin_contains?: InputMaybe<Scalars['String']['input']>;
+  plugin_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  plugin_ends_with?: InputMaybe<Scalars['String']['input']>;
+  plugin_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  plugin_gt?: InputMaybe<Scalars['String']['input']>;
+  plugin_gte?: InputMaybe<Scalars['String']['input']>;
+  plugin_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  plugin_lt?: InputMaybe<Scalars['String']['input']>;
+  plugin_lte?: InputMaybe<Scalars['String']['input']>;
+  plugin_not?: InputMaybe<Scalars['String']['input']>;
+  plugin_not_contains?: InputMaybe<Scalars['String']['input']>;
+  plugin_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  plugin_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  plugin_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  plugin_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  plugin_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  plugin_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  plugin_starts_with?: InputMaybe<Scalars['String']['input']>;
+  plugin_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
   poolDayData_?: InputMaybe<PoolDayData_Filter>;
   poolHourData_?: InputMaybe<PoolHourData_Filter>;
   sqrtPrice?: InputMaybe<Scalars['BigInt']['input']>;
@@ -3433,6 +3436,10 @@ export enum Pool_OrderBy {
   OverrideFee = 'overrideFee',
   Plugin = 'plugin',
   PluginConfig = 'pluginConfig',
+  PluginCollectedFeesToken0 = 'plugin__collectedFeesToken0',
+  PluginCollectedFeesToken1 = 'plugin__collectedFeesToken1',
+  PluginCollectedFeesUsd = 'plugin__collectedFeesUSD',
+  PluginId = 'plugin__id',
   PoolDayData = 'poolDayData',
   PoolHourData = 'poolHourData',
   SqrtPrice = 'sqrtPrice',
@@ -3718,7 +3725,6 @@ export enum PositionSnapshot_OrderBy {
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
   PoolOverrideFee = 'pool__overrideFee',
-  PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
   PoolTick = 'pool__tick',
@@ -4052,7 +4058,6 @@ export enum Position_OrderBy {
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
   PoolOverrideFee = 'pool__overrideFee',
-  PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
   PoolTick = 'pool__tick',
@@ -5196,7 +5201,6 @@ export enum Swap_OrderBy {
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
   PoolOverrideFee = 'pool__overrideFee',
-  PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
   PoolTick = 'pool__tick',
@@ -5441,7 +5445,6 @@ export enum TickHourData_OrderBy {
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
   PoolOverrideFee = 'pool__overrideFee',
-  PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
   PoolTick = 'pool__tick',
@@ -5702,7 +5705,6 @@ export enum Tick_OrderBy {
   PoolLiquidityProviderCount = 'pool__liquidityProviderCount',
   PoolObservationIndex = 'pool__observationIndex',
   PoolOverrideFee = 'pool__overrideFee',
-  PoolPlugin = 'pool__plugin',
   PoolPluginConfig = 'pool__pluginConfig',
   PoolSqrtPrice = 'pool__sqrtPrice',
   PoolTick = 'pool__tick',
