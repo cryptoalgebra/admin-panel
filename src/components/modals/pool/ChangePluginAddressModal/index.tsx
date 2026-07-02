@@ -1,18 +1,12 @@
-import Loader from '@/components/common/Loader';
-import {
-    Credenza,
-    CredenzaBody,
-    CredenzaContent,
-    CredenzaHeader,
-    CredenzaTitle,
-    CredenzaTrigger,
-} from '@/components/ui/credenza';
-import { Input } from '@/components/ui/input';
-import { usePrepareAlgebraPoolSetPlugin } from '@/generated';
-import { useTransitionAwait } from '@/hooks/common/useTransactionAwait';
-import { useState } from 'react';
-import { isAddress } from 'viem';
-import { Address, useContractWrite } from 'wagmi';
+import Loader from "@/components/common/Loader";
+import { Button } from "@/components/ui/button";
+import { Credenza, CredenzaBody, CredenzaContent, CredenzaHeader, CredenzaTitle, CredenzaTrigger } from "@/components/ui/credenza";
+import { Input } from "@/components/ui/input";
+import { algebraPoolABI } from "config";
+import { useTransactionAwait } from "@/hooks/common/useTransactionAwait";
+import { useState } from "react";
+import { Address, isAddress } from "viem";
+import { useWriteContract } from "wagmi";
 
 interface IChangePluginAddressModal {
     title: string;
@@ -20,28 +14,23 @@ interface IChangePluginAddressModal {
     poolId: Address;
 }
 
-const ChangePluginAddressModal = ({
-    title,
-    children,
-    poolId,
-}: IChangePluginAddressModal) => {
-    const [value, setValue] = useState<string>('');
+const ChangePluginAddressModal = ({ title, children, poolId }: IChangePluginAddressModal) => {
+    const [value, setValue] = useState<string>("");
     const [isAddressValid, setIsAddressValid] = useState<boolean>(false);
 
-    const { config } = usePrepareAlgebraPoolSetPlugin({
-        address: poolId,
-        args: [value as Address],
-        enabled: isAddress(value),
-    });
+    const { data, writeContract, isPending } = useWriteContract();
 
-    const { data, write } = useContractWrite(config);
-
-    const { isLoading } = useTransitionAwait(data?.hash, title);
+    const { isLoading } = useTransactionAwait(data, { title });
 
     const handleConfirm = () => {
         if (isAddress(value)) {
             setIsAddressValid(false);
-            write?.();
+            writeContract({
+                address: poolId,
+                abi: algebraPoolABI,
+                functionName: "setPlugin",
+                args: [value as Address],
+            });
         } else {
             setIsAddressValid(true);
         }
@@ -49,11 +38,11 @@ const ChangePluginAddressModal = ({
     return (
         <Credenza>
             <CredenzaTrigger asChild>{children}</CredenzaTrigger>
-            <CredenzaContent className="bg-white !rounded-3xl">
+            <CredenzaContent className="bg-white rounded-lg">
                 <CredenzaHeader>
                     <CredenzaTitle>{title}</CredenzaTitle>
                 </CredenzaHeader>
-                <CredenzaBody className={'flex flex-col gap-2'}>
+                <CredenzaBody className={"flex flex-col gap-2"}>
                     <Input
                         placeholder="Enter plugin address"
                         type="text"
@@ -61,18 +50,10 @@ const ChangePluginAddressModal = ({
                         value={value}
                         onChange={(e) => setValue(e.target.value)}
                     />
-                    {isAddressValid && (
-                        <p className="text-red-500 text-sm">
-                            Incorrect address!
-                        </p>
-                    )}
-                    <button
-                        disabled={isLoading}
-                        onClick={handleConfirm}
-                        className="flex items-center justify-center mt-2 py-2 px-4 w-full bg-blue-500 text-white font-bold rounded-xl disabled:bg-blue-400 hover:bg-blue-400"
-                    >
-                        {isLoading ? <Loader /> : 'Confirm'}
-                    </button>
+                    {isAddressValid && <p className="text-red-500 text-sm">Incorrect address!</p>}
+                    <Button disabled={isLoading || isPending} onClick={handleConfirm} className="w-full mt-2">
+                        {isLoading || isPending ? <Loader /> : "Confirm"}
+                    </Button>
                 </CredenzaBody>
             </CredenzaContent>
         </Credenza>

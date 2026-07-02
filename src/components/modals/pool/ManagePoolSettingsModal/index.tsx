@@ -1,166 +1,83 @@
-import { algebraPoolABI } from '@/abis';
-import Loader from '@/components/common/Loader';
-import {
-    Credenza,
-    CredenzaBody,
-    CredenzaContent,
-    CredenzaHeader,
-    CredenzaTitle,
-    CredenzaTrigger,
-} from '@/components/ui/credenza';
-import { Input } from '@/components/ui/input';
-import {
-    useAlgebraPoolFee,
-    useAlgebraPoolGlobalState,
-    useAlgebraPoolPlugin,
-    useAlgebraPoolTickSpacing,
-    useAlgebraBasePluginSBaseFee,
-    usePrepareAlgebraBasePluginSetBaseFee,
-} from '@/generated';
-import { useTransitionAwait } from '@/hooks/common/useTransactionAwait';
-import { useEffect, useState } from 'react';
-import { Address, useContractWrite, usePrepareContractWrite } from 'wagmi';
+import { algebraPoolABI } from "config/abis";
+import Loader from "@/components/common/Loader";
+import { Button } from "@/components/ui/button";
+import { Credenza, CredenzaBody, CredenzaContent, CredenzaHeader, CredenzaTitle, CredenzaTrigger } from "@/components/ui/credenza";
+import { Input } from "@/components/ui/input";
+import { useReadAlgebraPoolGlobalState, useReadAlgebraPoolTickSpacing } from "@/generated";
+import { useTransactionAwait } from "@/hooks/common/useTransactionAwait";
+import { useEffect, useState } from "react";
+import { Address } from "viem";
+import { useWriteContract } from "wagmi";
 
-type ManageFunctions = 'setFee' | 'setCommunityFee' | 'setTickSpacing';
+type ManageFunctions = "setCommunityFee" | "setTickSpacing";
 
 interface IManagePoolSettingsModal {
     title: string;
     functionName?: ManageFunctions;
     children: React.ReactNode;
     poolId: Address;
-    isAdaptiveFee?: boolean;
 }
 
-const ManagePoolSettingsModal = ({
-    title,
-    functionName,
-    children,
-    poolId,
-    isAdaptiveFee = false,
-}: IManagePoolSettingsModal) => {
-    /* Single values */
+const ManagePoolSettingsModal = ({ title, functionName, children, poolId }: IManagePoolSettingsModal) => {
     const [value, setValue] = useState<number>();
 
-    const { data: poolGlobalState } = useAlgebraPoolGlobalState({
+    const { data: poolGlobalState } = useReadAlgebraPoolGlobalState({
         address: poolId,
-        enabled: functionName === 'setCommunityFee',
     });
 
-    const { data: initialTickSpacing } = useAlgebraPoolTickSpacing({
+    const { data: initialTickSpacing } = useReadAlgebraPoolTickSpacing({
         address: poolId,
-        enabled: functionName === 'setTickSpacing',
-    });
-
-    const { data: initialStaticFee } = useAlgebraPoolFee({
-        address: poolId,
-        enabled: functionName === 'setFee',
     });
 
     const initialCommunityFee = poolGlobalState?.[4];
 
-    const { data: pluginId } = useAlgebraPoolPlugin({
-        address: poolId,
+    const { data, writeContract, isPending } = useWriteContract();
 
-    });
-
-    const { config } = usePrepareContractWrite({
-        address: poolId,
-        abi: algebraPoolABI,
-        functionName,
-        args: value !== undefined ? [value] : undefined,
-        enabled: Boolean(!isAdaptiveFee && value),
-    });
-
-    const { data, write } = useContractWrite(config);
-
-    const { isLoading } = useTransitionAwait(data?.hash, title);
+    const { isLoading } = useTransactionAwait(data, { title });
 
     useEffect(() => {
         switch (functionName) {
-            case 'setFee':
-                setValue(initialStaticFee);
-                break;
-            case 'setCommunityFee':
+            case "setCommunityFee":
                 setValue(initialCommunityFee);
                 break;
-            case 'setTickSpacing':
+            case "setTickSpacing":
                 setValue(initialTickSpacing);
                 break;
             default:
                 setValue(undefined);
         }
-    }, [
-        functionName,
-        initialStaticFee,
-        initialCommunityFee,
-        initialTickSpacing,
-    ]);
-
-    const { data: initialBaseFee } = useAlgebraBasePluginSBaseFee({ address: pluginId })
-    const [baseFee, setBaseFee] = useState<number>()
-
-    const { config: baseFeeConfig } = usePrepareAlgebraBasePluginSetBaseFee({
-        address: pluginId,
-        args: baseFee ? [baseFee] : undefined,
-        enabled: Boolean(baseFee)
-    })
-
-    const { data: feeHash, write: setFee } = useContractWrite(baseFeeConfig)
-
-    const { isLoading: isFeeLoading } = useTransitionAwait(
-        feeHash?.hash,
-        title
-    );
-
-    useEffect(() => {
-        console.log('initialBaseFee', initialBaseFee, pluginId)
-        if (initialBaseFee) {
-            setBaseFee(initialBaseFee)
-        }
-    }, [initialBaseFee])
+    }, [functionName, initialCommunityFee, initialTickSpacing]);
 
     const handleConfirm = () => {
-        if (isAdaptiveFee) {
-            setFee?.()
-        } else {
-            write?.();
+        if (functionName && value !== undefined) {
+            writeContract({
+                address: poolId,
+                abi: algebraPoolABI,
+                functionName,
+                args: [value],
+            });
         }
     };
 
     return (
         <Credenza>
             <CredenzaTrigger asChild>{children}</CredenzaTrigger>
-            <CredenzaContent className="bg-white !rounded-3xl">
+            <CredenzaContent className="bg-white rounded-lg">
                 <CredenzaHeader>
                     <CredenzaTitle>{title}</CredenzaTitle>
                 </CredenzaHeader>
-                <CredenzaBody className={'flex flex-col gap-4'}>
-                    {isAdaptiveFee ? <Input type="number"
-                        required
-                        value={baseFee}
-                        placeholder="Enter fee"
-                        onChange={(e) => {
-                            setBaseFee(Number(e.target.value));
-                        }} /> : <Input
-                        type="number"
+                <CredenzaBody className={"flex flex-col gap-4"}>
+                    <Input
                         required
                         value={value}
                         placeholder="Enter amount"
-                        onChange={(e) => {
-                            setValue(Number(e.target.value));
+                        onUserInput={(v) => {
+                            setValue(Number(v));
                         }}
-                    />}
-                    <button
-                        disabled={isLoading || isFeeLoading}
-                        onClick={handleConfirm}
-                        className="flex col-span-2 justify-center w-full p-2 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-400 disabled:bg-blue-400"
-                    >
-                        {isLoading ? (
-                            <Loader color="currentColor" />
-                        ) : (
-                            'Confirm'
-                        )}
-                    </button>
+                    />
+                    <Button disabled={isLoading || isPending} onClick={handleConfirm} className="w-full">
+                        {isLoading || isPending ? <Loader color="currentColor" /> : "Confirm"}
+                    </Button>
                 </CredenzaBody>
             </CredenzaContent>
         </Credenza>

@@ -1,18 +1,18 @@
 import PageContainer from "@/components/common/PageContainer";
-import GaugeDetails from "@/components/gauge/GaugeDetails";
-import { GaugeRewards } from "@/components/gauge/GaugeRewards";
-import { useVoterGaugeToPool } from "@/generated";
-import { useVotingPool } from "@/hooks/gauges/useVotingPool";
+import Ve33Module from "@/modules/Ve33Module";
+import { useReadVoterGaugeToPool } from "@/generated";
 import { ArrowLeft } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
-import { Address } from "wagmi";
+import { Address } from "viem";
+
+const { GaugeDetails, GaugeRewards } = Ve33Module.components;
+const { useVotingPool } = Ve33Module.hooks;
 
 const GaugePage = () => {
     const { gauge } = useParams<{ gauge: Address }>();
 
-    const { data: poolAddress } = useVoterGaugeToPool({
-        args: [gauge!],
-        enabled: !!gauge,
+    const { data: poolAddress } = useReadVoterGaugeToPool({
+        args: gauge ? [gauge] : undefined,
     });
 
     const { data: votingPool, refetch } = useVotingPool(poolAddress as Address);
@@ -21,12 +21,13 @@ const GaugePage = () => {
 
     return (
         <PageContainer>
-            <Link to={"/gauges"} className="flex items-center gap-2 mb-4 hover:text-black/70">
+            <Link to={"/gauges"} className="flex items-center gap-2 mb-6 text-text/70 hover:text-text transition-colors">
                 <ArrowLeft size={16} />
-                <span>Back</span>
+                <span>Back to Gauges</span>
             </Link>
             <div className="mb-8">
-                {token0 && token1 && <div className="font-bold text-2xl">{`Gauge for ${token0.symbol} / ${token1.symbol} pool`}</div>}
+                {token0 && token1 && <h1 className="font-semibold text-2xl text-text">{`${token0.symbol} / ${token1.symbol}`}</h1>}
+                <p className="text-sm text-text/50 mt-1">Gauge Management</p>
             </div>
             {votingPool ? (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
@@ -34,7 +35,12 @@ const GaugePage = () => {
                     <GaugeRewards votingPool={votingPool} refetch={refetch} />
                 </div>
             ) : (
-                <div>Loading...</div>
+                <div className="flex items-center justify-center py-16">
+                    <div className="flex flex-col items-center gap-3">
+                        <div className="w-6 h-6 border-2 border-border border-t-text rounded-full animate-spin" />
+                        <span className="text-sm text-text/50">Loading gauge data...</span>
+                    </div>
+                </div>
             )}
         </PageContainer>
     );

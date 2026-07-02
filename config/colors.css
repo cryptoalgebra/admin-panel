@@ -1,0 +1,19 @@
+:root {
+    /* BRAND */
+    --primary-100: #0a0a0a;
+    --primary-200: #171717;
+    --primary-300: #ffffff1a;
+
+    /* ACCENT */
+    --accent-100: #ff6467;
+    --accent-200: #ffb1b3;
+
+    /* TEXT */
+    --text-100: #0a0a0a; /* text color */
+    --text-200: #ffffff1a; /* muted text color */
+
+    /* BACKGROUND */
+    --bg-100: #ffffff; /* app background */
+    --bg-200: #fafafa; /* card background */
+    --bg-300: #dedede; /* border color */
+}

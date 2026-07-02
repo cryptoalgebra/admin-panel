@@ -1,12 +1,13 @@
-import { Currency } from "@cryptoalgebra/custom-pools-and-sliding-fee-sdk";
+import { Currency, WNATIVE } from "@cryptoalgebra/integral-sdk";
 import React from "react";
-import { Address } from "wagmi";
-import EthLogo from "@/assets/tokens/ether.svg";
+import { Address } from "viem";
 import BTCLogo from "@/assets/tokens/wbtc.svg";
 import USDCLogo from "@/assets/tokens/usdc.svg";
 import EtherLogo from "@/assets/tokens/ether.svg";
-import ALGBLogo from "@/assets/algebra-logo.svg";
-import { cn } from "@/lib/utils";
+import ProjectXLogo from "@/assets/tokens/project-x.jpg";
+import TOKENLogo from "@/assets/algebra-logo.svg";
+import { cn } from "@/utils/common/cn";
+import { DEFAULT_CHAIN_ID, DEFAULT_NATIVE_SYMBOL } from "config/default-chain";
 
 interface CurrencyLogoProps {
     currency: Currency | undefined | null;
@@ -18,21 +19,25 @@ interface CurrencyLogoProps {
 export const specialTokens: {
     [key: Address]: { symbol: string; logo: string };
 } = {
-    ["0x4200000000000000000000000000000000000006"]: {
-        symbol: "ETH",
+    [WNATIVE[DEFAULT_CHAIN_ID].address.toLowerCase()]: {
+        symbol: "WETH",
         logo: EtherLogo,
     },
     ["0xabac6f23fdf1313fc2e9c9244f666157ccd32990"]: {
         symbol: "USDC",
         logo: USDCLogo,
     },
-    ["0xaff9ae92ef4362117d64fe51c20011a6ee456815"]: {
+    ["0x50d22384026efc4b5bd3734a7456bfab35c929a4"]: {
         symbol: "BTC",
         logo: BTCLogo,
     },
     ["0x253f3460bc16074b960f80421d72e6fa6ef786c8"]: {
-        symbol: "ALGB",
-        logo: ALGBLogo,
+        symbol: "TOKEN",
+        logo: TOKENLogo,
+    },
+    ["0x0ebdc0b736b34207f6e8abe10c282b4003021a22"]: {
+        symbol: "PROJECTX",
+        logo: ProjectXLogo,
     },
 };
 
@@ -42,7 +47,7 @@ const CurrencyLogo = ({ currency, size, className, style = {} }: CurrencyLogoPro
 
     const address = currency.wrapped.address.toLowerCase() as Address;
 
-    const classString = cn(`w-[${size}px] h-[${size}px] min-w-[${size}px] min-h-[${size}px] bg-card-dark rounded-full`, className);
+    const classString = cn(`w-[${size}px] h-[${size}px] min-w-[${size}px] min-h-[${size}px] bg-black rounded-full`, className);
 
     if (address in specialTokens) {
         return (
@@ -66,8 +71,8 @@ const CurrencyLogo = ({ currency, size, className, style = {} }: CurrencyLogoPro
     if (currency.isNative) {
         return (
             <img
-                src={EthLogo}
-                alt={"ETH"}
+                src={EtherLogo}
+                alt={DEFAULT_NATIVE_SYMBOL}
                 className={classString}
                 style={{
                     ...style,

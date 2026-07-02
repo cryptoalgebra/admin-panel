@@ -1,0 +1,43 @@
+// AUTO-GENERATED FILE
+
+export default {
+  hooks: {
+    useTokenInfo: () => ({}),
+    useFarmData: () => ({}),
+    useAllPredictionMarkets: () => ({}),
+    useMarketAuthorization: () => ({}),
+    useMarketCollateralBalance: () => ({}),
+    usePredictionMarket: () => ({}),
+    usePredictionMarketState: () => ({}),
+    usePredictionProtocolAddress: () => ({}),
+    useTreasuryBalances: () => ({}),
+    useWithdrawPredictionFees: () => ({}),
+    useAllGauges: () => ({}),
+    useVotingPool: () => ({}),
+    useWhitelistForGauge: () => ({}),
+  },
+  components: {
+    InputToggle: () => null,
+    PoolSelector: () => null,
+    StatusBadge: () => null,
+    OutcomeBadge: () => null,
+    TopUpModal: () => null,
+    WithdrawFeesModal: () => null,
+    PredictionMarketsList: () => null,
+    PredictionSummary: () => null,
+    MarketHeader: () => null,
+    MarketLiveState: () => null,
+    MarketOverview: () => null,
+    MarketProtocolFees: () => null,
+    MarketTimelines: () => null,
+    GaugeRewards: () => null,
+  },
+  utils: {
+    formatTimestamp: () => undefined,
+    formatDeadline: () => undefined,
+    isDeadlinePassed: () => undefined,
+    formatQuestionText: () => undefined,
+    getMarketStatus: () => undefined,
+    hasClaimableFees: () => undefined,
+  },
+};

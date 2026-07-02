@@ -1,25 +1,16 @@
-import Loader from '@/components/common/Loader';
-import {
-    Credenza,
-    CredenzaBody,
-    CredenzaContent,
-    CredenzaHeader,
-    CredenzaTitle,
-    CredenzaTrigger,
-} from '@/components/ui/credenza';
-import { Input } from '@/components/ui/input';
-import {
-    useAlgebraFactoryDefaultCommunityFee,
-    useAlgebraFactoryDefaultTickspacing,
-    useAlgebraFactoryDefaultFee,
-    usePrepareAlgebraFactorySetDefaultCommunityFee,
-    usePrepareAlgebraFactorySetDefaultTickspacing,
-    usePreparePluginFactorySetDefaultBaseFee,
-} from '@/generated';
-import { useTransitionAwait } from '@/hooks/common/useTransactionAwait';
-import { cn } from '@/lib/utils';
-import { useEffect, useState } from 'react';
-import { useContractWrite } from 'wagmi';
+import Loader from "@/components/common/Loader";
+import { Button } from "@/components/ui/button";
+import { Credenza, CredenzaBody, CredenzaContent, CredenzaHeader, CredenzaTitle, CredenzaTrigger } from "@/components/ui/credenza";
+import { Input } from "@/components/ui/input";
+import { ALGEBRA_FACTORY } from "config/contract-addresses";
+import { DEFAULT_CHAIN_ID } from "config/default-chain";
+import { useTransactionAwait } from "@/hooks/common/useTransactionAwait";
+import { useEffect, useState } from "react";
+import { useReadContracts, useWriteContract } from "wagmi";
+import { algebraFactoryABI } from "config/abis";
+import { cn } from "@/utils/common/cn";
+import { useReadSecurityRegistryGlobalStatus, useWriteSecurityRegistrySetGlobalStatus } from "@/generated";
+import PoolsDefaultFeeConfigurationModal from "@/components/modals/PoolsDefaultFeeConfigurationModal";
 
 interface IPoolsDefaultSettingsModal {
     title: string;
@@ -27,154 +18,265 @@ interface IPoolsDefaultSettingsModal {
 }
 
 enum SettingsKeys {
-    COMMUNITY_FEE = 'Community Fee',
-    FEE = 'Fee',
-    TICK_SPACING = 'Tick Spacing',
+    COMMUNITY_FEE = "Community Fee",
+    TICK_SPACING = "Tick Spacing",
 }
 
-interface Settings {
-    [SettingsKeys.COMMUNITY_FEE]: number;
-    [SettingsKeys.FEE]: number;
-    [SettingsKeys.TICK_SPACING]: number;
+type Settings = Record<SettingsKeys, number>;
+
+enum PoolSecurityStatus {
+    ENABLED = 0,
+    BURN_ONLY = 1,
+    DISABLED = 2,
 }
 
-const PoolsDefaultSettingsModal = ({
-    title,
-    children,
-}: IPoolsDefaultSettingsModal) => {
+const STATUS_LABELS: Record<PoolSecurityStatus, string> = {
+    [PoolSecurityStatus.ENABLED]: "Enabled",
+    [PoolSecurityStatus.DISABLED]: "Disabled",
+    [PoolSecurityStatus.BURN_ONLY]: "Burn Only",
+};
+
+const STATUS_DESCRIPTIONS: Record<PoolSecurityStatus, string> = {
+    [PoolSecurityStatus.ENABLED]: "All pool operations are allowed (swap, mint, burn, flash)",
+    [PoolSecurityStatus.DISABLED]: "All pool operations are blocked",
+    [PoolSecurityStatus.BURN_ONLY]: "Only liquidity withdrawals (burns) are allowed",
+};
+
+const STATUS_COLORS: Record<PoolSecurityStatus, string> = {
+    [PoolSecurityStatus.ENABLED]: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    [PoolSecurityStatus.DISABLED]: "bg-red-50 text-red-700 border-red-200",
+    [PoolSecurityStatus.BURN_ONLY]: "bg-amber-50 text-amber-700 border-amber-200",
+};
+
+const PoolsDefaultSettingsModal = ({ title, children }: IPoolsDefaultSettingsModal) => {
+    const [activeTab, setActiveTab] = useState<"new" | "existing">("new");
     const [settingsData, setSettingsData] = useState<Settings>({
         [SettingsKeys.COMMUNITY_FEE]: 0,
-        [SettingsKeys.FEE]: 0,
         [SettingsKeys.TICK_SPACING]: 0,
     });
 
-    const { data: defaultFee } = useAlgebraFactoryDefaultFee()
+    const [selectedGlobalStatus, setSelectedGlobalStatus] = useState<PoolSecurityStatus | null>(null);
 
-    const { data: defaultCommunityFee } = useAlgebraFactoryDefaultCommunityFee();
-
-    const { data: defaultTickSpacing } = useAlgebraFactoryDefaultTickspacing();
+    /* Get Default Settings */
+    const { data: defaultSettingsResults } = useReadContracts({
+        contracts: [
+            {
+                address: ALGEBRA_FACTORY[DEFAULT_CHAIN_ID],
+                abi: algebraFactoryABI,
+                functionName: "defaultCommunityFee",
+            },
+            {
+                address: ALGEBRA_FACTORY[DEFAULT_CHAIN_ID],
+                abi: algebraFactoryABI,
+                functionName: "defaultTickspacing",
+            },
+        ],
+    });
 
     useEffect(() => {
-        if (defaultCommunityFee === undefined || defaultTickSpacing === undefined || defaultFee === undefined) return;
-        setSettingsData({
-            [SettingsKeys.COMMUNITY_FEE]: defaultCommunityFee,
-            [SettingsKeys.FEE]: defaultFee,
-            [SettingsKeys.TICK_SPACING]: defaultTickSpacing,
-        });
-    }, [defaultCommunityFee, defaultTickSpacing, defaultFee]);
+        if (!defaultSettingsResults) return;
+        const results = defaultSettingsResults.map((d) => d.result);
+        if (!results.length) return;
+
+        const defaultSettings: Settings = {
+            [SettingsKeys.COMMUNITY_FEE]: Number(results[0]),
+            [SettingsKeys.TICK_SPACING]: Number(results[1]),
+        };
+
+        setSettingsData(defaultSettings);
+    }, [defaultSettingsResults]);
 
     /* Set Default Community Fee */
-    const { config: defaultCommunityFeeConfig } =
-        usePrepareAlgebraFactorySetDefaultCommunityFee({
-            args: [settingsData[SettingsKeys.COMMUNITY_FEE]],
-        });
-
-    const { data: communityFeeHash, write: setDefaultCommunityFee } =
-        useContractWrite(defaultCommunityFeeConfig);
-
-    /* Set Default Fee */
-    const { config: defaultFeeConfig } =
-        usePreparePluginFactorySetDefaultBaseFee({
-            args: [settingsData[SettingsKeys.FEE]],
-        });
-
-    const { data: feeHash, write: setDefaultFeeConfiguration } =
-        useContractWrite(defaultFeeConfig);
+    const { data: communityFeeHash, writeContract: setDefaultCommunityFee, isPending: isCommunityFeePending } = useWriteContract();
 
     /* Set Tick Spacing */
-    const { config: tickSpacingConfig } =
-        usePrepareAlgebraFactorySetDefaultTickspacing({
-            args: [settingsData[SettingsKeys.TICK_SPACING]],
-        });
+    const { data: tickSpacingHash, writeContract: setDefaultTickSpacing, isPending: isTickSpacingPending } = useWriteContract();
 
-    const { data: tickSpacingHash, write: setDefaultTickSpacing } =
-        useContractWrite(tickSpacingConfig);
+    const { isLoading: communityFeeLoading } = useTransactionAwait(communityFeeHash, { title: "Set Community Fee" });
+    const { isLoading: tickSpacingLoading } = useTransactionAwait(tickSpacingHash, { title: "Set Tick Spacing" });
 
-    const { isLoading: feeLoading } = useTransitionAwait(
-        feeHash?.hash,
-        'Set Default Fee'
-    );
-    const { isLoading: communityFeeLoading } = useTransitionAwait(
-        communityFeeHash?.hash,
-        'Set Community Fee'
-    );
-    const { isLoading: tickSpacingLoading } = useTransitionAwait(
-        tickSpacingHash?.hash,
-        'Set Tick Spacing'
-    );
+    const {
+        data: globalStatus,
+        isLoading: isGlobalStatusLoading,
+        refetch: refetchGlobalStatus,
+    } = useReadSecurityRegistryGlobalStatus();
 
-    const handleSubmit = (e: React.FormEvent, key: SettingsKeys) => {
-        e.preventDefault();
+    const { data: globalStatusHash, writeContract: setGlobalStatus, isPending: isGlobalStatusPending } =
+        useWriteSecurityRegistrySetGlobalStatus();
+
+    const { isLoading: isGlobalStatusTxLoading } = useTransactionAwait(globalStatusHash, {
+        title: "Update Global Security Status",
+        callback: refetchGlobalStatus,
+    });
+
+    const handleSubmit = (key: SettingsKeys) => {
         switch (key) {
             case SettingsKeys.COMMUNITY_FEE:
-                setDefaultCommunityFee?.();
-                break;
-            case SettingsKeys.FEE:
-                setDefaultFeeConfiguration?.();
+                setDefaultCommunityFee({
+                    address: ALGEBRA_FACTORY[DEFAULT_CHAIN_ID],
+                    abi: algebraFactoryABI,
+                    functionName: "setDefaultCommunityFee",
+                    args: [settingsData[SettingsKeys.COMMUNITY_FEE]],
+                });
                 break;
             case SettingsKeys.TICK_SPACING:
-                setDefaultTickSpacing?.();
+                setDefaultTickSpacing({
+                    address: ALGEBRA_FACTORY[DEFAULT_CHAIN_ID],
+                    abi: algebraFactoryABI,
+                    functionName: "setDefaultTickspacing",
+                    args: [settingsData[SettingsKeys.TICK_SPACING]],
+                });
                 break;
             default:
                 break;
         }
     };
 
+    const isLoading = communityFeeLoading || tickSpacingLoading || isCommunityFeePending || isTickSpacingPending;
+
+    const isButtonLoading = (key: SettingsKeys): boolean => {
+        switch (key) {
+            case SettingsKeys.COMMUNITY_FEE:
+                return communityFeeLoading || isCommunityFeePending;
+            case SettingsKeys.TICK_SPACING:
+                return tickSpacingLoading || isTickSpacingPending;
+            default:
+                return false;
+        }
+    };
+
+    const handleGlobalStatusConfirm = () => {
+        if (selectedGlobalStatus !== null) {
+            setGlobalStatus({
+                args: [selectedGlobalStatus],
+            });
+        }
+    };
+
+    const currentGlobalStatus = globalStatus as PoolSecurityStatus | undefined;
+    const isGlobalLoading = isGlobalStatusLoading || isGlobalStatusTxLoading || isGlobalStatusPending;
+
     return (
         <Credenza>
             <CredenzaTrigger asChild>{children}</CredenzaTrigger>
-            <CredenzaContent className="bg-white !rounded-3xl w-[600px]">
+            <CredenzaContent className="bg-white rounded-lg w-[600px]">
                 <CredenzaHeader>
                     <CredenzaTitle>{title}</CredenzaTitle>
                 </CredenzaHeader>
                 <CredenzaBody className="flex flex-col gap-4">
-                    <form className="flex flex-col gap-4 items-center">
-                        {Object.entries(settingsData as Settings).map(
-                            ([key, value]) => (
-                                <label
-                                    className={cn(
-                                        'gap-2 mb-2 w-full',
-                                        key === SettingsKeys.FEE
-                                            ? 'grid grid-cols-2'
-                                            : 'flex flex-col'
-                                    )}
-                                    key={key}
-                                >
-                                    <h4 className="w-full font-semibold col-span-2">
-                                        {key}
-                                    </h4>
+                    <div className="flex items-center gap-2 rounded-lg border border-border p-1">
+                        <button
+                            onClick={() => setActiveTab("new")}
+                            className={cn(
+                                "flex-1 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                                activeTab === "new" ? "bg-bg-200 text-text" : "text-text/60 hover:bg-bg-100"
+                            )}
+                        >
+                            New Pools
+                        </button>
+                        <button
+                            onClick={() => setActiveTab("existing")}
+                            className={cn(
+                                "flex-1 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                                activeTab === "existing" ? "bg-bg-200 text-text" : "text-text/60 hover:bg-bg-100"
+                            )}
+                        >
+                            Existing Pools
+                        </button>
+                    </div>
+
+                    {activeTab === "new" ? (
+                        <div className="flex flex-col gap-4 items-center">
+                            <label className="gap-2 mb-2 w-full flex flex-col">
+                                <h4 className="w-full text-sm font-medium col-span-2">Fee</h4>
+                                <PoolsDefaultFeeConfigurationModal>
+                                    <Button className="w-full" variant="outline">
+                                        Manage Fee Settings
+                                    </Button>
+                                </PoolsDefaultFeeConfigurationModal>
+                            </label>
+                            {Object.entries(settingsData as Settings).map(([key, value]) => (
+                                <label className="gap-2 mb-2 w-full flex flex-col" key={key}>
+                                    <h4 className="w-full text-sm font-medium col-span-2">{key}</h4>
                                     <Input
                                         key={key}
-                                        onChange={(e) =>
+                                        onUserInput={(v) =>
                                             setSettingsData({
                                                 ...settingsData,
-                                                [key]: e.target.value,
+                                                [key]: v,
                                             })
                                         }
                                         value={value}
-                                        type={'number'}
                                     />
-                                    <button
-                                        disabled={
-                                            feeLoading ||
-                                            communityFeeLoading ||
-                                            tickSpacingLoading
-                                        }
-                                        onClick={(e) =>
-                                            handleSubmit(e, key as SettingsKeys)
-                                        }
-                                        className="flex col-span-2 justify-center w-full p-2 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-400 disabled:bg-blue-400"
-                                    >
-                                        {feeLoading ||
-                                        communityFeeLoading ||
-                                        tickSpacingLoading
-                                            ? <Loader />
-                                            : 'Confirm'}
-                                    </button>
+                                    <Button disabled={isLoading} onClick={() => handleSubmit(key as SettingsKeys)} className="w-full">
+                                        {isButtonLoading(key as SettingsKeys) ? <Loader /> : "Confirm"}
+                                    </Button>
                                 </label>
-                            )
-                        )}
-                    </form>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="flex flex-col gap-4">
+                            <div>
+                                <p className="text-xs text-text/50 mb-2">Current Global Status</p>
+                                {currentGlobalStatus !== undefined && (
+                                    <div
+                                        className={cn(
+                                            "inline-flex items-center px-3 py-1.5 rounded-full border text-sm font-medium",
+                                            STATUS_COLORS[currentGlobalStatus]
+                                        )}
+                                    >
+                                        {STATUS_LABELS[currentGlobalStatus]}
+                                    </div>
+                                )}
+                                {currentGlobalStatus !== undefined && (
+                                    <p className="text-xs text-text/50 mt-2">{STATUS_DESCRIPTIONS[currentGlobalStatus]}</p>
+                                )}
+                                {currentGlobalStatus === PoolSecurityStatus.ENABLED && (
+                                    <p className="text-xs text-text/50 mt-1">
+                                        Enabled means no global override; each pool can have its own status.
+                                    </p>
+                                )}
+                            </div>
+
+                            <hr className="border-border" />
+
+                            <div>
+                                <p className="text-xs text-text/50 mb-3">Select New Status</p>
+                                <div className="flex flex-col gap-2">
+                                    {[
+                                        PoolSecurityStatus.ENABLED,
+                                        PoolSecurityStatus.BURN_ONLY,
+                                        PoolSecurityStatus.DISABLED,
+                                    ].map((status) => (
+                                        <button
+                                            key={status}
+                                            onClick={() => setSelectedGlobalStatus(status)}
+                                            className={cn(
+                                                "flex items-start gap-3 p-3 rounded-lg border transition-all cursor-pointer",
+                                                selectedGlobalStatus === status
+                                                    ? "border-text bg-bg-200"
+                                                    : "border-border hover:border-text/50 hover:bg-bg-100"
+                                            )}
+                                        >
+                                            <div className="flex-1 text-left">
+                                                <p className="text-sm font-medium text-text">{STATUS_LABELS[status]}</p>
+                                                <p className="text-xs text-text/50 mt-1">{STATUS_DESCRIPTIONS[status]}</p>
+                                            </div>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <Button
+                                variant="destructive"
+                                onClick={handleGlobalStatusConfirm}
+                                disabled={selectedGlobalStatus === null || isGlobalStatusTxLoading || isGlobalStatusPending}
+                                className="w-full"
+                            >
+                                {isGlobalLoading || isGlobalStatusTxLoading || isGlobalStatusPending ? <Loader color="red" size={16} /> : "Confirm"}
+                            </Button>
+                        </div>
+                    )}
                 </CredenzaBody>
             </CredenzaContent>
         </Credenza>

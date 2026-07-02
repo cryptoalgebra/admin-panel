@@ -1,26 +1,31 @@
+import { INFO_GRAPH_URL, FARMING_GRAPH_URL, DEFAULT_CHAIN_ID, PREDICTION_GRAPH_URL } from "./config";
 import type { CodegenConfig } from "@graphql-codegen/cli";
 
 const config: CodegenConfig = {
-  overwrite: true,
-  schema: [
-    "https://api.studio.thegraph.com/query/82608/ve-analytics/version/latest",
-    "https://api.studio.thegraph.com/query/50593/goerli-blocks/version/latest",
-    "https://api.studio.thegraph.com/query/82608/ve-farms/version/latest",
-  ],
-  documents: "src/graphql/queries/!(*.d).{ts,tsx}",
-  generates: {
-    "src/graphql/generated/graphql.tsx": {
-      plugins: [
-        "typescript",
-        "typescript-operations",
-        "typescript-react-apollo",
-      ],
-      config: {
-        withHooks: true,
-        withResultType: true,
-      },
+    overwrite: true,
+    schema: [
+        INFO_GRAPH_URL[DEFAULT_CHAIN_ID], 
+        FARMING_GRAPH_URL[DEFAULT_CHAIN_ID],
+        PREDICTION_GRAPH_URL[DEFAULT_CHAIN_ID]
+    ],
+    documents: "src/graphql/queries/!(*.d).{ts,tsx}",
+    generates: {
+        "src/graphql/generated/graphql.tsx": {
+            plugins: ["typescript", "typescript-operations", "typescript-react-apollo"],
+            config: {
+                withHooks: true,
+                withResultType: true,
+                 scalars: {
+                    BigInt: "string",
+                    BigDecimal: "string",
+                    Bytes: "string",
+                    Int8: "number",
+                    Int: "number",
+                    Timestamp: "number",
+                },
+            },
+        },
     },
-  },
 };
 
 export default config;

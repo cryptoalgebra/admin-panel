@@ -1,6 +1,11 @@
-import DataWithCopyButton from "@/components/common/DataWithCopyButton";
+import { DataRow } from "@/components/common/DataRow";
+import { SectionCard } from "@/components/common/SectionCard";
+import { StatBox } from "@/components/common/StatBox";
 import { PoolFieldsFragment } from "@/graphql/generated/graphql";
-import { Address } from "wagmi";
+import { formatAmount } from "@/utils/common/formatAmount";
+import { useBlockExplorerUrl } from "@/hooks/common/useBlockExplorerUrl";
+import { Info } from "lucide-react";
+import { Address } from "viem";
 
 interface IPoolDetails {
     poolId: Address;
@@ -8,48 +13,24 @@ interface IPoolDetails {
 }
 
 const PoolDetails = ({ pool, poolId }: IPoolDetails) => {
+    const explorerBaseUrl = useBlockExplorerUrl();
+    const fee = Number(pool.overrideFee !== "0" ? pool.overrideFee : pool.fee) / 10_000;
+
     return (
-        <div className="flex flex-col text-left p-4 border rounded-xl">
-            <div className="font-bold mb-4">Pool Details</div>
-            <div className="flex flex-col gap-4">
-                <div>
-                    <p className="font-semibold text-sm">Pool address</p>
-                    <DataWithCopyButton data={poolId} />
-                </div>
-                <div>
-                    <p className="font-semibold text-sm">Deployer</p>
-                    <DataWithCopyButton data={pool.deployer} />
-                </div>
-                <div>
-                    <p className="font-semibold text-sm">TVL USD</p>
-                    <p>{pool.totalValueLockedUSD} $</p>
-                </div>
-                <div>
-                    <p className="font-semibold text-sm">Volume USD</p>
-                    <p>{pool.volumeUSD} $</p>
-                </div>
-                <div>
-                    <p className="font-semibold text-sm">Fee</p>
-                    <p>{pool.fee}</p>
-                </div>
-                <div>
-                    <p className="font-semibold text-sm">Fees USD</p>
-                    <p>{pool.feesUSD} $</p>
-                </div>
-                <div>
-                    <p className="font-semibold text-sm">Untracked Fees USD</p>
-                    <p>{pool.untrackedFeesUSD} $</p>
-                </div>
-                <div>
-                    <p className="font-semibold text-sm">Current Tick Spacing</p>
-                    <p>{pool.tickSpacing}</p>
-                </div>
-                <div>
-                    <p className="font-semibold text-sm">Current Tick</p>
-                    <p>{pool.tick}</p>
-                </div>
+        <SectionCard title="Pool Details" icon={Info}>
+            <div className="grid grid-cols-2 gap-3 pb-4">
+                <StatBox label="TVL USD" value={`$${formatAmount(pool.totalValueLockedUSD)}`} />
+                <StatBox label="Volume USD" value={`$${formatAmount(pool.volumeUSD)}`} />
+                <StatBox label="Fee" value={`${fee}%`} />
+                <StatBox label="Fees USD" value={`$${formatAmount(pool.feesUSD)}`} />
             </div>
-        </div>
+            <div className="divide-y divide-border">
+                <DataRow label="Pool Address" copyable={poolId} link={`${explorerBaseUrl}/address/${poolId}`} />
+                <DataRow label="Deployer" copyable={pool.deployer} link={`${explorerBaseUrl}/address/${pool.deployer}`} />
+                <DataRow label="Current Tick" value={pool.tick} />
+                <DataRow label="Tick Spacing" value={pool.tickSpacing} />
+            </div>
+        </SectionCard>
     );
 };
 

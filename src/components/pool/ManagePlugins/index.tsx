@@ -1,67 +1,186 @@
-import DataWithCopyButton from '@/components/common/DataWithCopyButton';
-import Loader from '@/components/common/Loader';
-import SetPluginAddressModal from '@/components/modals/pool/ChangePluginAddressModal';
-import ManagePluginConfigModal from '@/components/modals/pool/ManagePluginConfigModal';
-import { Switch } from '@/components/ui/switch';
-import { ALGEBRA_STUB_PLUGIN } from '@/constants/addresses';
-import {
-    useAlgebraBasePluginDefaultPluginConfig,
-    useAlgebraPoolPlugin,
-    usePrepareAlgebraPoolSetPluginConfig,
-} from '@/generated';
-import { useTransitionAwait } from '@/hooks/common/useTransactionAwait';
-import { usePluginFlags } from '@/hooks/pools/usePluginFlags';
-import { PluginFlags } from '@/types/pool-plugin-flags';
-import { parsePluginConfig } from '@/utils/pool/parsePluginConfig';
-import { parsePluginFlags } from '@/utils/pool/parsePluginFlags';
-import { useEffect, useMemo, useState } from 'react';
-import { Address, useContractWrite } from 'wagmi';
+import { DataRow } from "@/components/common/DataRow";
+import { SectionCard } from "@/components/common/SectionCard";
+import { StatBox } from "@/components/common/StatBox";
+import { Button } from "@/components/ui/button";
+import SetPluginAddressModal from "@/components/modals/pool/ChangePluginAddressModal";
+import ManagePluginConfigModal from "@/components/modals/pool/ManagePluginConfigModal";
+import { useReadAlgebraBasePluginDefaultPluginConfig, useReadAlgebraPoolPlugin } from "@/generated";
+import { useTransactionAwait } from "@/hooks/common/useTransactionAwait";
+import { usePluginFlags } from "@/hooks/pools/usePluginFlags";
+import { useBlockExplorerUrl } from "@/hooks/common/useBlockExplorerUrl";
+import { PluginFlags } from "@/types/pool-plugin-flags";
+import { parsePluginConfig } from "@/utils/pool/parsePluginConfig";
+import { parsePluginFlags } from "@/utils/pool/parsePluginFlags";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Address } from "viem";
+import { useWriteContract } from "wagmi";
+import { algebraPoolABI } from "config/abis";
+import { PLUGIN_KEYS, usePoolPlugins } from "@/hooks/pools/usePoolPlugins";
+import { Puzzle, Check, AlertTriangle, X } from "lucide-react";
+import { cn } from "@/utils/common/cn";
+import type { PluginConfigModuleKey } from "@/components/modals/pool/ManagePluginConfigModal";
+
 interface IManagePlugins {
     poolId: Address;
 }
 
+const MODULE_NAME_TO_KEY: Record<string, PluginConfigModuleKey> = {
+    [PLUGIN_KEYS.DYNAMIC_FEE]: "DYNAMIC_FEE",
+    [PLUGIN_KEYS.FARMING_PROXY]: "FARMING_PROXY",
+    [PLUGIN_KEYS.VOLATILITY_ORACLE]: "VOLATILITY_ORACLE",
+    [PLUGIN_KEYS.ALM]: "ALM",
+    [PLUGIN_KEYS.LIMIT_ORDER]: "LIMIT_ORDER",
+    [PLUGIN_KEYS.SECURITY]: "SECURITY",
+};
+
+const MODULE_ORDER: PluginConfigModuleKey[] = [
+    "DYNAMIC_FEE",
+    "FARMING_PROXY",
+    "VOLATILITY_ORACLE",
+    "ALM",
+    "LIMIT_ORDER",
+    "SECURITY",
+];
+
+type ModuleStatus = "ENABLED" | "DISABLED" | "PARTIAL";
+
+const MODULE_STATUS_PRIORITY: Record<ModuleStatus, number> = {
+    ENABLED: 0,
+    PARTIAL: 1,
+    DISABLED: 2,
+};
+
+interface ModuleDefinition {
+    key: PluginConfigModuleKey;
+    label: string;
+    requiredFlags: Array<keyof PluginFlags>;
+}
+
+const MODULE_DEFINITIONS: ModuleDefinition[] = [
+    { key: "DYNAMIC_FEE", label: "Dynamic Fee", requiredFlags: ["BEFORE_SWAP_FLAG", "DYNAMIC_FEE_FLAG"] },
+    { key: "FARMING_PROXY", label: "Farming", requiredFlags: ["AFTER_SWAP_FLAG"] },
+    { key: "VOLATILITY_ORACLE", label: "Volatility Oracle", requiredFlags: ["BEFORE_SWAP_FLAG", "AFTER_INIT_FLAG"] },
+    { key: "ALM", label: "ALM", requiredFlags: ["AFTER_SWAP_FLAG"] },
+    { key: "LIMIT_ORDER", label: "Limit Order", requiredFlags: ["AFTER_SWAP_FLAG"] },
+    { key: "SECURITY", label: "Security", requiredFlags: ["BEFORE_SWAP_FLAG", "BEFORE_POSITION_MODIFY_FLAG", "BEFORE_FLASH_FLAG"] },
+];
+
+const SECURITY_FLAG_EXPLANATIONS: Record<keyof PluginFlags, string> = {
+    BEFORE_SWAP_FLAG: "swap protection",
+    AFTER_SWAP_FLAG: "swap post-check",
+    BEFORE_POSITION_MODIFY_FLAG: "position modify protection",
+    AFTER_POSITION_MODIFY_FLAG: "position modify post-check",
+    BEFORE_FLASH_FLAG: "flash protection",
+    AFTER_FLASH_FLAG: "flash post-check",
+    AFTER_INIT_FLAG: "initialization post-check",
+    DYNAMIC_FEE_FLAG: "dynamic fee updates",
+};
+
+const FLAG_TO_HOOK_LABEL: Record<keyof PluginFlags, string> = {
+    BEFORE_SWAP_FLAG: "beforeSwap",
+    AFTER_SWAP_FLAG: "afterSwap",
+    BEFORE_POSITION_MODIFY_FLAG: "beforePositionModify",
+    AFTER_POSITION_MODIFY_FLAG: "afterPositionModify",
+    BEFORE_FLASH_FLAG: "beforeFlash",
+    AFTER_FLASH_FLAG: "afterFlash",
+    AFTER_INIT_FLAG: "afterInit",
+    DYNAMIC_FEE_FLAG: "dynamicFee",
+};
+
 const ManagePlugins = ({ poolId }: IManagePlugins) => {
+    const explorerBaseUrl = useBlockExplorerUrl();
     const pluginFlags = usePluginFlags(poolId);
     const [flags, setFlags] = useState<PluginFlags>();
+    const modalInitialFlagsRef = useRef<PluginFlags | null>(null);
+    const didSubmitConfigRef = useRef(false);
 
     const pluginConfig = useMemo(() => {
         if (!flags) return;
-        return parsePluginFlags(flags)
+        return parsePluginFlags(flags);
     }, [flags]);
 
-    const { data: pluginId } = useAlgebraPoolPlugin({
+    const { activeModuleNames } = usePoolPlugins(poolId);
+
+    const activeModuleKeys = useMemo(() => {
+        const moduleSet = new Set<PluginConfigModuleKey>();
+
+        for (const moduleName of activeModuleNames) {
+            const mappedModule = MODULE_NAME_TO_KEY[moduleName.trim()];
+            if (mappedModule) {
+                moduleSet.add(mappedModule);
+            }
+        }
+
+        return MODULE_ORDER.filter((moduleKey) => moduleSet.has(moduleKey));
+    }, [activeModuleNames]);
+
+    const currentActiveModules = useMemo(() => {
+        if (!flags) return [];
+
+        return MODULE_DEFINITIONS.filter((moduleDefinition) => activeModuleKeys.includes(moduleDefinition.key))
+            .map((moduleDefinition) => {
+                const enabledFlags = moduleDefinition.requiredFlags.filter((flag) => Boolean(flags[flag]));
+                let status: ModuleStatus = "DISABLED";
+                let hoverExplanation: string | undefined;
+                if (moduleDefinition.key === "DYNAMIC_FEE") {
+                    const isBeforeSwapEnabled = Boolean(flags.BEFORE_SWAP_FLAG);
+                    const isDynamicFeeEnabled = Boolean(flags.DYNAMIC_FEE_FLAG);
+
+                    if (isBeforeSwapEnabled && isDynamicFeeEnabled) {
+                        status = "ENABLED";
+                    } else if (isBeforeSwapEnabled && !isDynamicFeeEnabled) {
+                        status = "DISABLED";
+                    } else if (!isBeforeSwapEnabled && isDynamicFeeEnabled) {
+                        status = "PARTIAL";
+                        hoverExplanation = "Enabled hooks: dynamicFee. Missing hooks: beforeSwap";
+                    }
+                } else if (moduleDefinition.key === "VOLATILITY_ORACLE") {
+                    const isBeforeSwapEnabled = Boolean(flags.BEFORE_SWAP_FLAG);
+                    const isAfterInitEnabled = Boolean(flags.AFTER_INIT_FLAG);
+
+                    status = isBeforeSwapEnabled && isAfterInitEnabled ? "ENABLED" : "DISABLED";
+                } else if (moduleDefinition.key === "SECURITY") {
+                    if (enabledFlags.length === 0) {
+                        status = "DISABLED";
+                    } else if (enabledFlags.length === moduleDefinition.requiredFlags.length) {
+                        status = "ENABLED";
+                    } else {
+                        status = "PARTIAL";
+                        hoverExplanation = `Enabled functionality: ${enabledFlags
+                            .map((flag) => SECURITY_FLAG_EXPLANATIONS[flag])
+                            .join(", ")}`;
+                    }
+                } else if (enabledFlags.length === moduleDefinition.requiredFlags.length) {
+                    status = "ENABLED";
+                } else if (enabledFlags.length > 0) {
+                    status = "PARTIAL";
+                    const missingFlags = moduleDefinition.requiredFlags.filter((flag) => !enabledFlags.includes(flag));
+                    hoverExplanation = `Enabled hooks: ${enabledFlags
+                        .map((flag) => FLAG_TO_HOOK_LABEL[flag])
+                        .join(", ")}. Missing hooks: ${missingFlags.map((flag) => FLAG_TO_HOOK_LABEL[flag]).join(", ")}`;
+                }
+
+                return {
+                    key: moduleDefinition.key,
+                    label: moduleDefinition.label,
+                    status,
+                    hoverExplanation,
+                };
+            })
+            .sort((a, b) => MODULE_STATUS_PRIORITY[a.status] - MODULE_STATUS_PRIORITY[b.status]);
+    }, [activeModuleKeys, flags]);
+
+    const { data: pluginId } = useReadAlgebraPoolPlugin({
         address: poolId,
     });
 
-    const isToActivate = pluginId === ALGEBRA_STUB_PLUGIN;
+    const { data: defaultPluginConfig } = useReadAlgebraBasePluginDefaultPluginConfig({
+        address: pluginId,
+    });
 
-    const isSwapDisabled =
-        flags?.AFTER_SWAP_FLAG === 1 || flags?.BEFORE_SWAP_FLAG === 1;
+    const { data: setPluginConfigHash, writeContract, isPending } = useWriteContract();
 
-    const isMintBurnDisabled = flags?.BEFORE_POSITION_MODIFY_FLAG === 1;
-
-    const isFlashesDisabled =
-        flags?.AFTER_FLASH_FLAG === 1 || flags?.BEFORE_FLASH_FLAG === 1;
-
-    const { data: defaultPluginConfig } =
-        useAlgebraBasePluginDefaultPluginConfig({
-            address: pluginId,
-        });
-
-    const { config: preparedPluginConfig } =
-        usePrepareAlgebraPoolSetPluginConfig({
-            address: poolId,
-            args: [pluginConfig as number],
-            enabled: pluginConfig !== undefined,
-        });
-
-    const { data: setPluginConfigHash, write } =
-        useContractWrite(preparedPluginConfig);
-
-    const { isLoading } = useTransitionAwait(
-        setPluginConfigHash?.hash,
-        'Set Plugin'
-    );
+    const { isLoading } = useTransactionAwait(setPluginConfigHash, { title: "Set Plugin" });
 
     useEffect(() => {
         if (!pluginFlags) return;
@@ -74,9 +193,22 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
             if (!prev) return;
             const updatedFlags = { ...prev };
 
-            if (flag === 'DYNAMIC_FEE_FLAG') {
-                updatedFlags.DYNAMIC_FEE_FLAG = prev.DYNAMIC_FEE_FLAG ? 0 : 1;
-                updatedFlags.BEFORE_SWAP_FLAG = prev.DYNAMIC_FEE_FLAG ? 0 : 1;
+            if (flag === "DYNAMIC_FEE_FLAG") {
+                const nextDynamicFeeFlag = prev.DYNAMIC_FEE_FLAG ? 0 : 1;
+                updatedFlags.DYNAMIC_FEE_FLAG = nextDynamicFeeFlag;
+
+                // Dynamic fee requires beforeSwap, so enabling dynamicFee also enables beforeSwap.
+                if (nextDynamicFeeFlag === 1) {
+                    updatedFlags.BEFORE_SWAP_FLAG = 1;
+                }
+            } else if (flag === "BEFORE_SWAP_FLAG") {
+                const nextBeforeSwapFlag = prev.BEFORE_SWAP_FLAG ? 0 : 1;
+                updatedFlags.BEFORE_SWAP_FLAG = nextBeforeSwapFlag;
+
+                // If beforeSwap is turned off, dynamicFee must be turned off as well.
+                if (nextBeforeSwapFlag === 0) {
+                    updatedFlags.DYNAMIC_FEE_FLAG = 0;
+                }
             } else {
                 updatedFlags[flag] = prev[flag] ? 0 : 1;
             }
@@ -86,8 +218,25 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
     };
 
     const handleConfirm = () => {
-        if (isLoading) return;
-        write?.();
+        if (isLoading || isPending || pluginConfig === undefined) return;
+        writeContract({
+            address: poolId,
+            abi: algebraPoolABI,
+            functionName: "setPluginConfig",
+            args: [pluginConfig],
+        },
+        {
+            onSuccess: () => {
+                didSubmitConfigRef.current = true;
+                modalInitialFlagsRef.current = null;
+            },
+            onError: () => {
+                didSubmitConfigRef.current = false;
+                if (modalInitialFlagsRef.current) {
+                    setFlags(modalInitialFlagsRef.current);
+                }
+            },
+        });
     };
 
     const handleResetPluginConfig = () => {
@@ -95,177 +244,103 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
         setFlags(parsePluginConfig(defaultPluginConfig));
     };
 
-    return (
-        <div className="flex flex-col gap-4 text-left p-4 border rounded-xl">
-            <div className="font-bold">Manage Plugins</div>
-            {pluginId && flags ? (
-                <div className="flex flex-col gap-4">
-                    <div>
-                        <p className="font-semibold text-sm">
-                            Current Plugin address
-                        </p>
-                        <DataWithCopyButton data={pluginId} />
-                    </div>
-                    <div className="flex justify-between ">
-                        <div>
-                            <p className="font-semibold text-sm">
-                                Pool Plugin Config (uint8)
-                            </p>
-                            <div className='flex justify-between items-center'>
-                                <p>{pluginConfig}</p>
-                                {defaultPluginConfig !== pluginConfig && <button 
-                                    onClick={handleResetPluginConfig}
-                                    className='flex items-center justify-center border px-2 rounded-lg hover:bg-slate-100'
-                                >
-                                    reset
-                                </button>}
-                            </div>
-                        </div>
-                        {defaultPluginConfig ? (
-                            <div>
-                                <p className="font-semibold text-sm">
-                                    Default Plugin Config (uint8)
-                                </p>
-                                <p>{defaultPluginConfig}</p>
-                            </div>
-                        ) : null}
-                    </div>
-                    <hr />
-                    {!isToActivate ? (
-                        <>
-                            <div className="flex items-center justify-between">
-                                <label htmlFor="farmingsPlugin">
-                                    <p className="font-semibold text-sm">
-                                        On-chain farmings Setup
-                                    </p>
-                                    <p>
-                                        AFTER_SWAP_FLAG ={' '}
-                                        {flags.AFTER_SWAP_FLAG}
-                                    </p>
-                                </label>
-                                <Switch
-                                    id="farmingsPlugin"
-                                    checked={Boolean(flags.AFTER_SWAP_FLAG)}
-                                    onCheckedChange={() =>
-                                        handleCheckFlag('AFTER_SWAP_FLAG')
-                                    }
-                                />
-                            </div>
-                            <div className="flex items-center justify-between">
-                                <label htmlFor="oraclePlugin">
-                                    <p className="font-semibold text-sm">
-                                        TWAP Oracle Setup
-                                    </p>
-                                    <p>
-                                        BEFORE_SWAP_FLAG ={' '}
-                                        {flags.BEFORE_SWAP_FLAG}
-                                    </p>
-                                </label>
-                                <Switch
-                                    id="oraclePlugin"
-                                    checked={Boolean(flags.BEFORE_SWAP_FLAG)}
-                                    onCheckedChange={() =>
-                                        handleCheckFlag('BEFORE_SWAP_FLAG')
-                                    }
-                                />
-                            </div>
-                            <div className="flex items-center justify-between">
-                                <label htmlFor="dynamicFeePlugin">
-                                    <p className="font-semibold text-sm">
-                                        Dynamic Fees Setup
-                                    </p>
-                                    <p>
-                                        BEFORE_SWAP_FLAG ={' '}
-                                        {flags.BEFORE_SWAP_FLAG}
-                                    </p>
-                                    <p>
-                                        DYNAMIC_FEE = {flags.DYNAMIC_FEE_FLAG}
-                                    </p>
-                                </label>
-                                <Switch
-                                    id="dynamicFeePlugin"
-                                    checked={Boolean(
-                                        flags.DYNAMIC_FEE_FLAG &&
-                                            flags.BEFORE_SWAP_FLAG
-                                    )}
-                                    onCheckedChange={() => {
-                                        handleCheckFlag('DYNAMIC_FEE_FLAG');
-                                    }}
-                                />
-                            </div>
-                            <button
-                                disabled={isLoading}
-                                onClick={handleConfirm}
-                                className="flex items-center justify-center py-2 px-4 w-full mt-auto bg-blue-500 text-white font-bold rounded-xl disabled:bg-blue-400 hover:bg-blue-400"
-                            >
-                                {isLoading ? <Loader /> : 'Confirm'}
-                            </button>
-                        </>
-                    ) : (
-                        <>
-                            <div>
-                                <p className="font-semibold text-sm">
-                                    Swap status
-                                </p>
-                                {isSwapDisabled ? (
-                                    <p className="text-red-600">Disabled</p>
-                                ) : (
-                                    <p className="text-green-600">Enabled</p>
-                                )}
-                            </div>
-                            <div>
-                                <p className="font-semibold text-sm">
-                                    Mint / Burn status
-                                </p>
-                                {isMintBurnDisabled ? (
-                                    <p className="text-red-600">Disabled</p>
-                                ) : (
-                                    <p className="text-green-600">Enabled</p>
-                                )}
-                            </div>
-                            <div>
-                                <p className="font-semibold text-sm">
-                                    Flash status
-                                </p>
-                                {isFlashesDisabled ? (
-                                    <p className="text-red-600">Disabled</p>
-                                ) : (
-                                    <p className="text-green-600">Enabled</p>
-                                )}
-                            </div>
-                        </>
-                    )}
-                </div>
-            ) : (
-                <p>Loading...</p>
-            )}
+    const handlePluginConfigModalOpenChange = (open: boolean) => {
+        if (open) {
+            modalInitialFlagsRef.current = flags ? { ...flags } : null;
+            didSubmitConfigRef.current = false;
+            return;
+        }
 
-            {flags && pluginId && pluginConfig !== undefined && (
-                <ManagePluginConfigModal
-                    pluginConfig={pluginConfig}
-                    onChange={handleCheckFlag}
-                    onReset={handleResetPluginConfig}
-                    onConfirm={handleConfirm}
-                    isLoading={isLoading}
-                    title="Custom Hooks Settings"
-                    flags={flags}
-                >
-                    <button className="py-2 px-4 w-full mt-auto border border-blue-500 text-blue-500 bg-white font-bold rounded-xl hover:bg-blue-500 hover:text-white">
-                        Manage Plugin Config
-                    </button>
-                </ManagePluginConfigModal>
+        if (!didSubmitConfigRef.current && modalInitialFlagsRef.current) {
+            setFlags(modalInitialFlagsRef.current);
+        }
+
+        modalInitialFlagsRef.current = null;
+        didSubmitConfigRef.current = false;
+    };
+
+    return (
+        <SectionCard title="Plugin Management" icon={Puzzle}>
+            {pluginId && flags ? (
+                <>
+                    <div className="border-b border-border mb-4">
+                        <DataRow label="Plugin Address" copyable={pluginId} link={`${explorerBaseUrl}/address/${pluginId}`} />
+                    </div>
+
+                    {/* Active Modules */}
+                    <div className="pb-4">
+                        <p className="text-xs font-medium text-text/50 uppercase tracking-wider mb-3">Modules</p>
+                        {currentActiveModules.length > 0 ? (
+                            <div className="flex flex-wrap gap-2">
+                                {currentActiveModules.map((moduleItem) => (
+                                    <span
+                                        key={moduleItem.key}
+                                        title={moduleItem.status === "PARTIAL" ? moduleItem.hoverExplanation : undefined}
+                                        className={cn(
+                                            "inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full border",
+                                            moduleItem.status === "ENABLED"
+                                                ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                                                : moduleItem.status === "PARTIAL"
+                                                  ? "bg-amber-50 text-amber-700 border-amber-200"
+                                                  : "bg-red-50 text-red-700 border-red-200"
+                                        )}
+                                    >
+                                        {moduleItem.status === "ENABLED" ? (
+                                            <Check size={12} />
+                                        ) : moduleItem.status === "PARTIAL" ? (
+                                            <AlertTriangle size={12} />
+                                        ) : (
+                                            <X size={12} />
+                                        )}
+                                        {moduleItem.label}
+                                    </span>
+                                ))}
+                            </div>
+                        ) : (
+                            <p className="text-sm text-text/50">No active modules</p>
+                        )}
+                    </div>
+
+                    {/* Plugin Config Stats */}
+                    <div className="grid grid-cols-2 gap-3 pb-4">
+                        <StatBox label="Current Config" value={pluginConfig ?? "-"} />
+                        {defaultPluginConfig !== undefined && <StatBox label="Default Config" value={defaultPluginConfig} />}
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex flex-col gap-3 pt-4 ">
+                        {flags && pluginId && pluginConfig !== undefined && (
+                            <ManagePluginConfigModal
+                                pluginConfig={pluginConfig}
+                                onChange={handleCheckFlag}
+                                onReset={handleResetPluginConfig}
+                                onConfirm={handleConfirm}
+                                onOpenChange={handlePluginConfigModalOpenChange}
+                                isLoading={isLoading || isPending}
+                                title="Custom Hooks Settings"
+                                flags={flags}
+                                activeModuleKeys={activeModuleKeys}
+                            >
+                                <Button variant="outline" className="w-full">
+                                    Manage Plugin Config
+                                </Button>
+                            </ManagePluginConfigModal>
+                        )}
+                        {pluginId && (
+                            <SetPluginAddressModal poolId={poolId} title="Set Plugin Address">
+                                <Button variant="outline" className="w-full">
+                                    Change Plugin Address
+                                </Button>
+                            </SetPluginAddressModal>
+                        )}
+                    </div>
+                </>
+            ) : (
+                <div className="flex items-center justify-center py-8">
+                    <div className="w-5 h-5 border-2 border-neutral-300 border-t-neutral-900 rounded-full animate-spin" />
+                </div>
             )}
-            {pluginId && (
-                <SetPluginAddressModal
-                    poolId={poolId}
-                    title="Set Plugin Address"
-                >
-                    <button className="py-2 px-4 w-full mt-auto border border-blue-500 text-blue-500 bg-white font-bold rounded-xl hover:bg-blue-500 hover:text-white">
-                        Change Plugin Address
-                    </button>
-                </SetPluginAddressModal>
-            )}
-        </div>
+        </SectionCard>
     );
 };
 

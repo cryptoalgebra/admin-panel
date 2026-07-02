@@ -1,40 +1,34 @@
-import GaugesList from "@/components/gauges/GaugesList";
+import Ve33Module from "@/modules/Ve33Module";
+import { Button } from "@/components/ui/button";
 import PageContainer from "../../components/common/PageContainer";
-import { voterABI } from "@/generated";
-import { useTransitionAwait } from "@/hooks/common/useTransactionAwait";
+import { useTransactionAwait } from "@/hooks/common/useTransactionAwait";
 import Loader from "@/components/common/Loader";
-import { useContractWrite, usePrepareContractWrite } from "wagmi";
-import { VOTER } from "@/constants/addresses";
+import { useWriteVoterDistributeAll } from "@/generated";
 import { Link } from "react-router-dom";
 
+const { GaugesList } = Ve33Module.components;
+
 const GaugesPage = () => {
-    const { config: distributeAllConfig, isError } = usePrepareContractWrite({
-        address: VOTER,
-        abi: voterABI,
-        functionName: "distributeAll",
-    });
+    const { writeContract, data: hash, isPending, isError } = useWriteVoterDistributeAll();
 
-    const { write: distributeAll, data: distributeAllHash, isLoading: distributeAllPending } = useContractWrite(distributeAllConfig);
+    const { isLoading } = useTransactionAwait(hash, { title: "Distribute All" });
 
-    const { isLoading: distributeAllLoading } = useTransitionAwait(distributeAllHash?.hash, "Distribute All");
-
-    const isDistributing = distributeAllPending || distributeAllLoading;
+    const isDistributing = isPending || isLoading;
 
     return (
         <PageContainer>
-            <div className="flex justify-between w-full mb-4">
-                <div className="font-bold text-2xl">Gauges</div>
+            <div className="flex justify-between items-center w-full mb-6">
+                <div>
+                    <h1 className="font-semibold text-2xl text-text">Gauges</h1>
+                    <p className="text-sm text-text/50 mt-1">Manage voting gauges</p>
+                </div>
                 <div className="flex gap-2">
-                    <button
-                        onClick={() => distributeAll?.()}
-                        disabled={isDistributing || isError}
-                        className="py-2 px-4 bg-purple-500 text-white font-bold rounded-xl hover:bg-purple-400 disabled:opacity-60 disabled:pointer-events-none"
-                    >
-                        {isDistributing ? <Loader /> : "Distribute All Rewards"}
-                    </button>
-                    <Link to={"/new-gauge"} className="py-2 px-4 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-400">
-                        + New Gauge
-                    </Link>
+                    <Button onClick={() => writeContract({})} disabled={isDistributing || isError}>
+                        {isDistributing ? <Loader /> : "Distribute All"}
+                    </Button>
+                    <Button variant="outline" asChild>
+                        <Link to={"/new-gauge"}>+ New Gauge</Link>
+                    </Button>
                 </div>
             </div>
             <GaugesList />

@@ -1,7 +1,9 @@
 import PageContainer from "@/components/common/PageContainer";
-import CreateGauge from "@/components/gauges/CreateGauge";
+import Ve33Module from "@/modules/Ve33Module";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+
+const { CreateGauge } = Ve33Module.components;
 
 const NewGaugePage = () => {
     return (

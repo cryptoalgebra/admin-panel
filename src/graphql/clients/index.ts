@@ -1,11 +1,15 @@
-import { ApolloClient, InMemoryCache } from "@apollo/client";
+import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
+import { createApolloClient } from "../utils/createApolloClient";
+import { INFO_GRAPH_URL, FARMING_GRAPH_URL, PREDICTION_GRAPH_URL } from "config/graphql-urls";
 
-export const infoClient = new ApolloClient({
-    uri: import.meta.env.VITE_INFO_GRAPH,
-    cache: new InMemoryCache(),
-});
+export const infoClient: Record<number, ApolloClient<NormalizedCacheObject>> = Object.fromEntries(
+    Object.entries(INFO_GRAPH_URL).map(([chainId, url]) => [Number(chainId), createApolloClient(url)])
+);
 
-export const farmsClient = new ApolloClient({
-    uri: import.meta.env.VITE_FARMING_GRAPH,
-    cache: new InMemoryCache()
-})
+export const farmingClient: Record<number, ApolloClient<NormalizedCacheObject>> = Object.fromEntries(
+    Object.entries(FARMING_GRAPH_URL).map(([chainId, url]) => [Number(chainId), createApolloClient(url)])
+);
+
+export const predictionClient: Record<number, ApolloClient<NormalizedCacheObject>> = Object.fromEntries(
+    Object.entries(PREDICTION_GRAPH_URL).map(([chainId, url]) => [Number(chainId), createApolloClient(url)])
+);

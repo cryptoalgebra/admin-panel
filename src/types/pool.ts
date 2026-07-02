@@ -1,5 +1,5 @@
 import { TokenFieldsFragment } from '@/graphql/generated/graphql';
-import { Address } from 'wagmi';
+import { Address } from 'viem';
 
 interface Pair {
     token0: TokenFieldsFragment;
@@ -11,6 +11,7 @@ export interface FormattedPool {
     pair: Pair;
     deployer: string;
     fee: number;
+    overrideFee: number;
     tvlUSD: number;
     volume24USD: number;
     apr: number;

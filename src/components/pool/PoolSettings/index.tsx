@@ -1,103 +1,73 @@
-import DataWithCopyButton from '@/components/common/DataWithCopyButton';
-import ManagePoolSettingsModal from '@/components/modals/pool/ManagePoolSettingsModal';
-import { ALGEBRA_STUB_PLUGIN, PLUGIN_FACTORY } from '@/constants/addresses';
-import { pluginFactoryABI, useAlgebraPoolPlugin } from '@/generated';
-import { usePool } from '@/hooks/pools/usePool';
-import { Address, useContractRead } from 'wagmi';
-import PoolActivationModal from '@/components/modals/pool/PoolActivationModal';
-import { ADDRESS_ZERO } from '@cryptoalgebra/custom-pools-and-sliding-fee-sdk';
+import { DataRow } from "@/components/common/DataRow";
+import { SectionCard } from "@/components/common/SectionCard";
+import ManagePoolSettingsModal from "@/components/modals/pool/ManagePoolSettingsModal";
+import ManageFeeModal from "@/components/modals/pool/ManageFeeModal";
+import PoolSecurityModal from "@/components/modals/pool/PoolSecurityModal";
+import { Button } from "@/components/ui/button";
+import { PLUGIN_FACTORY } from "config/contract-addresses";
+import { DEFAULT_CHAIN_ID } from "config/default-chain";
+import { usePool } from "@/hooks/pools/usePool";
+import { useBlockExplorerUrl } from "@/hooks/common/useBlockExplorerUrl";
+import { Address } from "viem";
+import { useReadContract } from "wagmi";
+import { pluginFactoryABI } from "config/abis";
+import { Lock, Settings } from "lucide-react";
 
 interface IPoolSettings {
     poolId: Address;
-    deployer: Address;
 }
 
-const PoolSettings = ({ poolId, deployer }: IPoolSettings) => {
+const PoolSettings = ({ poolId }: IPoolSettings) => {
+    const explorerBaseUrl = useBlockExplorerUrl();
 
-    const { data: pluginId } = useAlgebraPoolPlugin({
-        address: poolId,
-    });
-
-    const { data: basePluginId } = useContractRead({
-        address: PLUGIN_FACTORY,
+    const { data: basePluginId } = useReadContract({
+        address: PLUGIN_FACTORY[DEFAULT_CHAIN_ID],
         abi: pluginFactoryABI,
-        functionName: 'pluginByPool',
+        functionName: "pluginByPool",
         args: [poolId],
     });
-
-    const isToActivate = pluginId === ALGEBRA_STUB_PLUGIN;
 
     const [, pool] = usePool(poolId);
 
     return (
-        <div className="flex flex-col gap-4 text-left p-4 border rounded-xl">
-            <div className="font-bold">Pool Settings</div>
-            <div>
-                <p className="font-semibold text-sm">Pool address</p>
-                <DataWithCopyButton data={poolId} />
+        <SectionCard title="Pool Settings" icon={Settings}>
+            <div className="divide-y divide-border pb-4">
+                <DataRow label="Pool Address" copyable={poolId} link={`${explorerBaseUrl}/address/${poolId}`} />
+                <DataRow
+                    label="Base Plugin"
+                    copyable={basePluginId || ""}
+                    link={basePluginId ? `${explorerBaseUrl}/address/${basePluginId}` : undefined}
+                />
             </div>
-            <div>
-                <p className="font-semibold text-sm">Base plugin address</p>
-                <DataWithCopyButton data={basePluginId || ''} />
+
+            <div className="flex flex-col gap-3 mt-4">
+                <div className="flex gap-2">
+                    <ManagePoolSettingsModal poolId={poolId} functionName="setCommunityFee" title="Community Fee">
+                        <Button variant="outline" className="flex-1">
+                            Community Fee
+                        </Button>
+                    </ManagePoolSettingsModal>
+                    <ManageFeeModal poolId={poolId}>
+                        <Button variant="outline" className="flex-1">
+                            Fee
+                        </Button>
+                    </ManageFeeModal>
+                    <ManagePoolSettingsModal poolId={poolId} functionName="setTickSpacing" title="Tick Spacing">
+                        <Button variant="outline" className="flex-1">
+                            Tick Spacing
+                        </Button>
+                    </ManagePoolSettingsModal>
+                </div>
             </div>
-            <div>
-                <p className="font-semibold text-sm">Stub plugin address</p>
-                <DataWithCopyButton data={ALGEBRA_STUB_PLUGIN} />
+
+            <div className="mt-4 ">
+                <PoolSecurityModal poolId={poolId} title={`Pool Security: ${pool?.token0.symbol} / ${pool?.token1.symbol}`}>
+                    <Button variant="destructive" className="w-full">
+                        <Lock size={12} /> Manage Pool Security
+                    </Button>
+                </PoolSecurityModal>
             </div>
-            <div className="flex gap-4 mt-auto">
-                <ManagePoolSettingsModal
-                    poolId={poolId}
-                    functionName="setCommunityFee"
-                    title="Community Fee"
-                >
-                    <button className="py-2 px-4 w-1/2 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-400">
-                        Community Fee
-                    </button>
-                </ManagePoolSettingsModal>
-                {deployer === ADDRESS_ZERO && <ManagePoolSettingsModal
-                    poolId={poolId}
-                    functionName="setFee"
-                    title="Fee"
-                    isAdaptiveFee
-                >
-                    <button className="py-2 px-4 w-1/2 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-400">
-                        Fee
-                    </button>
-                </ManagePoolSettingsModal>}
-                <ManagePoolSettingsModal
-                    poolId={poolId}
-                    functionName="setTickSpacing"
-                    title="Tick Spacing"
-                >
-                    <button className="py-2 px-4 w-1/2 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-400">
-                        Tick Spacing
-                    </button>
-                </ManagePoolSettingsModal>
-            </div>
-            {isToActivate && basePluginId ? (
-                <PoolActivationModal
-                    isToActivate={isToActivate}
-                    pluginId={basePluginId}
-                    poolId={poolId}
-                    title={`Activate Pool ${pool?.token0.symbol} / ${pool?.token1.symbol}`}
-                >
-                    <button className="flex justify-center w-full py-2 px-4 border border-green-500 text-green-600 font-bold rounded-xl hover:bg-green-600 hover:text-white">
-                        Activate Pool
-                    </button>
-                </PoolActivationModal>
-            ) : (
-                <PoolActivationModal
-                    isToActivate={isToActivate}
-                    pluginId={ALGEBRA_STUB_PLUGIN}
-                    poolId={poolId}
-                    title={`Deactivate Pool ${pool?.token0.symbol} / ${pool?.token1.symbol}`}
-                >
-                    <button className="flex justify-center w-full py-2 px-4 border border-red-200 text-red-500 font-bold rounded-xl hover:bg-red-500 hover:text-white">
-                        Deactivate Pool
-                    </button>
-                </PoolActivationModal>
-            )}
-        </div>
+        </SectionCard>
     );
 };
 

@@ -1,118 +1,76 @@
-import {
-  useAlgebraPoolGlobalState,
-  useAlgebraPoolLiquidity,
-  useAlgebraPoolTickSpacing,
-  useAlgebraPoolToken0,
-  useAlgebraPoolToken1,
-} from "@/generated";
-import { Pool, ADDRESS_ZERO } from "@cryptoalgebra/custom-pools-and-sliding-fee-sdk";
-import { Address } from "wagmi";
+import { useReadContracts } from "wagmi";
+import { Pool, ADDRESS_ZERO } from "@cryptoalgebra/integral-sdk";
+import { Address } from "viem";
 import { useCurrency } from "@/hooks/common/useCurrency";
 import { useMemo } from "react";
+import { algebraPoolABI } from "config/abis";
 
 export const PoolState = {
-  LOADING: "LOADING",
-  NOT_EXISTS: "NOT_EXISTS",
-  EXISTS: "EXISTS",
-  INVALID: "INVALID",
+    LOADING: "LOADING",
+    NOT_EXISTS: "NOT_EXISTS",
+    EXISTS: "EXISTS",
+    INVALID: "INVALID",
 } as const;
 
-export type PoolStateType = (typeof PoolState)[keyof typeof PoolState];
+export type PoolStateType = typeof PoolState[keyof typeof PoolState];
 
-export function usePool(
-  address: Address | undefined
-): [PoolStateType, Pool | null] {
-  const {
-    data: tickSpacing,
-    isLoading: isTickSpacingLoading,
-    isError: isTickSpacingError,
-  } = useAlgebraPoolTickSpacing({
-    address,
-  });
-  const {
-    data: globalState,
-    isLoading: isGlobalStateLoading,
-    isError: isGlobalStateError,
-  } = useAlgebraPoolGlobalState({
-    address,
-  });
-  const {
-    data: liquidity,
-    isLoading: isLiquidityLoading,
-    isError: isLiquidityError,
-  } = useAlgebraPoolLiquidity({
-    address,
-  });
+export function usePool(address: Address | undefined): [PoolStateType, Pool | null] {
+    const { data: multicallData, isLoading: isMulticallLoading, isError: isMulticallError } = useReadContracts({
+        allowFailure: false,
+        contracts: address
+            ? [
+                  { address, abi: algebraPoolABI, functionName: "tickSpacing" },
+                  { address, abi: algebraPoolABI, functionName: "globalState" },
+                  { address, abi: algebraPoolABI, functionName: "liquidity" },
+                  { address, abi: algebraPoolABI, functionName: "token0" },
+                  { address, abi: algebraPoolABI, functionName: "token1" },
+              ]
+            : undefined,
+    });
 
-  const {
-    data: token0Address,
-    isLoading: isLoadingToken0,
-    isError: isToken0Error,
-  } = useAlgebraPoolToken0({
-    address,
-  });
-  const {
-    data: token1Address,
-    isLoading: isLoadingToken1,
-    isError: isToken1Error,
-  } = useAlgebraPoolToken1({
-    address,
-  });
+    const [tickSpacing, globalState, liquidity, token0Address, token1Address] = multicallData || [];
+    const [sqrtRatioX96, tickCurrent, fee] = globalState || [];
 
-  const token0 = useCurrency(token0Address);
-  const token1 = useCurrency(token1Address);
+    const token0 = useCurrency(token0Address);
+    const token1 = useCurrency(token1Address);
 
-  const isPoolError =
-    isTickSpacingError ||
-    isGlobalStateError ||
-    isLiquidityError ||
-    isToken0Error ||
-    isToken1Error ||
-    !address;
+    const isPoolError = isMulticallError || !address;
 
-  const isPoolLoading =
-    isTickSpacingLoading ||
-    isGlobalStateLoading ||
-    isLiquidityLoading ||
-    isLoadingToken0 ||
-    isLoadingToken1;
-  const isTokensLoading = !token0 || !token1;
+    const isPoolLoading = isMulticallLoading;
+    const isTokensLoading = !token0 || !token1;
 
-  return useMemo(() => {
-    if ((isPoolLoading || isTokensLoading) && !isPoolError)
-      return [PoolState.LOADING, null];
+    return useMemo(() => {
+        console.log(tickSpacing, globalState, liquidity, token0, token1);
+        if ((isPoolLoading || isTokensLoading) && !isPoolError) return [PoolState.LOADING, null];
 
-    if (!tickSpacing || !globalState || liquidity === undefined)
-      return [PoolState.NOT_EXISTS, null];
+        if (!token0 || !token1) return [PoolState.NOT_EXISTS, null];
 
-    if (globalState[0] === 0n || !token0 || !token1)
-      return [PoolState.NOT_EXISTS, null];
+        if (
+            sqrtRatioX96 === undefined ||
+            fee === undefined ||
+            tickCurrent === undefined ||
+            tickSpacing === undefined ||
+            liquidity === undefined
+        )
+            return [PoolState.NOT_EXISTS, null];
 
-    try {
-      return [
-        PoolState.EXISTS,
-        new Pool(
-          token0.wrapped,
-          token1.wrapped,
-          globalState[2],
-          ADDRESS_ZERO,
-          globalState[0].toString(),
-          Number(liquidity),
-          globalState[1],
-          tickSpacing
-        ),
-      ];
-    } catch (error) {
-      return [PoolState.NOT_EXISTS, null];
-    }
-  }, [
-    token0,
-    token1,
-    globalState,
-    liquidity,
-    tickSpacing,
-    isPoolError,
-    isPoolLoading,
-    isTokensLoading,
-  ]);
+        try {
+            return [
+                PoolState.EXISTS,
+                new Pool(
+                    token0.wrapped,
+                    token1.wrapped,
+                    fee,
+                    sqrtRatioX96.toString(),
+                    ADDRESS_ZERO,
+                    liquidity.toString(),
+                    tickCurrent,
+                    tickSpacing
+                ),
+            ];
+        } catch (error) {
+            console.error("Failed to create Pool instance:", error);
+            return [PoolState.NOT_EXISTS, null];
+        }
+    }, [tickSpacing, globalState, liquidity, token0, token1, isPoolLoading, isTokensLoading, isPoolError, sqrtRatioX96, fee, tickCurrent]);
 }

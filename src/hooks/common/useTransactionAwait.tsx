@@ -1,16 +1,26 @@
-import { ToastAction } from '@/components/ui/toast';
-import { useToast } from '@/components/ui/use-toast';
-import { ExternalLinkIcon } from 'lucide-react';
-import { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Address, useWaitForTransaction } from 'wagmi';
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
+import { useAppKitNetwork } from "@reown/appkit/react";
+import { ExternalLinkIcon } from "lucide-react";
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Address } from "viem";
+import { useAccount, useWaitForTransactionReceipt } from "wagmi";
 
-export const ViewTxOnExplorer = ({ hash }: { hash: Address | undefined }) =>
-    hash ? (
+export interface TransactionInfo {
+    title: string;
+    description?: string;
+    callback?: () => void;
+}
+
+export const ViewTxOnExplorer = ({ hash }: { hash: Address | undefined }) => {
+    const { caipNetwork: chain } = useAppKitNetwork();
+
+    return hash ? (
         <ToastAction altText="View on explorer" asChild>
             <Link
-                to={`https://holesky.etherscan.io/tx/${hash}`}
-                target={'_blank'}
+                to={`${chain?.blockExplorers?.default.url}/tx/${hash}`}
+                target={"_blank"}
                 className="border-none gap-2 hover:bg-transparent hover:text-blue-400"
             >
                 View on explorer
@@ -20,48 +30,49 @@ export const ViewTxOnExplorer = ({ hash }: { hash: Address | undefined }) =>
     ) : (
         <></>
     );
+};
 
-export function useTransitionAwait(
-    hash: Address | undefined,
-    title: string,
-    description?: string,
-    redirectPath?: string
-) {
+export function useTransactionAwait(hash: Address | undefined, transactionInfo: TransactionInfo, redirectPath?: string) {
     const { toast } = useToast();
 
     const navigate = useNavigate();
 
-    const { data, isError, isLoading, isSuccess } = useWaitForTransaction({
+    const { address: account } = useAccount();
+
+    const { data, isError, isLoading, isSuccess } = useWaitForTransactionReceipt({
         hash,
     });
 
     useEffect(() => {
-        if (isLoading) {
+        if (isLoading && hash && account) {
             toast({
-                title: title,
-                description: description || 'Transaction was sent',
+                title: transactionInfo.title,
+                description: transactionInfo.description || "Transaction was sent",
                 action: <ViewTxOnExplorer hash={hash} />,
             });
         }
-    }, [isLoading]);
+    }, [isLoading, hash, account]);
 
     useEffect(() => {
-        if (isLoading) {
+        if (isError && hash) {
             toast({
-                title: title,
-                description: description || 'Transaction failed',
+                title: transactionInfo.title,
+                description: transactionInfo.description || "Transaction failed",
                 action: <ViewTxOnExplorer hash={hash} />,
             });
         }
     }, [isError]);
 
     useEffect(() => {
-        if (isSuccess) {
+        if (isSuccess && hash) {
             toast({
-                title: title,
-                description: description || 'Transaction confirmed',
+                title: transactionInfo.title,
+                description: transactionInfo.description || "Transaction confirmed",
                 action: <ViewTxOnExplorer hash={hash} />,
             });
+            if (transactionInfo.callback) {
+                transactionInfo.callback();
+            }
             if (redirectPath) {
                 navigate(redirectPath);
             }
