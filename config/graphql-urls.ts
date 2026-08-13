@@ -1,11 +1,12 @@
 import { ChainId } from "@cryptoalgebra/integral-sdk";
 
 export const INFO_GRAPH_URL = {
-    [ChainId.BaseSepolia]: "https://api.goldsky.com/api/public/project_cm2cd1yfmmrav01u9b02f69vj/subgraphs/integral-ve-analytics/v1.0.0/gn",
+    [ChainId.BaseSepolia]:
+        "https://gateway.thegraph.com/api/42cc232fae3835266ca697c702804a32/subgraphs/id/8fjuLTUz3S5ZpSr2Vx2Ws7HZLijfSwbjSwU2M6WwjciZ",
 };
 
 export const FARMING_GRAPH_URL = {
-    [ChainId.BaseSepolia]: "https://api.goldsky.com/api/public/project_cm2cd1yfmmrav01u9b02f69vj/subgraphs/integral-ve-farming/v1.0.0/gn",
+    [ChainId.BaseSepolia]: "https://api.studio.thegraph.com/query/50593/base-testnet-farms/v0.0.2",
 };
 
 export const PREDICTION_GRAPH_URL = {
