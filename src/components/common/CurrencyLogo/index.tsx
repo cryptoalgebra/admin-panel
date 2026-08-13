@@ -1,11 +1,8 @@
 import { Currency, WNATIVE } from "@cryptoalgebra/integral-sdk";
 import React from "react";
 import { Address } from "viem";
-import BTCLogo from "@/assets/tokens/wbtc.svg";
-import USDCLogo from "@/assets/tokens/usdc.svg";
+import USDGLogo from "@/assets/tokens/usdg.png";
 import EtherLogo from "@/assets/tokens/ether.svg";
-import ProjectXLogo from "@/assets/tokens/project-x.jpg";
-import TOKENLogo from "@/assets/algebra-logo.svg";
 import { cn } from "@/utils/common/cn";
 import { DEFAULT_CHAIN_ID, DEFAULT_NATIVE_SYMBOL } from "config/default-chain";
 
@@ -23,21 +20,9 @@ export const specialTokens: {
         symbol: "WETH",
         logo: EtherLogo,
     },
-    ["0xabac6f23fdf1313fc2e9c9244f666157ccd32990"]: {
-        symbol: "USDC",
-        logo: USDCLogo,
-    },
-    ["0x50d22384026efc4b5bd3734a7456bfab35c929a4"]: {
-        symbol: "BTC",
-        logo: BTCLogo,
-    },
-    ["0x253f3460bc16074b960f80421d72e6fa6ef786c8"]: {
-        symbol: "TOKEN",
-        logo: TOKENLogo,
-    },
-    ["0x0ebdc0b736b34207f6e8abe10c282b4003021a22"]: {
-        symbol: "PROJECTX",
-        logo: ProjectXLogo,
+    ["0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168".toLowerCase()]: {
+        symbol: "USDG",
+        logo: USDGLogo,
     },
 };
 

@@ -18,7 +18,6 @@ import {
     ALGEBRA_FACTORY,
     BINARY_LMSR_MARKET_MANAGER,
     FARMING_CENTER,
-    MULTICALL3,
     PLUGIN_FACTORY,
     SECURITY_REGISTRY,
     VOTER,
@@ -26,38 +25,39 @@ import {
 import { defineChain } from "viem";
 import { slidingFeePluginAbi } from "./abis/plugins/slidingFeePlugin";
 
-const baseSepoliaChain = /*#__PURE__*/ defineChain({
-    id: 84532,
-    network: "baseSepolia",
-    name: "Base Sepolia",
+const robinhoodChain = /*#__PURE__*/ defineChain({
+    id: 4663,
+    network: "robinhood",
+    name: "Robinhood Chain",
     nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
     rpcUrls: {
         default: {
-            http: ["https://base-sepolia-rpc.publicnode.com"],
+            http: ["https://rpc.mainnet.chain.robinhood.com"],
         },
         public: {
-            http: ["https://base-sepolia-rpc.publicnode.com"],
+            http: ["https://rpc.mainnet.chain.robinhood.com"],
         },
     },
     blockExplorers: {
         default: {
-            name: "Basescan",
-            url: "https://sepolia.basescan.org",
+            name: "Robinhood Chain Explorer",
+            url: "https://robinhoodchain.blockscout.com",
         },
         etherscan: {
-            name: "Basescan",
-            url: "https://sepolia.basescan.org",
+            name: "Robinhood Chain Explorer",
+            url: "https://robinhoodchain.blockscout.com",
         },
     },
     contracts: {
         multicall3: {
-            address: MULTICALL3[84532],
+            address: "0x69D57B9D705eaD73a5d2f2476C30c55bD755cc2F",
+            blockCreated: 35371485,
         },
     },
 });
 
 /* configure supported networks here */
-export const wagmiNetworks: [AppKitNetwork, ...AppKitNetwork[]] = [baseSepoliaChain];
+export const wagmiNetworks: [AppKitNetwork, ...AppKitNetwork[]] = [robinhoodChain];
 
 const rawContracts = [
     { name: "AlgebraFactory", abi: algebraFactoryABI },
