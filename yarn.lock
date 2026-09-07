@@ -1453,10 +1453,10 @@
     tsdx "^0.14.1"
     typechain "^8.0.0"
 
-"@cryptoalgebra/integral-sdk@npm:@cryptoalgebra/morpheus-sdk@1.3.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@cryptoalgebra/morpheus-sdk/-/morpheus-sdk-1.3.0.tgz#d54834ec004506e11af956e1b35a44588a48b71d"
-  integrity sha512-86AexLKbFxafjdBIYcH/6Miu8Bsq+3Hqook2M3dBGewj0IiQ51gpM2MBifBmS/GKVMDp80OTD2H17meanangVg==
+"@cryptoalgebra/integral-sdk@npm:@cryptoalgebra/kitten-sdk@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@cryptoalgebra/kitten-sdk/-/kitten-sdk-1.2.0.tgz#0b6c547450683d38f3ff455f5d5770cf99ae7628"
+  integrity sha512-MoUFyWjMfU4pyEZL6vXhjtDoZMguWYKrLl/U2wJDfU4aREENBXLUvc4fV+Nwl87/bq3e/G8/ZIZOTcc6fN3S9Q==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/address" "^5.7.0"

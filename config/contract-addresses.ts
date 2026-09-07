@@ -3,33 +3,35 @@ import { Address } from "viem";
 
 /* Algebra Core */
 export const ALGEBRA_FACTORY: Record<number, Address> = {
-    [ChainId.Robinhood]: "0x10253594A832f967994b44f33411940533302ACb",
+    [ChainId.Robinhood]: "0xf03875b5Ec5eAc83cab83A6c2ab17844304AA7a0",
 };
 
 /* Plugins */
 export const PLUGIN_FACTORY: Record<number, Address> = {
-    [ChainId.Robinhood]: "0x37A4950b4ea0C46596404895c5027B088B0e70e7",
+    [ChainId.Robinhood]: "0x888B035e6f64b1C1Aebcd6DDf0C9fd7aEBeA39ED",
 };
 
 export const SECURITY_REGISTRY: Record<number, Address> = {
-    [ChainId.Robinhood]: "0x28DeD2af752655Df5Ee92450DC259F92a5ABe449",
+    [ChainId.Robinhood]: "0xd3EB4f63257480E3269653bAf373df85D31Ab438",
 };
 
 /* Farming */
 export const ALGEBRA_ETERNAL_FARMING: Record<number, Address> = {
-    [ChainId.Robinhood]: "0xB4F9b6b019E75CBe51af4425b2Fc12797e2Ee2a1",
+    [ChainId.Robinhood]: "0xc8A85FD6511bf875646B3632Aedd60d5752610BC",
 };
 
 export const FARMING_CENTER: Record<number, Address> = {
-    [ChainId.Robinhood]: "0x50FCbF85d23aF7C91f94842FeCd83d16665d27bA",
+    [ChainId.Robinhood]: "0xE416C0C29DBDb4Fa25870b835ad904c1E8478CDc",
 };
 
 /* Ve 3.3 */
+/* not deployed — Ve33Module is disabled in app-modules.ts */
 export const VOTER: Record<number, Address> = {
     [ChainId.Robinhood]: "0x1B79491D453FFb4eFf2B75b106052B1670AC8b27",
 };
 
 /* Prediction */
+/* not deployed — PredictionModule is disabled in app-modules.ts */
 export const BINARY_LMSR_MARKET_MANAGER: Record<number, Address> = {
     [ChainId.Robinhood]: "0xf04604de76eb31004F2331bd0701b6eBF8ffdCB1",
 };
