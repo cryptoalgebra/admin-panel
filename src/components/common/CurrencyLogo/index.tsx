@@ -1,8 +1,8 @@
 import { Currency, WNATIVE } from "@cryptoalgebra/integral-sdk";
 import React from "react";
 import { Address } from "viem";
-import USDGLogo from "@/assets/tokens/usdg.png";
-import EtherLogo from "@/assets/tokens/ether.svg";
+import USDTLogo from "@/assets/tokens/usdt.png";
+import BNBLogo from "@/assets/tokens/bnb.png";
 import { cn } from "@/utils/common/cn";
 import { DEFAULT_CHAIN_ID, DEFAULT_NATIVE_SYMBOL } from "config/default-chain";
 
@@ -17,12 +17,12 @@ export const specialTokens: {
     [key: Address]: { symbol: string; logo: string };
 } = {
     [WNATIVE[DEFAULT_CHAIN_ID].address.toLowerCase()]: {
-        symbol: "WETH",
-        logo: EtherLogo,
+        symbol: "WBNB",
+        logo: BNBLogo,
     },
-    ["0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168".toLowerCase()]: {
-        symbol: "USDG",
-        logo: USDGLogo,
+    ["0x55d398326f99059fF775485246999027B3197955".toLowerCase()]: {
+        symbol: "USDT",
+        logo: USDTLogo,
     },
 };
 
@@ -56,7 +56,7 @@ const CurrencyLogo = ({ currency, size, className, style = {} }: CurrencyLogoPro
     if (currency.isNative) {
         return (
             <img
-                src={EtherLogo}
+                src={BNBLogo}
                 alt={DEFAULT_NATIVE_SYMBOL}
                 className={classString}
                 style={{

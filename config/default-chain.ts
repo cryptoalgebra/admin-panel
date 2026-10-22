@@ -1,26 +1,26 @@
 import { ChainId } from "@cryptoalgebra/integral-sdk";
 
 export const CHAIN_NAME = {
-    [ChainId.Robinhood]: "Robinhood",
+    [ChainId.BSC]: "BNB Smart Chain",
 };
 
 export const NATIVE_SYMBOL = {
-    [ChainId.Robinhood]: "ETH",
+    [ChainId.BSC]: "BNB",
 };
 
 export const NATIVE_NAME = {
-    [ChainId.Robinhood]: "Ethereum",
+    [ChainId.BSC]: "BNB",
 };
 
 export const CHAIN_ID = {
-    [ChainId.Robinhood]: ChainId.Robinhood,
+    [ChainId.BSC]: ChainId.BSC,
 };
 
 export const CHAIN_IMAGE = {
-    [ChainId.Robinhood]: "/robinhood.png",
+    [ChainId.BSC]: "/BSC.png",
 };
 
-export const DEFAULT_CHAIN_ID = ChainId.Robinhood;
+export const DEFAULT_CHAIN_ID = ChainId.BSC;
 export const DEFAULT_CHAIN_NAME = CHAIN_NAME[DEFAULT_CHAIN_ID];
 export const DEFAULT_NATIVE_SYMBOL = NATIVE_SYMBOL[DEFAULT_CHAIN_ID];
 export const DEFAULT_NATIVE_NAME = NATIVE_NAME[DEFAULT_CHAIN_ID];

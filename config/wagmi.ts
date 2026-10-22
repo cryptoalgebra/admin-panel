@@ -25,39 +25,39 @@ import {
 import { defineChain } from "viem";
 import { slidingFeePluginAbi } from "./abis/plugins/slidingFeePlugin";
 
-const robinhoodChain = /*#__PURE__*/ defineChain({
-    id: 4663,
-    network: "robinhood",
-    name: "Robinhood Chain",
-    nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+const bscChain = /*#__PURE__*/ defineChain({
+    id: 56,
+    network: "bsc",
+    name: "BNB Smart Chain",
+    nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 },
     rpcUrls: {
         default: {
-            http: ["https://rpc.mainnet.chain.robinhood.com"],
+            http: ["https://bsc-rpc.publicnode.com"],
         },
         public: {
-            http: ["https://rpc.mainnet.chain.robinhood.com"],
+            http: ["https://bsc-rpc.publicnode.com"],
         },
     },
     blockExplorers: {
         default: {
-            name: "Robinhood Chain Explorer",
-            url: "https://robinhoodchain.blockscout.com",
+            name: "BNB Smart Chain Explorer",
+            url: "https://bscscan.com",
         },
         etherscan: {
-            name: "Robinhood Chain Explorer",
-            url: "https://robinhoodchain.blockscout.com",
+            name: "BNB Smart Chain Explorer",
+            url: "https://bscscan.com",
         },
     },
     contracts: {
         multicall3: {
-            address: "0x69D57B9D705eaD73a5d2f2476C30c55bD755cc2F",
-            blockCreated: 35371485,
+            address: "0x804cD0Cb4397DFba6c34B75daF16793db6fbe4F9",
+            blockCreated: 129111731,
         },
     },
 });
 
 /* configure supported networks here */
-export const wagmiNetworks: [AppKitNetwork, ...AppKitNetwork[]] = [robinhoodChain];
+export const wagmiNetworks: [AppKitNetwork, ...AppKitNetwork[]] = [bscChain];
 
 const rawContracts = [
     { name: "AlgebraFactory", abi: algebraFactoryABI },

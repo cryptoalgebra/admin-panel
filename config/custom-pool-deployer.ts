@@ -5,17 +5,17 @@ export type PoolDeployerType = "BASE" | "LIMIT_ORDERS" | "ALM" | "AI";
 
 export const CUSTOM_POOL_DEPLOYER_ADDRESSES: Record<PoolDeployerType, Record<number, Address>> = {
     BASE: {
-        [ChainId.Robinhood]: ADDRESS_ZERO,
+        [ChainId.BSC]: ADDRESS_ZERO,
     },
     /* Replace with `null` to use as a stub */
     LIMIT_ORDERS: {
-        [ChainId.Robinhood]: null,
+        [ChainId.BSC]: null,
     },
     ALM: {
-        [ChainId.Robinhood]: null,
+        [ChainId.BSC]: null,
     },
     AI: {
-        [ChainId.Robinhood]: null,
+        [ChainId.BSC]: null,
     },
 } as const;
 
